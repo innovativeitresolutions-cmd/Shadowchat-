@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="A free, privacy-respecting four-door story puzzle inspired by The Suffocating Shadows of Sallisaw.">
+<title>The Four Doors | SKYCOIN4444 Story Easter Eggs</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#edf3fa;background:#0c1320}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#182c43,#0c1320 60%);min-height:100vh}
+main{max-width:1020px;margin:auto;padding:clamp(18px,4vw,56px)}a{color:#83d8f6}a:focus-visible,button:focus-visible{outline:3px solid #ffe08f;outline-offset:3px}
+header{padding:24px 0 28px;border-bottom:1px solid #2d3d52}header p{color:#b3c9df}h1{font-size:clamp(2.4rem,5vw,4rem);letter-spacing:-.045em;line-height:1.07;margin:.2em 0}
+.eyebrow{text-transform:uppercase;letter-spacing:.2em;color:#8ad7df;font-size:.75rem;font-weight:bold}
+.sub{line-height:1.65;max-width:710px}.notice{background:#13263d;border:1px solid #375474;padding:12px 16px;border-radius:12px;margin:20px 0;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:30px}
+.card{background:#111f31;border:1px solid #35516c;border-radius:20px;padding:22px;display:flex;flex-direction:column;min-height:300px;box-shadow:0 9px 30px #050a132a}
+.card.done{border-color:#68ddb2}.symbol{font-size:3rem}.pill{display:inline-block;width:fit-content;border:1px solid #395e76;border-radius:20px;color:#b9dbf0;padding:5px 12px;font-size:.8rem}
+h2{font-size:1.5rem;margin:10px 0}p{line-height:1.55}.card p{color:#c0d2e6;flex:1}
+button{background:#3d8bac;border:1px solid #74c6df;color:#fff;font-size:1rem;font-weight:bold;border-radius:10px;cursor:pointer;padding:12px 16px}
+button:hover{background:#277a9a}button[disabled]{opacity:.6;cursor:default}
+dialog{border:1px solid #6386a5;background:#102239;color:#f0f7ff;border-radius:18px;padding:27px;max-width:min(92vw,600px);box-shadow:0 12px 50px #0009}
+dialog::backdrop{background:#02070acb}.choices{display:grid;gap:10px;margin:20px 0}
+.choices button{text-align:left;background:#1c3e56}.choices button:hover{background:#306784}
+.small{font-size:.87rem;color:#a9c2d8}.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px}
+#result{margin-top:24px;min-height:85px;border:1px dashed #4c7292;border-radius:15px;padding:18px;background:#101c2d}
+#result strong{color:#b7f0ca}#dialog-message{min-height:1.8em}footer{margin:40px 0 0;padding:20px 0;border-top:1px solid #2b4056;color:#b3c9df}
+@media(prefers-reduced-motion:no-preference){.card{transition:transform .17s ease}.card:hover{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<p class="eyebrow">SKYCOIN4444 · The Chosen One · Optional story adventure</p>
+<h1>Four doors.<br>One choice.</h1>
+<p class="sub">Somewhere inside the story, a father learns that every pattern has a meaning only after you check the evidence. Find the four small truths hidden in the fictional SKYCOIN4444 world. No account, payment, score, countdown, or personal information required.</p>
+</header>
+<p class="notice"><strong>Privacy first:</strong> This interactive prototype works entirely in your browser. It does not ask for names, dates of birth, wallet keys or contact details, and sends no puzzle answers to a server. Your optional completion markers stay in this browser only. The number <b>4444</b> is a theme—not an access code, password, or financial reward.</p>
+<section class="grid" id="cards" aria-label="The four story doors">
+<article class="card" data-id="knight"><span class="pill">Door one · SkySchool</span><div class="symbol" aria-hidden="true">♞</div><h2>The Knight's Move</h2><p>When a straight path is dangerous, a knight can choose a different route. Which of these is a legal knight move from b1 in chess?</p><button type="button" data-open="knight">Try the puzzle</button></article>
+<article class="card" data-id="rain"><span class="pill">Door two · SkyHope</span><div class="symbol" aria-hidden="true">☂</div><h2>Rain Means Rain</h2><p>Not every coincidence is a message. A child hears rain on the roof. What should be the first conclusion?</p><button type="button" data-open="rain">Try the puzzle</button></article>
+<article class="card" data-id="compass"><span class="pill">Door three · HopeAI</span><div class="symbol" aria-hidden="true">✧</div><h2>Find North</h2><p>The compass settles when the hand does. What is the better next step when a question feels impossible to answer?</p><button type="button" data-open="compass">Try the puzzle</button></article>
+<article class="card" data-id="consent"><span class="pill">Door four · ShadowChat</span><div class="symbol" aria-hidden="true">◇</div><h2>The Exit Is Yours</h2><p>The fourth door isn't a secret backdoor. Which choice should every privacy-respecting system protect?</p><button type="button" data-open="consent">Try the puzzle</button></article>
+</section>
+<section id="result" role="status" aria-live="polite"><strong>0 of 4 doors opened.</strong><p class="small">Explore in any order. The lesson is free to leave and free to revisit.</p></section>
+<div class="links" aria-label="Explore the connected ecosystem">
+<a href="/skySchool">Explore SkySchool</a>
+<a href="/hopeAI">Explore HopeAI</a>
+<a href="/">Return to the platform</a>
+</div>
+<button id="clear" type="button" style="margin-top:26px;background:#283c54">Forget my local progress</button>
+<footer>Inspired by the reconstructed novel <em>The Suffocating Shadows of Sallisaw: The Chosen One</em>. Fictional themes, not proof of real-world surveillance or promises about platform capabilities. <strong>Proud before proof. People before platforms.</strong></footer>
+</main>
+<dialog id="puzzle" aria-labelledby="dialog-title">
+<h2 id="dialog-title"></h2>
+<p id="dialog-question"></p>
+<div class="choices" id="dialog-choices"></div>
+<p id="dialog-message" role="status" aria-live="polite"></p>
+<button type="button" id="close">Close</button>
+</dialog>
+<script>
+(() => {
+"use strict";
+const KEY="skycoin4444-story-trail-v1";
+const questions={
+knight:{title:"The Knight's Move",question:"From b1, which destination can the chess knight reach in one move?",options:["b3","c3","c2","d1"],answer:1,success:"A knight doesn't always travel the expected path. Choose your move. A wrong answer doesn't erase your worth."},
+rain:{title:"Rain Means Rain",question:"You hear rain just after a difficult conversation. What is supported by the evidence?",options:["It proves someone is sending a warning","It is raining; check for other facts before adding meaning","Every storm predicts something bad"],answer:1,success:"Sometimes rain is simply weather. Care comes from what we do for one another, not what we read into coincidences."},
+compass:{title:"Find North",question:"An unfamiliar situation makes you anxious. Which response gets you closer to an answer?",options:["Treat the first guess as certainty","Publish a theory immediately","Identify what you know, what you don't know, and one safe next step"],answer:2,success:"Your direction can be useful before your whole map is finished. HopeAI should be allowed to say 'I don't know'."},
+consent:{title:"The Exit Is Yours",question:"An old permission lets a third party inspect information. What should the user be able to do?",options:["Understand and revoke that permission","Give more information to prove loyalty","Lose access until they agree"],answer:0,success:"Identity. Memory. Consent. Consequence. The fourth door must open from the inside."}
+};
+function read(){try{const a=JSON.parse(localStorage.getItem(KEY)||"[]");return new Set(Array.isArray(a)?a.filter(x=>Object.hasOwn(questions,x)):[])}catch{return new Set}}
+let done=read();
+const modal=document.getElementById("puzzle"),title=document.getElementById("dialog-title"),qEl=document.getElementById("dialog-question"),opts=document.getElementById("dialog-choices"),message=document.getElementById("dialog-message");
+function render(){
+for(const card of document.querySelectorAll(".card")){const id=card.dataset.id;card.classList.toggle("done",done.has(id));card.querySelector("button").textContent=done.has(id)?"Review this door ✓":"Try the puzzle"}
+const result=document.getElementById("result");
+result.replaceChildren();
+const heading=document.createElement("strong");heading.textContent=done.size+" of 4 doors opened.";result.append(heading);
+const copy=document.createElement("p");copy.className="small";
+copy.textContent=done.size===4?"4444 is complete. No prize, no secret permission, and no account needed. The hidden message: Proud before proof. Love before legacy. People before platforms.":"Choose any door. You can leave at any time. Every clue is about making a kinder, more careful choice.";
+result.append(copy);
+}
+document.querySelectorAll("[data-open]").forEach(btn=>btn.addEventListener("click",()=>{
+const id=btn.dataset.open, item=questions[id];title.textContent=item.title;qEl.textContent=item.question;message.textContent="";opts.replaceChildren();
+item.options.forEach((answer,i)=>{const button=document.createElement("button");button.type="button";button.textContent=answer;button.addEventListener("click",()=>{
+if(i===item.answer){done.add(id);try{localStorage.setItem(KEY,JSON.stringify([...done]))}catch{};message.textContent=item.success;render();button.focus()}
+else{message.textContent="Not quite. Look for the answer that protects evidence, choice, or curiosity. Try again.";}
+});opts.append(button)});
+modal.showModal();
+}));
+document.getElementById("close").addEventListener("click",()=>modal.close());
+document.getElementById("clear").addEventListener("click",()=>{done.clear();try{localStorage.removeItem(KEY)}catch{};render()});
+render();
+})();
+</script>
+</body>
+</html>

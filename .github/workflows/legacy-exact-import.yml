@@ -80,8 +80,8 @@ jobs:
                   expected_lines = int(row["source_loc"])
                   source_files += 1
                   source_loc_inventory += expected_lines
-                  with target.open("r", encoding="utf-8", errors="ignore") as fh:
-                      actual_lines = sum(1 for _ in fh)
+                  text = target.read_text(encoding="utf-8", errors="ignore")
+                  actual_lines = text.count("\n") + 1
                   source_loc_recounted += actual_lines
                   if actual_lines != expected_lines:
                       loc_mismatches.append({

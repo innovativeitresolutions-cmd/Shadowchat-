@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 20 — ATTENTION ENGINE
  * Feed Intelligence V2, Addiction Loops, Retention AI
@@ -432,7 +433,7 @@ export const feedIntelligenceV2 = {
 export const addictionLoopsEngine = {
   // Daily Drops
   createDailyDrop(params: Omit<DailyDrop, "id" | "claimedCount">): DailyDrop {
-    const id = `drop_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `drop_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const drop: DailyDrop = { ...params, id, claimedCount: 0 };
     _dailyDrops.set(id, drop);
     return drop;

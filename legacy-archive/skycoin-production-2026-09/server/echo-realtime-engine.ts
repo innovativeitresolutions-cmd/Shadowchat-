@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * @file echo-realtime-engine.ts
  * @description Production TypeScript engine file for SKYCOIN4444 platform: ECHO Real-time Engine.
@@ -94,7 +95,7 @@ const PONG_MESSAGE_TYPE = "PONG";
 // --- Utility Functions ---
 
 function generateUniqueId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  return Date.now().toString(36) + (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2);
 }
 
 function isValidJson(str: string): boolean {
@@ -158,8 +159,7 @@ class ConnectionManager {
           this.onMessageCallback(message);
         }
       } else {
-        console.warn("Received non-JSON message:", event.data);
-      }
+              }
     };
 
     this.ws.onclose = (event) => {
@@ -170,8 +170,7 @@ class ConnectionManager {
     };
 
     this.ws.onerror = (event) => {
-      console.error("WebSocket error:", event);
-      this.onErrorCallback(event);
+            this.onErrorCallback(event);
       this.ws?.close(); // Force close to trigger onclose and reconnection logic
     };
   }
@@ -190,8 +189,7 @@ class ConnectionManager {
     if (this.state === ConnectionState.Connected && this.ws) {
       this.ws.send(JSON.stringify(message));
     } else {
-      console.warn("WebSocket not connected, message not sent:", message);
-      // Potentially queue message for later sending
+            // Potentially queue message for later sending
     }
   }
 
@@ -202,7 +200,6 @@ class ConnectionManager {
   private setState(newState: ConnectionState): void {
     if (this.state !== newState) {
       this.state = newState;
-      // console.log("Connection state changed to:", newState);
     }
   }
 
@@ -211,12 +208,10 @@ class ConnectionManager {
       this.reconnectAttempts++;
       this.setState(ConnectionState.Reconnecting);
       this.reconnectTimer = setTimeout(() => {
-        console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.config.maxReconnectAttempts})...`);
         this.connect();
       }, this.config.reconnectIntervalMs);
     } else {
-      console.error("Max reconnect attempts reached. Connection permanently lost.");
-      this.setState(ConnectionState.Disconnected);
+            this.setState(ConnectionState.Disconnected);
     }
   }
 
@@ -278,8 +273,7 @@ class PubSubManager {
         try {
           sub.callback(message);
         } catch (error) {
-          console.error(`Error in subscription callback for channel ${message.channel}:`, error);
-        }
+                  }
       });
     }
   }
@@ -295,7 +289,6 @@ class PresenceTracker {
 
   public updatePresence(info: PresenceInfo): void {
     this.presenceMap.set(info.userId, info);
-    // console.log(`Presence updated for ${info.userId}: ${info.status}`);
   }
 
   public getPresence(userId: string): PresenceInfo | undefined {
@@ -311,7 +304,6 @@ class PresenceTracker {
       this.roomPresence.set(roomId, new Set());
     }
     this.roomPresence.get(roomId)!.add(userId);
-    // console.log(`${userId} joined room ${roomId}`);
   }
 
   public leaveRoom(roomId: string, userId: string): void {
@@ -320,7 +312,6 @@ class PresenceTracker {
       if (this.roomPresence.get(roomId)!.size === 0) {
         this.roomPresence.delete(roomId);
       }
-      // console.log(`${userId} left room ${roomId}`);
     }
   }
 
@@ -343,8 +334,7 @@ class MessageQueue {
 
   public enqueue(message: WebSocketMessage): boolean {
     if (this.queue.length >= this.capacity) {
-      console.warn("Message queue is full, dropping oldest message.");
-      this.queue.shift(); // Remove the oldest message
+            this.queue.shift(); // Remove the oldest message
     }
     const item: MessageQueueItem = {
       id: generateUniqueId(),
@@ -503,8 +493,7 @@ class EchoRealtimeEngine {
       this.connectionManager.send(message);
       this.messageHistory.addMessage(message);
     } else {
-      console.warn("Connection not active, queuing message:", message);
-      this.messageQueue.enqueue(message);
+            this.messageQueue.enqueue(message);
     }
   }
 
@@ -512,16 +501,14 @@ class EchoRealtimeEngine {
     while (!this.messageQueue.isEmpty() && this.connectionManager.getState() === ConnectionState.Connected) {
       const item = this.messageQueue.dequeue();
       if (item) {
-        console.log("Sending queued message:", item.message);
-        this.connectionManager.send(item.message);
+                this.connectionManager.send(item.message);
         this.messageHistory.addMessage(item.message);
       }
     }
   }
 
   private handleOpen(): void {
-    console.log("WebSocket connection opened.");
-    this.processQueuedMessages();
+        this.processQueuedMessages();
     // Re-subscribe to all active channels upon reconnection
     this.pubSubManager.getActiveChannels().forEach(channel => {
       this.sendMessage({ type: "SUBSCRIBE", channel, timestamp: Date.now(), payload: { userId: this.userId } });
@@ -533,15 +520,13 @@ class EchoRealtimeEngine {
   }
 
   private handleClose(event: CloseEvent): void {
-    console.log("WebSocket connection closed:", event.code, event.reason);
-    if (this.userId) {
+        if (this.userId) {
       this.updatePresence({ userId: this.userId, status: 'offline', lastSeen: Date.now() });
     }
   }
 
   private handleMessage(message: WebSocketMessage): void {
-    // console.log("Received message:", message);
-    this.messageHistory.addMessage(message);
+    //     this.messageHistory.addMessage(message);
 
     switch (message.type) {
       case "PRESENCE_UPDATE":
@@ -573,11 +558,7 @@ class EchoRealtimeEngine {
   }
 
   private handleError(event: Event): void {
-    console.error("WebSocket error occurred:", event);
-    // Potentially use invokeLLM for advanced error analysis or reporting
-      invokeLLM({ messages: [{ role: "user", content: `WebSocket error: ${JSON.stringify(event)}` }] }).then(analysis => {
-      // console.log("LLM analysis of error:", analysis);
-    });
+    this.onErrorCallback(event);
   }
 
   // --- Presence Tracking Methods ---
@@ -645,8 +626,7 @@ class EchoRealtimeEngine {
       const resp = await invokeLLM({ messages: [{ role: "system", content: "Analyze the sentiment of the message. Reply with one word: positive, negative, or neutral." }, { role: "user", content: messageText }] });
       return String(resp.choices[0]?.message?.content || "").trim() || "neutral";
     } catch (error) {
-      console.error("Error analyzing message sentiment with LLM:", error);
-      return "error";
+            return "error";
     }
   }
 
@@ -656,8 +636,7 @@ class EchoRealtimeEngine {
       const resp = await invokeLLM({ messages: [{ role: "system", content: "You are a helpful chat assistant." }, ...contextMsgs, { role: "user", content: prompt }] });
       return String(resp.choices[0]?.message?.content || "");
     } catch (error) {
-      console.error("Error generating chatbot response with LLM:", error);
-      return "";
+            return "";
     }
   }
 }

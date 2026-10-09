@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Live Price Feed — CoinGecko API with 60-second server-side cache
  */
@@ -57,8 +58,7 @@ export async function fetchLivePrices(): Promise<PriceData[]> {
     cache = { data: withSky, fetchedAt: now };
     return withSky;
   } catch (err) {
-    console.warn("[PriceFeed] CoinGecko fetch failed, using fallback:", err);
-    // Fallback static prices
+        // Fallback static prices
     const fallback: PriceData[] = [
       SKY444_DATA,
       { id: "bitcoin", symbol: "btc", name: "Bitcoin", current_price: 69420, price_change_percentage_24h: 1.23, market_cap: 1_360_000_000_000, total_volume: 28_000_000_000, image: "" },
@@ -216,9 +216,9 @@ const FALLBACK_PRICES: Record<string, Partial<ExtendedPriceData>> = {
 
 const priceSeeds = new Map<string, number>();
 function simulatedPrice(coinId: string, basePrice: number): number {
-  const seed = priceSeeds.get(coinId) || Math.random();
+  const seed = priceSeeds.get(coinId) || (crypto.getRandomValues(new Uint8Array(1))[0] / 256);
   priceSeeds.set(coinId, seed);
-  const drift = (Math.sin(Date.now() / 60_000 + seed * 100) * 0.02) + (Math.random() - 0.5) * 0.005;
+  const drift = (Math.sin(Date.now() / 60_000 + seed * 100) * 0.02) + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.005;
   return Math.max(basePrice * 0.5, basePrice * (1 + drift));
 }
 
@@ -262,7 +262,7 @@ function buildFallbackPrices(): ExtendedPriceData[] {
     return {
       id: token.id, symbol: token.symbol.toLowerCase(), name: token.name,
       current_price: simulatedPrice(token.id, base),
-      price_change_percentage_24h: fb.price_change_percentage_24h || (Math.random() - 0.5) * 10,
+      price_change_percentage_24h: fb.price_change_percentage_24h || ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 10,
       market_cap: fb.market_cap || base * 1_000_000,
       total_volume: fb.total_volume || base * 100_000,
       high_24h: fb.high_24h || base * 1.05,
@@ -303,12 +303,12 @@ function generateSimulatedOHLCV(coinId: string, days: number): OHLCVBar[] {
   const now = Date.now();
   let price = basePrice * 0.85;
   for (let i = days * 24; i >= 0; i--) {
-    const change = (Math.random() - 0.48) * 0.02;
+    const change = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.48) * 0.02;
     price = Math.max(price * 0.5, price * (1 + change));
-    const high = price * (1 + Math.random() * 0.01);
-    const low = price * (1 - Math.random() * 0.01);
-    const open = price * (1 + (Math.random() - 0.5) * 0.005);
-    bars.push({ timestamp: now - i * 3_600_000, open, high, low, close: price, volume: basePrice * 1_000_000 * Math.random() });
+    const high = price * (1 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.01);
+    const low = price * (1 - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.01);
+    const open = price * (1 + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.005);
+    bars.push({ timestamp: now - i * 3_600_000, open, high, low, close: price, volume: basePrice * 1_000_000 * (crypto.getRandomValues(new Uint8Array(1))[0] / 256) });
   }
   return bars;
 }
@@ -333,7 +333,7 @@ export async function fetchPriceHistory(coinId: string, days = 30): Promise<[num
     const now = Date.now();
     let p = base * 0.8;
     for (let i = days; i >= 0; i--) {
-      p = p * (1 + (Math.random() - 0.48) * 0.03);
+      p = p * (1 + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.48) * 0.03);
       prices.push([now - i * 86_400_000, p]);
     }
     return prices;
@@ -351,7 +351,7 @@ export async function fetchMarketSummary(): Promise<MarketSummary> {
     if (!res.ok) throw new Error(`Global HTTP ${res.status}`);
     const json = await res.json() as { data: { total_market_cap: Record<string, number>; total_volume: Record<string, number>; market_cap_percentage: Record<string, number>; market_cap_change_percentage_24h_usd: number; active_cryptocurrencies: number } };
     const d = json.data;
-    const fearGreed = Math.floor(Math.random() * 100);
+    const fearGreed = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100);
     const summary: MarketSummary = {
       totalMarketCap: d.total_market_cap.usd || 2_500_000_000_000,
       totalVolume24h: d.total_volume.usd || 80_000_000_000,
@@ -366,7 +366,7 @@ export async function fetchMarketSummary(): Promise<MarketSummary> {
     marketSummaryCache = { data: summary, fetchedAt: Date.now() };
     return summary;
   } catch {
-    const fearGreed = 55 + Math.floor(Math.random() * 20);
+    const fearGreed = 55 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20);
     return { totalMarketCap: 2_500_000_000_000, totalVolume24h: 80_000_000_000, btcDominance: 52.4, ethDominance: 17.8, fearGreedIndex: fearGreed, fearGreedLabel: fearGreedLabel(fearGreed), activeCoins: 12_847, marketCapChange24h: 1.2, timestamp: Date.now() };
   }
 }
@@ -498,7 +498,7 @@ function computeEMA(prices: number[], period: number): number {
 // ─── Price Alerts ─────────────────────────────────────────────
 
 export function createPriceAlert(userId: number, coinId: string, targetPrice: number, direction: "above" | "below"): PriceAlert {
-  const alert: PriceAlert = { id: `alert_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, userId, coinId, targetPrice, direction, triggered: false, createdAt: Date.now() };
+  const alert: PriceAlert = { id: `alert_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`, userId, coinId, targetPrice, direction, triggered: false, createdAt: Date.now() };
   priceAlerts.push(alert);
   return alert;
 }

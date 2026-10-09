@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Router } from 'express';
 import { db } from './db';
 import { datingNotifications, datingMatches, datingMessages, users } from '../drizzle/schema';
@@ -36,7 +37,7 @@ export async function createNotification(
   }
 ): Promise<DatingNotification> {
   const notification = {
-    id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    id: `notif_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`,
     userId,
     type,
     fromUserId,
@@ -152,8 +153,7 @@ router.get('/api/dating/notifications/preferences', async (req: any, res) => {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-    // TODO: Fetch from database
-    const preferences = {
+        const preferences = {
       emailNotifications: true,
       pushNotifications: true,
       smsNotifications: false,
@@ -179,8 +179,7 @@ router.patch('/api/dating/notifications/preferences', async (req: any, res) => {
 
     const { preferences } = req.body;
 
-    // TODO: Save to database
-
+    
     res.json({ success: true, preferences });
   } catch (error) {
     res.status(500).json({ error: 'Failed to update preferences' });

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 29 — CULTURE ENGINE
  * Meme Markets, Trend Rituals, Event Layer, Cultural Moments,
@@ -234,7 +235,7 @@ const _seasonalEvents = new Map<string, SeasonalEvent>();
 
 export const memeMarketEngine = {
   createMeme(params: Omit<MemeAsset, "id" | "status" | "marketCap" | "price" | "priceHistory" | "holders" | "totalShares" | "circulatingShares" | "usageCount" | "reactionCount" | "shareCount" | "culturalScore" | "createdAt" | "updatedAt">): MemeAsset {
-    const id = `meme_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `meme_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const initialPrice = 1.0;
     const meme: MemeAsset = {
       ...params,
@@ -300,7 +301,7 @@ export const memeMarketEngine = {
     else if (meme.marketCap > 10000) meme.status = "rising";
     else if (meme.marketCap < 100 && meme.circulatingShares > 0) meme.status = "declining";
 
-    const tradeId = `trade_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const tradeId = `trade_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const trade: MemeMarketTrade = {
       id: tradeId,
       memeId,
@@ -389,7 +390,7 @@ export const memeMarketEngine = {
 
 export const eventEngine = {
   createEvent(params: Omit<PlatformEvent, "id" | "participantCount" | "participantIds" | "totalEngagement" | "createdAt">): PlatformEvent {
-    const id = `event_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `event_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const event: PlatformEvent = {
       ...params,
       id,
@@ -446,7 +447,7 @@ export const eventEngine = {
   },
 
   createSeasonalEvent(params: Omit<SeasonalEvent, "id" | "totalParticipants" | "createdAt">): SeasonalEvent {
-    const id = `season_event_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `season_event_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const event: SeasonalEvent = { ...params, id, totalParticipants: 0, createdAt: new Date() };
     _seasonalEvents.set(id, event);
     return event;
@@ -467,7 +468,7 @@ export const eventEngine = {
 
 export const ritualEngine = {
   createRitual(params: Omit<CommunityRitual, "id" | "participantCount" | "streakRecord" | "currentStreak" | "totalParticipations" | "createdAt">): CommunityRitual {
-    const id = `ritual_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `ritual_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const ritual: CommunityRitual = {
       ...params,
       id,
@@ -583,7 +584,7 @@ export const hashtagEconomyEngine = {
 
 export const culturalMomentEngine = {
   recordMoment(params: Omit<CulturalMoment, "id" | "isArchived" | "createdAt">): CulturalMoment {
-    const id = `moment_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `moment_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const moment: CulturalMoment = { ...params, id, isArchived: false, createdAt: new Date() };
     _culturalMoments.set(id, moment);
 
@@ -622,7 +623,7 @@ export const culturalMomentEngine = {
 
 export const platformLoreEngine = {
   createLore(params: Omit<PlatformLore, "id" | "viewCount" | "endorsements" | "createdAt">): PlatformLore {
-    const id = `lore_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `lore_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const lore: PlatformLore = { ...params, id, viewCount: 0, endorsements: 0, createdAt: new Date() };
     _platformLore.set(id, lore);
 
@@ -660,7 +661,7 @@ export const platformLoreEngine = {
 
 export const collectiveMemoryEngine = {
   recordMemory(params: Omit<CollectiveMemory, "id" | "createdAt">): CollectiveMemory {
-    const id = `memory_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `memory_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const memory: CollectiveMemory = { ...params, id, createdAt: new Date() };
     _collectiveMemory.set(id, memory);
     return memory;

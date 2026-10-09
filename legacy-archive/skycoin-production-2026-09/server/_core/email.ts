@@ -28,8 +28,7 @@ export async function sendVerificationEmail(email: string, token: string) {
     });
     return true;
   } catch (error) {
-    console.error('Email send error:', error);
-    return false;
+        return false;
   }
 }
 
@@ -50,7 +49,6 @@ export async function sendWelcomeEmail(email: string, name: string) {
     });
     return true;
   } catch (error) {
-    console.error('Email send error:', error);
-    return false;
+        return false;
   }
 }

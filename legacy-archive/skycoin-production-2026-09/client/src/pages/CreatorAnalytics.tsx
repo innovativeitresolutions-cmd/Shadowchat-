@@ -77,10 +77,10 @@ function generateChartData(days: number) {
     d.setDate(d.getDate() - (days - 1 - i));
     return {
       date: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      followers: Math.floor(800 + i * 12 + Math.random() * 30),
-      views: Math.floor(1200 + i * 45 + Math.random() * 200),
-      revenue: Math.floor(20 + i * 2.5 + Math.random() * 15),
-      likes: Math.floor(300 + i * 8 + Math.random() * 50),
+      followers: Math.floor(800 + i * 12 + (Math.random()) * 30),
+      views: Math.floor(1200 + i * 45 + (Math.random()) * 200),
+      revenue: Math.floor(20 + i * 2.5 + (Math.random()) * 15),
+      likes: Math.floor(300 + i * 8 + (Math.random()) * 50),
     };
   });
 }

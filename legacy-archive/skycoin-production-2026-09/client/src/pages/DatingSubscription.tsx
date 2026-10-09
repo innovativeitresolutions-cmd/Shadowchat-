@@ -53,8 +53,7 @@ export default function DatingSubscription() {
       const data = await response.json();
       setPlans(data || []);
     } catch (error) {
-      console.error('Failed to load plans:', error);
-    }
+          }
   };
 
   const loadCurrentSubscription = async () => {
@@ -63,8 +62,7 @@ export default function DatingSubscription() {
       const data = await response.json();
       setCurrentSubscription(data);
     } catch (error) {
-      console.error('Failed to load subscription:', error);
-    } finally {
+          } finally {
       setLoading(false);
     }
   };
@@ -82,8 +80,7 @@ export default function DatingSubscription() {
         window.location.href = data.checkoutUrl;
       }
     } catch (error) {
-      console.error('Failed to upgrade subscription:', error);
-    } finally {
+          } finally {
       setUpgrading(null);
     }
   };

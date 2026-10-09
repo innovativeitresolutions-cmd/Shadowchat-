@@ -67,8 +67,7 @@ class MaxParallelMiningEngine {
       },
     ];
 
-    console.log(`[Mining] Initialized ${this.collaborators.length} collaborators`);
-  }
+      }
 
   /**
    * Initialize 128 parallel mining workers
@@ -96,24 +95,19 @@ class MaxParallelMiningEngine {
       this.totalHashrate += worker.hashrate;
     }
 
-    console.log(`[Mining] Initialized ${this.workers.length} parallel workers`);
-    console.log(`[Mining] Total hashrate: ${this.totalHashrate.toLocaleString()} H/s`);
   }
 
   /**
    * Start max parallel mining
    */
   async startMining(): Promise<void> {
+    throw new Error('This module simulates mining and reward transfers; live mining is unavailable.');
     if (this.isRunning) {
-      console.log('[Mining] Already running');
-      return;
+            return;
     }
 
     this.isRunning = true;
-    console.log('[Mining] Starting max parallel mining engine...');
-    console.log(`[Mining] ${this.workers.length} workers active`);
-    console.log(`[Mining] Mining for ${this.collaborators.length} collaborators`);
-
+            
     // Simulate mining blocks
     const miningInterval = setInterval(async () => {
       if (!this.isRunning) {
@@ -124,8 +118,7 @@ class MaxParallelMiningEngine {
       try {
         await this.mineBatch();
       } catch (error) {
-        console.error('[Mining] Error in mining batch:', error);
-      }
+              }
     }, 5000); // Mine every 5 seconds
 
     await notifyOwner({
@@ -148,8 +141,7 @@ ${this.collaborators.map((c) => `- ${c.name}: ${c.share}% (${c.wallet})`).join('
     const activeWorkers = this.workers.filter((w) => w.status === 'active').length;
     const batchEarnings = blockReward * activeWorkers;
 
-    console.log(`[Mining] Batch: ${activeWorkers} workers mining, earnings: $${batchEarnings}`);
-
+    
     // Distribute rewards to collaborators
     for (const collaborator of this.collaborators) {
       const reward = (batchEarnings * collaborator.share) / 100;
@@ -161,11 +153,9 @@ ${this.collaborators.map((c) => `- ${c.name}: ${c.share}% (${c.wallet})`).join('
           'MULTI'
         );
 
-        console.log(`[Mining] Routed $${reward.toFixed(2)} to ${collaborator.name} (${tx.id})`);
         this.totalEarnings += reward;
       } catch (error) {
-        console.error(`[Mining] Failed to route reward to ${collaborator.name}:`, error);
-      }
+              }
     }
   }
 
@@ -174,8 +164,7 @@ ${this.collaborators.map((c) => `- ${c.name}: ${c.share}% (${c.wallet})`).join('
    */
   stopMining(): void {
     this.isRunning = false;
-    console.log('[Mining] Stopped');
-  }
+      }
 
   /**
    * Get mining stats
@@ -201,8 +190,7 @@ ${this.collaborators.map((c) => `- ${c.name}: ${c.share}% (${c.wallet})`).join('
    */
   addCollaborator(collaborator: Collaborator): void {
     this.collaborators.push(collaborator);
-    console.log(`[Mining] Added collaborator: ${collaborator.name}`);
-  }
+      }
 
   /**
    * Get collaborators
@@ -223,8 +211,7 @@ if (require.main === module) {
   setTimeout(() => {
     maxParallelMiningEngine.stopMining();
     const stats = maxParallelMiningEngine.getStats();
-    console.log('[Mining] Final stats:', stats);
-  }, 3600000);
+      }, 3600000);
 }
 
 export default maxParallelMiningEngine;

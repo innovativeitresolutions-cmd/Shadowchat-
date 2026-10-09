@@ -16,13 +16,11 @@ describe('Dating System', () => {
 
   beforeEach(async () => {
     // Setup test data
-    console.log('Setting up test data...');
-  });
+      });
 
   afterEach(async () => {
     // Cleanup test data
-    console.log('Cleaning up test data...');
-  });
+      });
 
   describe('Profile Management', () => {
     it('should create a dating profile', async () => {

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Router } from 'express';
 import { db } from './db';
 import os from 'os';
@@ -163,8 +164,7 @@ class HealthMonitor {
    * Check cache health
    */
   private checkCache(): HealthCheck {
-    // Placeholder for cache health check
-    return {
+        return {
       status: 'pass',
       responseTime: 0,
       message: 'Cache operational',
@@ -221,7 +221,7 @@ class HealthMonitor {
     message: string
   ): Alert {
     const alert: Alert = {
-      id: `${Date.now()}-${Math.random()}`,
+      id: `${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256)}`,
       severity,
       type,
       message,

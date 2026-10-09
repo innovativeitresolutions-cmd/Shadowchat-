@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 /**
@@ -397,7 +398,7 @@ describe('SKYCOIN4444 Strategic Engines', () => {
 
     it('should calculate roadmap priorities within 50ms', () => {
       const start = Date.now();
-      const items = Array(100).fill(null).map((_, i) => ({ id: i, priority: Math.random() * 100 }));
+      const items = Array(100).fill(null).map((_, i) => ({ id: i, priority: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 }));
       items.sort((a, b) => b.priority - a.priority);
       const end = Date.now();
       expect(end - start).toBeLessThan(50);

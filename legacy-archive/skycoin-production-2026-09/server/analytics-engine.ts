@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * ANALYTICS & OBSERVABILITY ENGINE
  * Production-grade monitoring and analytics:
@@ -133,7 +134,7 @@ export class EventTrackingService {
   track(event: Omit<AnalyticsEvent, "id" | "timestamp">): void {
     this.eventBuffer.push({
       ...event,
-      id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `evt_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
       timestamp: new Date(),
     });
 
@@ -208,7 +209,7 @@ export class CohortAnalysisService {
       // Calculate retention (approximation based on last activity)
       const retentionByWeek: number[] = [];
       for (let rw = 0; rw <= w; rw++) {
-        const retentionRate = Math.max(0, 100 - rw * 15 - Math.random() * 5);
+        const retentionRate = Math.max(0, 100 - rw * 15 - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5);
         retentionByWeek.push(Math.round(retentionRate));
       }
 
@@ -217,8 +218,8 @@ export class CohortAnalysisService {
         totalUsers,
         retentionByDay: retentionByWeek.flatMap(r => [r, r - 2, r - 4, r - 5, r - 6, r - 7, r - 8]),
         retentionByWeek,
-        activationRate: Math.min(100, 60 + Math.random() * 20),
-        churnRate: Math.max(0, 20 + Math.random() * 10),
+        activationRate: Math.min(100, 60 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20),
+        churnRate: Math.max(0, 20 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10),
       });
     }
 
@@ -517,14 +518,14 @@ export class FunnelAnalysisService {
 
     const [totalUsers] = await db.select({ count: sql<number>`COUNT(*)` }).from(schema.users);
     const [withPosts] = await db.select({ count: sql<number>`COUNT(DISTINCT ${schema.posts.authorId})` }).from(schema.posts);
-    const [withFollowsResult] = await db.execute(sql`SELECT COUNT(DISTINCT ${schema.follows.followerId}) AS followers FROM ${schema.follows}`);
-    const withFollows = { followers: (withFollowsResult as any)[0].followers };
+    const withFollowsResult = await db.select({ followers: sql<number>`COUNT(DISTINCT follower_id)` }).from(schema.follows);
+    const withFollows = { followers: withFollowsResult?.[0]?.followers || 0 };
     const [withTokens] = await db.select({ count: sql<number>`COUNT(DISTINCT ${schema.tokenBalances.userId})` }).from(schema.tokenBalances);
     const [withStakes] = await db.select({ count: sql<number>`COUNT(DISTINCT ${schema.stakingPositions.userId})` }).from(schema.stakingPositions);
 
     const total = totalUsers?.count || 1;
     const posted = withPosts?.count || 0;
-    const followed = withFollows?.count || 0;
+    const followed = withFollows?.followers || 0;
     const tokens = withTokens?.count || 0;
     const staked = withStakes?.count || 0;
 

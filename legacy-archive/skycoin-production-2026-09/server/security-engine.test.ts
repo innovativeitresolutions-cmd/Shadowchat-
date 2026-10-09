@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Security Engine Test Suite
  * Tests: rate limiting, CSRF protection, fraud detection, input validation
@@ -53,7 +54,7 @@ class RateLimiter {
 const csrfTokens = new Map<string, { token: string; createdAt: number; used: boolean }>();
 
 function generateCsrfToken(sessionId: string, nowMs = Date.now()): string {
-  const token = `csrf_${sessionId}_${Math.random().toString(36).slice(2)}_${nowMs}`;
+  const token = `csrf_${sessionId}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}_${nowMs}`;
   csrfTokens.set(sessionId, { token, createdAt: nowMs, used: false });
   return token;
 }

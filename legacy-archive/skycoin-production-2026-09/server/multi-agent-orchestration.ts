@@ -199,7 +199,7 @@ export class MultiAgentOrchestrationEngine {
    * Simulate agent decision
    */
   private simulateAgentDecision(task: Task, agent: Agent): string {
-    const random = Math.random();
+    const random = (crypto.getRandomValues(new Uint8Array(1))[0] / 256);
     if (random < agent.successRate) {
       return task.priority > 50 ? 'approve' : 'proceed';
     }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Security Core Engine
  * Phase 5H — Sovereignty Build
@@ -345,7 +346,7 @@ class FraudEscalationEngine {
     walletAddress?: string
   ): { fraudSignal: FraudSignal; actions: EscalationAction[] } {
     const fraudSignal: FraudSignal = {
-      id: `sig_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `sig_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       userId,
       walletAddress,
       category,
@@ -459,7 +460,7 @@ class WalletAnomalyDetector {
     riskScore: number
   ): WalletAnomalyAlert {
     return {
-      id: `walert_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `walert_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       walletAddress,
       anomalyType,
       description,
@@ -523,7 +524,7 @@ class ExploitDetector {
     blocked: boolean
   ): { safe: boolean; attackType: ExploitAttempt["attackType"]; blocked: boolean } {
     const attempt: ExploitAttempt = {
-      id: `exploit_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `exploit_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       userId,
       ipAddress,
       attackType,

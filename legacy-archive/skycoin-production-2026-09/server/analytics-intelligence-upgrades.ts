@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -5,10 +6,10 @@ export const analyticsIntelligenceRouter = router({
   // Real-time dashboards
   getDashboard: protectedProcedure.query(async () => ({
     metrics: {
-      dau: Math.floor(Math.random() * 100000),
-      mau: Math.floor(Math.random() * 1000000),
-      revenue: Math.random() * 100000,
-      retention: Math.random() * 100,
+      dau: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
+      mau: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000),
+      revenue: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000,
+      retention: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
     },
   })),
 
@@ -26,8 +27,8 @@ export const analyticsIntelligenceRouter = router({
     .query(async ({ input }) => ({
       forecast: Array.from({ length: input.days }, (_, i) => ({
         day: i,
-        value: Math.random() * 1000,
-        confidence: 0.8 + Math.random() * 0.2,
+        value: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000,
+        confidence: 0.8 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.2,
       })),
     })),
 
@@ -62,9 +63,9 @@ export const analyticsIntelligenceRouter = router({
   calculateLTV: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ input }) => ({
-      ltv: Math.random() * 10000,
-      cac: Math.random() * 100,
-      paybackPeriod: Math.random() * 12,
+      ltv: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000,
+      cac: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
+      paybackPeriod: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 12,
     })),
 
   // Attribution modeling
@@ -82,8 +83,8 @@ export const analyticsIntelligenceRouter = router({
     .input(z.object({ sessionId: z.string() }))
     .query(async ({ input }) => ({
       sessionId: input.sessionId,
-      duration: Math.random() * 3600,
-      events: Math.floor(Math.random() * 100),
+      duration: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3600,
+      events: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
     })),
 
   // Error tracking
@@ -91,17 +92,17 @@ export const analyticsIntelligenceRouter = router({
     errors: Array.from({ length: 10 }, (_, i) => ({
       id: `error-${i}`,
       message: `Error ${i}`,
-      count: Math.floor(Math.random() * 1000),
+      count: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000),
     })),
   })),
 
   // Performance monitoring
   getPerformance: publicProcedure.query(async () => ({
     metrics: {
-      fcp: Math.random() * 2000,
-      lcp: Math.random() * 4000,
-      cls: Math.random() * 0.5,
-      ttfb: Math.random() * 1000,
+      fcp: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2000,
+      lcp: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 4000,
+      cls: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5,
+      ttfb: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000,
     },
   })),
 });

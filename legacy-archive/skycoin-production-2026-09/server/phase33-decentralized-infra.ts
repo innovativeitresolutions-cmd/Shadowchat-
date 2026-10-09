@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 33 — DECENTRALIZED INFRASTRUCTURE LAYER
  * Distributed storage backups, content replication, distributed indexing,
@@ -185,7 +186,7 @@ const _governanceRecords = new Map<string, ImmutableGovernanceRecord>();
 let _chainPosition = 0;
 
 function _id(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
 }
 
 function _hash(data: string): string {
@@ -233,7 +234,7 @@ export const storageNodeManager = {
       capacityGB: params.capacityGB,
       usedGB: 0,
       replicationFactor: params.replicationFactor ?? 3,
-      latencyMs: Math.floor(Math.random() * 50) + 10,
+      latencyMs: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50) + 10,
       uptimePercent: 99.9,
       lastHealthCheck: new Date(),
       joinedAt: new Date(),
@@ -457,7 +458,7 @@ export const decentralizedArchiveEngine = {
       id: _id("arch"),
       creatorId: params.creatorId,
       archiveType: params.archiveType,
-      ipfsCid: params.ipfsCid ?? `Qm${Math.random().toString(36).slice(2).padStart(44, "0")}`,
+      ipfsCid: params.ipfsCid ?? `Qm${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2).padStart(44, "0")}`,
       arweaveId: params.arweaveId,
       sizeBytes: params.sizeBytes,
       recordCount: params.recordCount,
@@ -664,7 +665,7 @@ export const immutablePayoutEngine = {
     payoutType: ImmutablePayout["payoutType"];
     txHash?: string;
   }): ImmutablePayout {
-    const txHash = params.txHash ?? `0x${Math.random().toString(16).slice(2).padStart(64, "0")}`;
+    const txHash = params.txHash ?? `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2).padStart(64, "0")}`;
     const proofLog = immutableProofLogEngine.record({
       category: "payout",
       entityId: txHash,
@@ -732,7 +733,7 @@ export const immutableDonationEngine = {
     message?: string;
     isAnonymous?: boolean;
   }): ImmutableDonation {
-    const txHash = `0x${Math.random().toString(16).slice(2).padStart(64, "0")}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2).padStart(64, "0")}`;
     const proofLog = immutableProofLogEngine.record({
       category: "donation",
       entityId: txHash,

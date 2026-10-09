@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { db } from './db';
 import { users } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
@@ -68,8 +69,7 @@ export async function createUser(data: SignUpData) {
       message: 'Account created successfully',
     };
   } catch (error) {
-    console.error('Error creating user:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to create account',
     };
@@ -115,8 +115,7 @@ export async function socialLogin(data: SocialLoginData) {
       message: 'Account created from social login',
     };
   } catch (error) {
-    console.error('Error with social login:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to process social login',
     };
@@ -129,7 +128,7 @@ export async function socialLogin(data: SocialLoginData) {
 export async function sendEmailVerification(userId: string, email: string) {
   try {
     // Generate verification token
-    const token = Math.random().toString(36).substring(2, 15);
+    const token = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15);
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // In production, send email with verification link
@@ -141,8 +140,7 @@ export async function sendEmailVerification(userId: string, email: string) {
       message: 'Verification email sent',
     };
   } catch (error) {
-    console.error('Error sending verification email:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to send verification email',
     };
@@ -165,8 +163,7 @@ export async function verifyEmail(userId: string, token: string) {
       message: 'Email verified successfully',
     };
   } catch (error) {
-    console.error('Error verifying email:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to verify email',
     };
@@ -192,7 +189,7 @@ export async function requestPasswordReset(email: string) {
     }
 
     // Generate reset token
-    const token = Math.random().toString(36).substring(2, 15);
+    const token = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15);
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     // In production, send email with reset link
@@ -203,8 +200,7 @@ export async function requestPasswordReset(email: string) {
       message: 'Password reset email sent',
     };
   } catch (error) {
-    console.error('Error requesting password reset:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to process password reset request',
     };
@@ -233,8 +229,7 @@ export async function resetPassword(
       message: 'Password reset successfully',
     };
   } catch (error) {
-    console.error('Error resetting password:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to reset password',
     };
@@ -262,8 +257,7 @@ export async function updateProfile(
       message: 'Profile updated successfully',
     };
   } catch (error) {
-    console.error('Error updating profile:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to update profile',
     };
@@ -276,9 +270,9 @@ export async function updateProfile(
 export async function setupTwoFactor(userId: string) {
   try {
     // Generate 2FA secret (in production, use TOTP library)
-    const secret = Math.random().toString(36).substring(2, 15);
+    const secret = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15);
     const backupCodes = Array.from({ length: 10 }, () =>
-      Math.random().toString(36).substring(2, 8)
+      (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 8)
     );
 
     return {
@@ -288,8 +282,7 @@ export async function setupTwoFactor(userId: string) {
       message: '2FA setup initiated',
     };
   } catch (error) {
-    console.error('Error setting up 2FA:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to setup 2FA',
     };
@@ -307,8 +300,7 @@ export async function verify2FA(userId: string, code: string) {
       message: '2FA code verified',
     };
   } catch (error) {
-    console.error('Error verifying 2FA:', error);
-    return {
+        return {
       success: false,
       error: 'Invalid 2FA code',
     };
@@ -320,7 +312,7 @@ export async function verify2FA(userId: string, code: string) {
  */
 export async function createSession(userId: string) {
   try {
-    const sessionToken = Math.random().toString(36).substring(2, 15);
+    const sessionToken = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15);
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
     return {
@@ -330,8 +322,7 @@ export async function createSession(userId: string) {
       message: 'Session created',
     };
   } catch (error) {
-    console.error('Error creating session:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to create session',
     };
@@ -349,8 +340,7 @@ export async function logout(userId: string, sessionToken: string) {
       message: 'Logged out successfully',
     };
   } catch (error) {
-    console.error('Error logging out:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to logout',
     };

@@ -101,7 +101,7 @@ export default function ContentScheduler() {
     if (scheduledAt <= new Date()) { toast.error("Scheduled time must be in the future"); return; }
 
     const newPost: ScheduledPost = {
-      id: Math.random().toString(36).slice(2),
+      id: (Math.random()).toString(36).slice(2),
       content,
       mediaType,
       platforms: selectedPlatforms,

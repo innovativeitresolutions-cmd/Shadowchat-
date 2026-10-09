@@ -65,8 +65,7 @@ class EventBus {
       try {
         h(data);
       } catch (err) {
-        console.error(`[EventBus] Error in handler for "${event}":`, err);
-      }
+              }
     });
   }
 
@@ -90,11 +89,11 @@ class ActionStateMachine {
   }
 
   private generateId(): string {
-    return `act_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    return `act_${Date.now()}_${(Math.random()).toString(36).slice(2, 9)}`;
   }
 
   private generateTraceId(): string {
-    return `trace_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    return `trace_${Date.now()}_${(Math.random()).toString(36).slice(2, 11)}`;
   }
 
   start(type: string): ActionLifecycle {
@@ -127,8 +126,7 @@ class ActionStateMachine {
     };
 
     if (!VALID_TRANSITIONS[action.state].includes(nextState)) {
-      console.warn(`[ActionSM] Invalid transition: ${action.state} → ${nextState} for ${id}`);
-      return action;
+            return action;
     }
 
     const updated: ActionLifecycle = {

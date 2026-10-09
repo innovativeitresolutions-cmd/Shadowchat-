@@ -23,8 +23,8 @@ const CREATOR_ANALYTICS = (() => {
   let earnings = 120; let views = 4000;
   for (let i = 29; i >= 0; i--) {
     const d = new Date(); d.setDate(d.getDate() - i);
-    earnings = Math.round(earnings * (1 + (Math.random() - 0.35) * 0.12));
-    views = Math.round(views * (1 + (Math.random() - 0.3) * 0.15));
+    earnings = Math.round(earnings * (1 + ((Math.random()) - 0.35) * 0.12));
+    views = Math.round(views * (1 + ((Math.random()) - 0.3) * 0.15));
     pts.push({ date: d.toLocaleDateString("en", { month: "short", day: "numeric" }), earnings, views });
   }
   return pts;

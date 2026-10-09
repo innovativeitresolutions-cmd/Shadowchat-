@@ -43,7 +43,7 @@ export default function GameCrash() {
 
   const generateCrashPoint = () => {
     // Provably fair: house edge ~4%, crash point between 1.00 and ~100x
-    const r = Math.random();
+    const r = (Math.random());
     if (r < 0.04) return 1.00; // instant crash 4% of time
     return Math.max(1.00, 0.99 / (1 - r));
   };
@@ -66,7 +66,7 @@ export default function GameCrash() {
       }
       // Simulate other players cashing out
       setPlayers(prev => prev.map(p => {
-        if (!p.cashedAt && Math.random() < 0.01 * current) {
+        if (!p.cashedAt && (Math.random()) < 0.01 * current) {
           return { ...p, cashedAt: parseFloat(current.toFixed(2)) };
         }
         return p;

@@ -48,7 +48,7 @@ import {
 // ─── Test: Stripe Adapter ─────────────────────────────────────────────────────
 describe("Stripe Adapter", () => {
   it("creates a customer and returns a customerId", async () => {
-    const result = await stripeAdapter.createCustomer({ email: "test@example.com", name: "Test User", userId: 9001 });
+    const result = await stripeAdapter.createCustomer({ email: "user@example.com", name: "Test User", userId: 9001 });
     expect(result.customerId).toMatch(/^cus_/);
   });
 

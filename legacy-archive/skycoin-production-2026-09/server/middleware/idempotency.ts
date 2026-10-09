@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYCOIN4444 — Idempotent API Middleware
  * =========================================
@@ -147,8 +148,8 @@ export function tracingMiddleware(
 ): void {
   const traceId =
     (req.headers["x-trace-id"] as string) ??
-    `trace-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-  const spanId = `span-${Math.random().toString(36).slice(2, 9)}`;
+    `trace-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
+  const spanId = `span-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
   const requestStart = Date.now();
 
   // Attach trace context to request
@@ -176,11 +177,11 @@ export function tracingMiddleware(
 
     // Flag slow requests (> 500ms) for investigation
     if (duration > 500) {
-      console.warn("[SLOW REQUEST]", JSON.stringify(logEntry));
+      console.warn("Slow API request", logEntry);
     } else if (res.statusCode >= 500) {
-      console.error("[SERVER ERROR]", JSON.stringify(logEntry));
+      console.error("Failed API request", logEntry);
     } else {
-      console.log("[REQUEST]", JSON.stringify(logEntry));
+      console.info("API request", logEntry);
     }
   });
 

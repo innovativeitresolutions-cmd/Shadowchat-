@@ -43,8 +43,7 @@ export function registerOAuthRoutes(app: Express) {
           await db.ensureAllTokenBalances(freshUser.id);
         }
       } catch (airdropErr) {
-        console.warn("[Airdrop] Failed to seed starter tokens:", airdropErr);
-      }
+              }
 
       const sessionToken = await sdk.createSessionToken(userInfo.openId, {
         name: userInfo.name || "",
@@ -56,8 +55,7 @@ export function registerOAuthRoutes(app: Express) {
 
       res.redirect(302, "/");
     } catch (error) {
-      console.error("[OAuth] Callback failed", error);
-      res.status(500).json({ error: "OAuth callback failed" });
+            res.status(500).json({ error: "OAuth callback failed" });
     }
   });
 }

@@ -44,8 +44,7 @@ export async function createUserNotification(params: CreateNotificationParams) {
     });
     return result;
   } catch (err) {
-    console.error("[Notifications] Failed to create notification:", err);
-    return null;
+        return null;
   }
 }
 
@@ -63,8 +62,7 @@ export async function getUserNotifications(userId: number, limit = 50) {
       .orderBy(desc(notifications.createdAt))
       .limit(limit);
   } catch (err) {
-    console.error("[Notifications] Failed to get notifications:", err);
-    return [];
+        return [];
   }
 }
 
@@ -81,8 +79,7 @@ export async function markNotificationReadInDB(notificationId: number, userId: n
       .where(and(eq(notifications.id, notificationId), eq(notifications.userId, userId)));
     return true;
   } catch (err) {
-    console.error("[Notifications] Failed to mark as read:", err);
-    return false;
+        return false;
   }
 }
 

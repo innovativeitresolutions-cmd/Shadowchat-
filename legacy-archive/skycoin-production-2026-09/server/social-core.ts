@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SOCIAL CORE ENGINE — Retention-First Social Loops
  *
@@ -966,7 +967,7 @@ export class VoiceNoteService {
 
   private generateWaveform(duration: number): number[] {
     const samples = Math.min(100, Math.floor(duration * 10));
-    return Array.from({ length: samples }, () => Math.random() * 0.8 + 0.1);
+    return Array.from({ length: samples }, () => (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.8 + 0.1);
   }
 }
 

@@ -35,8 +35,7 @@ export default function DatingDiscovery() {
       const data = await response.json();
       setProfiles(data.profiles || []);
     } catch (error) {
-      console.error('Failed to load profiles:', error);
-    } finally {
+          } finally {
       setLoading(false);
     }
   };
@@ -55,8 +54,7 @@ export default function DatingDiscovery() {
         body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'like' }),
       });
     } catch (error) {
-      console.error('Failed to like profile:', error);
-    }
+          }
 
     nextProfile();
   };
@@ -73,8 +71,7 @@ export default function DatingDiscovery() {
         body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'superlike' }),
       });
     } catch (error) {
-      console.error('Failed to super like profile:', error);
-    }
+          }
 
     nextProfile();
   };
@@ -89,8 +86,7 @@ export default function DatingDiscovery() {
         body: JSON.stringify({ toUserId: currentProfile.id, likeType: 'pass' }),
       });
     } catch (error) {
-      console.error('Failed to pass profile:', error);
-    }
+          }
 
     nextProfile();
   };

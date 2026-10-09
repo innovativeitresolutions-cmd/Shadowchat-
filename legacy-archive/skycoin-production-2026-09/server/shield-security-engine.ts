@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SHIELD Security Engine v1.0
  * Fraud detection, 2FA, audit logging, threat intelligence, bot detection for SKYCOIN4444
@@ -191,7 +192,7 @@ export class AuditLogEngine {
   log(entry: Omit<AuditLog, "id" | "timestamp">): AuditLog {
     const log: AuditLog = {
       ...entry,
-      id: `audit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `audit_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
       timestamp: Date.now(),
     };
     this.logs.push(log);
@@ -277,7 +278,7 @@ export class ThreatDetectionEngine {
   }
 
   recordThreat(threat: Omit<ThreatEvent, "id" | "timestamp">): ThreatEvent {
-    const event: ThreatEvent = { ...threat, id: `threat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, timestamp: Date.now() };
+    const event: ThreatEvent = { ...threat, id: `threat_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`, timestamp: Date.now() };
     this.threats.push(event);
     if (this.threats.length > this.maxThreats) this.threats.shift();
     return event;
@@ -311,7 +312,7 @@ export class SessionSecurityEngine {
 
   createSession(userId: number, ipAddress: string, userAgent: string): SessionSecurity {
     const session: SessionSecurity = {
-      sessionId: `sess_${Date.now()}_${Math.random().toString(36).slice(2, 16)}`,
+      sessionId: `sess_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 16)}`,
       userId, ipAddress, userAgent,
       createdAt: Date.now(),
       lastActivity: Date.now(),

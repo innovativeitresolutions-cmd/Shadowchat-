@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Infrastructure Ascension Engine
  * Phase 5I — Sovereignty Build
@@ -164,7 +165,7 @@ class JobQueueSystem {
     options: { priority?: JobPriority; maxAttempts?: number; scheduledAt?: Date; timeout?: number; tags?: string[] } = {}
   ): Job {
     const job: Job = {
-      id: `job_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `job_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       type,
       payload,
       priority: options.priority || "normal",
@@ -457,8 +458,8 @@ class DistributedTracer {
     traceId?: string
   ): TraceSpan {
     const span: TraceSpan = {
-      traceId: traceId || `trace_${Date.now()}_${Math.random().toString(36).slice(2)}`,
-      spanId: `span_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      traceId: traceId || `trace_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
+      spanId: `span_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       parentSpanId,
       operationName,
       serviceName,
@@ -467,7 +468,7 @@ class DistributedTracer {
       tags: {},
       logs: [],
     };
-    if (Math.random() < this.sampleRate) this.spans.set(span.spanId, span);
+    if ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) < this.sampleRate) this.spans.set(span.spanId, span);
     return span;
   }
 
@@ -535,8 +536,8 @@ class BackupSystem {
     job.startedAt = new Date();
     try {
       // In production: use pg_dump, mysqldump, or S3 sync
-      const mockSize = Math.floor(Math.random() * 1000000000) + 100000000;
-      const mockChecksum = `sha256_${Math.random().toString(36).slice(2)}`;
+      const mockSize = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000000) + 100000000;
+      const mockChecksum = `sha256_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
       const mockLocation = `s3://shadowchat-backups/${job.target}/${job.type}/${job.id}.tar.gz`;
       job.size = mockSize;
       job.checksum = mockChecksum;
@@ -675,7 +676,7 @@ class FeatureFlagSystem {
       const hash = (userId * 2654435761) % 100;
       return hash < flag.rolloutPercentage;
     }
-    return Math.random() * 100 < flag.rolloutPercentage;
+    return (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 < flag.rolloutPercentage;
   }
 
   update(key: string, updates: Partial<Pick<FeatureFlag, "enabled" | "rolloutPercentage" | "userIds" | "expiresAt">>): void {

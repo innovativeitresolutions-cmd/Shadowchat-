@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * STREAMING CORE ENGINE — Production-Grade Live Platform Infrastructure
  *
@@ -372,7 +373,7 @@ export class RTMPIngestService {
 
   private generateSecureKey(): string {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length: 32 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return Array.from({ length: 32 }, () => chars[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * chars.length)]).join("");
   }
 }
 

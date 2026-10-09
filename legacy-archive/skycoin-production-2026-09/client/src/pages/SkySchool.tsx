@@ -803,7 +803,7 @@ document.querySelectorAll("p")
 
 Modifying Content:
 element.textContent = "New text"
-element.innerHTML = "<p>HTML content</p>"
+element.textContent = "<p>HTML content</p>"
 element.setAttribute("class", "active")
 
 Styling:
@@ -814,8 +814,7 @@ element.classList.remove("inactive")
 
 Event Listeners:
 element.addEventListener("click", function() {
-    console.log("Clicked!");
-});
+    });
 
 Common Events:
 • click: Mouse click
@@ -827,7 +826,7 @@ Common Events:
 
 Event Object:
 element.addEventListener("click", (event) => {
-    console.log(event.target);  // Element clicked
+      // Element clicked
     event.preventDefault();  // Stop default behavior
 });
 
@@ -886,9 +885,7 @@ Effects:
 import { useEffect } from "react";
 
 useEffect(() => {
-    console.log("Component mounted");
-    return () => console.log("Component unmounted");
-}, []);  // Dependency array`
+        return () => }, []);  // Dependency array`
       },
       {
         title: "Advanced React",

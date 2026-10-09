@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Simulation Layer
  * AI personas that blend with real feed to make platform feel alive.
@@ -154,7 +155,7 @@ async function ensureSimulationTables() {
 // ─── Content Generator ────────────────────────────────────────────────────────
 
 async function generatePersonaPost(persona: typeof AI_PERSONAS[number], topic?: string): Promise<string> {
-  const selectedTopic = topic ?? persona.topics[Math.floor(Math.random() * persona.topics.length)];
+  const selectedTopic = topic ?? persona.topics[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * persona.topics.length)];
   const response = await invokeLLM({
     messages: [
       {
@@ -186,16 +187,16 @@ async function runSimulationCycle(db: NonNullable<Awaited<ReturnType<typeof getD
     for (let i = 0; i < w; i++) weightedPersonas.push(p);
   }
 
-  const selected = [...weightedPersonas].sort(() => Math.random() - 0.5).slice(0, count);
+  const selected = [...weightedPersonas].sort(() => (crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5).slice(0, count);
 
   for (const persona of selected) {
-    const topic = persona.topics[Math.floor(Math.random() * persona.topics.length)];
+    const topic = persona.topics[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * persona.topics.length)];
     try {
       const content = await generatePersonaPost(persona, topic);
-      const likes = Math.floor(Math.random() * 50) + 1;
-      const comments = Math.floor(Math.random() * 15);
-      const shares = Math.floor(Math.random() * 8);
-      const blendWeight = 0.5 + Math.random() * 0.5;
+      const likes = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50) + 1;
+      const comments = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 15);
+      const shares = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 8);
+      const blendWeight = 0.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5;
 
       await db.execute(sql.raw(
         `INSERT INTO simulation_posts (persona_id, persona_name, persona_handle, persona_avatar, content, topic, likes, comments, shares, blend_weight)
@@ -208,8 +209,7 @@ async function runSimulationCycle(db: NonNullable<Awaited<ReturnType<typeof getD
 
       results.push({ personaId: persona.id, content, topic });
     } catch (err) {
-      console.warn(`[Simulation] Failed to generate post for ${persona.id}:`, err);
-    }
+          }
   }
 
   return results;
@@ -360,17 +360,16 @@ export const simulationRouter = router({
       const topic = persona.topics[0];
       try {
         const content = await generatePersonaPost(persona, topic);
-        const likes = Math.floor(Math.random() * 100) + 10;
-        const comments = Math.floor(Math.random() * 20) + 2;
-        const shares = Math.floor(Math.random() * 10);
+        const likes = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 10;
+        const comments = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20) + 2;
+        const shares = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10);
         await db.execute(sql.raw(
           `INSERT INTO simulation_posts (persona_id, persona_name, persona_handle, persona_avatar, content, topic, likes, comments, shares, blend_weight)
-           VALUES ('${persona.id}', '${persona.name.replace(/'/g, "''")}', '${persona.handle}', '${persona.avatar}', '${content.replace(/'/g, "''")}', '${topic}', ${likes}, ${comments}, ${shares}, ${0.7 + Math.random() * 0.3})`,
+           VALUES ('${persona.id}', '${persona.name.replace(/'/g, "''")}', '${persona.handle}', '${persona.avatar}', '${content.replace(/'/g, "''")}', '${topic}', ${likes}, ${comments}, ${shares}, ${0.7 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.3})`,
         ));
         generated++;
       } catch (err) {
-        console.warn(`[Simulation] Seed failed for ${persona.id}:`, err);
-      }
+              }
     }
 
     return { success: true, message: `Seeded ${generated} posts`, generated };
@@ -392,11 +391,8 @@ export async function autoSeedSimulation() {
     const existing = Number(countData[0]?.total ?? 0);
 
     if (existing < 5) {
-      console.log("[Simulation] Auto-seeding AI persona posts...");
-      await runSimulationCycle(db, 4);
-      console.log("[Simulation] Auto-seed complete.");
-    }
+            await runSimulationCycle(db, 4);
+          }
   } catch (err) {
-    console.warn("[Simulation] Auto-seed failed:", err);
-  }
+      }
 }

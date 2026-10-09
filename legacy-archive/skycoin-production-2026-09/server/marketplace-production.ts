@@ -795,7 +795,7 @@ export const marketplaceEngine = orderSystem;
 const _listings = new Map<string, { listingId: string; sellerId: number; title: string; price: number; currency: string; status: string; createdAt: Date }>();
 
 (marketplaceEngine as any).createListing = async function(params: { sellerId: number; title: string; price: number; currency?: string; description?: string; category?: string; stock?: number }) {
-  const listingId = `lst_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const listingId = `lst_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
   const listing = { id: listingId, listingId, sellerId: params.sellerId, title: params.title, price: params.price, currency: params.currency ?? "USD", description: params.description ?? "", category: params.category ?? "general", stock: params.stock ?? 1, status: "active", createdAt: new Date() };
   _listings.set(listingId, listing);
   return listing;

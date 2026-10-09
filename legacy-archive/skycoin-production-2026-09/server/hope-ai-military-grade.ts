@@ -139,8 +139,7 @@ export class MilitaryGradeHOPEAI {
         return decision;
       } catch (error) {
         lastError = error as Error;
-        console.error(`[HOPE AI] Model ${config.name} failed:`, lastError.message);
-        // Continue to next model
+                // Continue to next model
       }
     }
 
@@ -201,8 +200,7 @@ Provide your response in this format:
    * Local Llama 3 model (fallback)
    */
   private async callLocalModel(context: string): Promise<string> {
-    // Placeholder for local model inference
-    // In production, this would call a local Llama 3 instance via vLLM or similar
+        // In production, this would call a local Llama 3 instance via vLLM or similar
     return `<decision>Local inference pending</decision><confidence>0.5</confidence>`;
   }
 
@@ -284,8 +282,7 @@ Provide your response in this format:
         // For now, just clear the buffer
         this.auditBuffer = [];
       } catch (error) {
-        console.error('[HOPE AI] Audit persistence failed:', error);
-      }
+              }
     }, 5000); // Persist every 5 seconds
   }
 

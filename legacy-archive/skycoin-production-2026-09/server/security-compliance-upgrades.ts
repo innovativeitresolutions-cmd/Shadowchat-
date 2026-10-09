@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 const adminProcedure = protectedProcedure;
 import { z } from "zod";
@@ -52,7 +53,7 @@ export const securityComplianceRouter = router({
   checkRateLimit: publicProcedure
     .input(z.object({ endpoint: z.string() }))
     .query(async ({ input }) => ({
-      remaining: Math.floor(Math.random() * 1000),
+      remaining: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000),
       resetTime: Date.now() + 3600000,
     })),
 

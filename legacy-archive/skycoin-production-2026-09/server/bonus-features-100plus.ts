@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -92,14 +93,14 @@ export const bonusFeaturesRouter = router({
 
   // Viral referral system
   getReferralStats: protectedProcedure.query(async () => ({
-    referrals: Math.floor(Math.random() * 1000),
-    earnings: Math.random() * 10000,
+    referrals: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000),
+    earnings: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000,
     tier: "gold",
   })),
 
   // Invite codes
   generateInviteCode: protectedProcedure.mutation(async () => ({
-    code: `SKY${Math.random().toString(36).substring(7).toUpperCase()}`,
+    code: `SKY${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7).toUpperCase()}`,
     bonus: 100,
   })),
 
@@ -108,8 +109,8 @@ export const bonusFeaturesRouter = router({
     leaderboard: Array.from({ length: 10 }, (_, i) => ({
       rank: i + 1,
       user: `referrer${i}`,
-      referrals: Math.floor(Math.random() * 10000),
-      earnings: Math.random() * 100000,
+      referrals: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
+      earnings: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000,
     })),
   })),
 
@@ -137,9 +138,9 @@ export const bonusFeaturesRouter = router({
 
   // Creator dashboard
   getCreatorDashboard: protectedProcedure.query(async () => ({
-    followers: Math.floor(Math.random() * 100000),
-    engagement: Math.random() * 100,
-    earnings: Math.random() * 50000,
+    followers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
+    engagement: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
+    earnings: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50000,
     growth: "+25% this month",
   })),
 
@@ -180,16 +181,16 @@ export const bonusFeaturesRouter = router({
 
   // Network effects
   getNetworkValue: publicProcedure.query(async () => ({
-    users: Math.floor(Math.random() * 1000000),
-    transactions: Math.floor(Math.random() * 10000000),
-    tvl: Math.random() * 1000000000,
+    users: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000),
+    transactions: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000000),
+    tvl: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000000,
     networkValue: "Metcalfe's Law: n²",
   })),
 
   // Brand loyalty
   getLoyaltyProgram: protectedProcedure.query(async () => ({
     tier: "platinum",
-    points: Math.floor(Math.random() * 100000),
+    points: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
     benefits: ["Early access", "Exclusive NFTs", "Premium support"],
   })),
 
@@ -299,12 +300,12 @@ export const bonusFeaturesRouter = router({
     .mutation(async ({ input }) => ({
       proposalId: `prop-${Date.now()}`,
       status: "voting",
-      votingPower: Math.random() * 1000000,
+      votingPower: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000,
     })),
 
   // DAO treasury
   getTreasuryBalance: publicProcedure.query(async () => ({
-      balance: Math.random() * 100000000,
+      balance: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000000,
       allocation: {
         development: 0.4,
         marketing: 0.3,

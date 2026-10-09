@@ -821,7 +821,7 @@ export const swapEngine = dexSwapEngine;
 
 // ─── COMMANDMENT ALIASES: walletConnectService ───────────────────────────────
 (walletConnectService as any).generateChallenge = function(address: string, userId?: number) {
-  const nonce = Math.random().toString(36).slice(2, 18);
+  const nonce = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 18);
   const issuedAt = new Date().toISOString();
   const message = `Sign in with Ethereum to Shadowchat.\n\nAddress: ${address}\nNonce: ${nonce}\nIssued At: ${issuedAt}\nChain ID: 1`;
   return { message, nonce, address, userId, issuedAt, expiresAt: new Date(Date.now() + 300_000).toISOString() };

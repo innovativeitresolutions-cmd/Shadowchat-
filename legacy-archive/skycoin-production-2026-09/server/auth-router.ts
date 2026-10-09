@@ -69,8 +69,7 @@ export const authRouter = router({
 
       // Store verification token (in production, save to database)
       // For now, we'll return it for email sending
-      console.log(`[Auth] Verification token for ${input.email}: ${verificationToken}`);
-
+      
       // Generate token pair
       const tokens = await jwtAuthService.generateTokenPair(user.id, user.email, 'user');
 
@@ -293,8 +292,7 @@ export const authRouter = router({
       const { token: resetToken, hashedToken, expiresAt } = jwtAuthService.generatePasswordResetToken();
 
       // Store reset token (in production, save to database)
-      console.log(`[Auth] Password reset token for ${input.email}: ${resetToken}`);
-
+      
       return { success: true, message: 'Password reset link has been sent to your email' };
     }),
 

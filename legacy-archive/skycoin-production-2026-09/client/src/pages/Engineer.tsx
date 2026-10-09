@@ -66,8 +66,7 @@ export default function Engineer() {
       
       // Broadcast to collaborators (simulated)
       if (collaborators.length > 1) {
-        console.log(`[Collab] Shared result with ${collaborators.length - 1} collaborators`);
-      }
+              }
     } catch (err) {
       setOutput(`Error: ${err instanceof Error ? err.message : "Unknown error"}`);
     }

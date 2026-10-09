@@ -12,7 +12,6 @@ import {
   Bookmark, MoreHorizontal, Plus, Eye, Clock
 } from "lucide-react";
 
-// Mock video data for demo
 const MOCK_REELS = [
   { id: 1, user: "CryptoKing", avatar: "👑", title: "How I made 10x on TRUMP token 🚀", views: "2.4M", likes: 184200, comments: 3420, duration: "0:45", tags: ["crypto","trump","defi"], url: "", thumb: "https://picsum.photos/seed/reel1/400/700" },
   { id: 2, user: "SkyWhale", avatar: "🐋", title: "DeFi yield farming explained in 60 seconds", views: "890K", likes: 67300, comments: 1820, duration: "1:00", tags: ["defi","yield","tutorial"], url: "", thumb: "https://picsum.photos/seed/reel2/400/700" },

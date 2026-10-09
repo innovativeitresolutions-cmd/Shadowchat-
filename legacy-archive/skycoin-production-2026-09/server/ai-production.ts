@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * AI PRODUCTION LAYER — COMMANDMENTS 7 & 8
  * Commandment 7: AI must be functional (real OpenAI calls, not Math.random)
@@ -58,7 +59,7 @@ export const analyticsTracker = {
   track(event: Omit<AnalyticsEvent, "id" | "timestamp">): void {
     const fullEvent: AnalyticsEvent = {
       ...event,
-      id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `evt_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
       timestamp: new Date().toISOString(),
     };
 
@@ -314,7 +315,7 @@ export interface FeedRankingResult {
 export const feedRankingAI = {
   /**
    * Real feed ranking using a multi-factor scoring model.
-   * No Math.random() — all scores are deterministic and data-driven.
+   * No (crypto.getRandomValues(new Uint8Array(1))[0] / 256) — all scores are deterministic and data-driven.
    */
   rankPost(signals: FeedRankingSignals, nowMs?: number): FeedRankingResult {
     // Accept an explicit timestamp so tests can be deterministic

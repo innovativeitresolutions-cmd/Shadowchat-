@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * DeFi & TOKEN ECONOMICS ENGINE
  * Full decentralized finance system:
@@ -249,7 +250,7 @@ export class SwapEngine {
 
     return {
       success: true,
-      txId: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      txId: `tx_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
       quote,
     };
   }
@@ -588,16 +589,16 @@ export class PriceOracle {
       const basePrice = 0.05;
       const volatility = 0.02;
       const trend = 0.001 * (30 - d); // Slight uptrend
-      const noise = (Math.random() - 0.5) * volatility;
+      const noise = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * volatility;
       const price = basePrice + trend + noise;
 
       this.priceHistory.push({
         timestamp: new Date(Date.now() - d * 24 * 60 * 60 * 1000),
-        open: price - Math.random() * 0.005,
-        high: price + Math.random() * 0.01,
-        low: price - Math.random() * 0.01,
+        open: price - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.005,
+        high: price + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.01,
+        low: price - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.01,
         close: price,
-        volume: 50000 + Math.random() * 100000,
+        volume: 50000 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000,
       });
     }
 

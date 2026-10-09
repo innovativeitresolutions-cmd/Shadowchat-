@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Social Engine Test Suite
  * Tests: feed ranking, trending, tips, follows, posts, comments
@@ -181,7 +182,7 @@ function getFollowerCount(userId: number): number {
 const NOW = Date.now();
 function makePost(overrides: Partial<Post> = {}): Post {
   return {
-    id: Math.floor(Math.random() * 10000),
+    id: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
     userId: 1,
     content: "Test post content",
     likes: 10,
@@ -198,7 +199,7 @@ function makePost(overrides: Partial<Post> = {}): Post {
 
 function makeUser(overrides: Partial<User> = {}): User {
   return {
-    id: Math.floor(Math.random() * 10000),
+    id: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
     name: "Test User",
     followers: 100,
     reputation: 50,

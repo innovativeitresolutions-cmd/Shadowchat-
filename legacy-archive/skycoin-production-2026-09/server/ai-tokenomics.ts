@@ -92,8 +92,7 @@ export async function getUserTokenBalance(userId: string): Promise<TokenBalance>
       lastUpdated: new Date(),
     };
   } catch (error) {
-    console.error('Error fetching token balance:', error);
-    return {
+        return {
       userId,
       balance: 0,
       totalEarned: 0,
@@ -144,8 +143,7 @@ export async function deductTokens(
       newBalance,
     };
   } catch (error) {
-    console.error('Error deducting tokens:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to process token deduction',
     };
@@ -180,8 +178,7 @@ export async function awardTokens(
       newBalance: balance.balance,
     };
   } catch (error) {
-    console.error('Error awarding tokens:', error);
-    return {
+        return {
       success: false,
     };
   }
@@ -214,8 +211,7 @@ export async function getTokenHistory(userId: string, limit = 50) {
       .where(eq(tokenTransactions.userId, userId))
       .limit(limit);
   } catch (error) {
-    console.error('Error fetching token history:', error);
-    return [];
+        return [];
   }
 }
 

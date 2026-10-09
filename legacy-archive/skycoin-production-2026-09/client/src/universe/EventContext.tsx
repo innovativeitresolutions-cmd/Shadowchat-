@@ -69,7 +69,7 @@ export function EventProvider({ children }: { children: ReactNode }) {
 
   const emit = <T,>(type: AppEventType, payload: T, source?: string) => {
     const event: AppEvent<T> = {
-      id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      id: `evt-${Date.now()}-${(Math.random()).toString(36).slice(2, 7)}`,
       type,
       payload,
       timestamp: Date.now(),
@@ -82,13 +82,13 @@ export function EventProvider({ children }: { children: ReactNode }) {
     // Notify type-specific listeners
     const typeListeners = listenersRef.current.get(type);
     typeListeners?.forEach(handler => {
-      try { handler(event as AppEvent); } catch (e) { console.error("[EventBus] handler error:", e); }
+      try { handler(event as AppEvent); } catch (e) {  }
     });
 
     // Notify wildcard listeners
     const allListeners = listenersRef.current.get("*");
     allListeners?.forEach(handler => {
-      try { handler(event as AppEvent); } catch (e) { console.error("[EventBus] wildcard handler error:", e); }
+      try { handler(event as AppEvent); } catch (e) {  }
     });
   };
 

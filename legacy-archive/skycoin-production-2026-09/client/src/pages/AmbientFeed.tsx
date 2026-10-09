@@ -14,12 +14,12 @@ import { toast } from "sonner";
 // Ambient particle system — purely CSS-driven
 const AMBIENT_PARTICLES = Array.from({ length: 20 }, (_, i) => ({
   id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 4 + 1,
-  delay: Math.random() * 5,
-  duration: Math.random() * 8 + 4,
-  color: ["purple", "cyan", "pink", "blue"][Math.floor(Math.random() * 4)],
+  x: (Math.random()) * 100,
+  y: (Math.random()) * 100,
+  size: (Math.random()) * 4 + 1,
+  delay: (Math.random()) * 5,
+  duration: (Math.random()) * 8 + 4,
+  color: ["purple", "cyan", "pink", "blue"][Math.floor((Math.random()) * 4)],
 }));
 
 const AI_HIGHLIGHTS = [

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * REAL-TIME EVENT ENGINE
  * Server-Sent Events based real-time system:
@@ -137,7 +138,7 @@ export class SSEConnectionManager {
   }
 
   addConnection(userId: number, send: (event: RealtimeEvent) => void): string {
-    const connectionId = `conn_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const connectionId = `conn_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
 
     const connection: SSEConnection = {
       userId,
@@ -633,7 +634,7 @@ export function createChatRoom(params: {
   maxMembers?: number; slowMode?: number; metadata?: Record<string, unknown>;
 }): ChatRoom {
   const room: ChatRoom = {
-    id: `room_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `room_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     name: params.name,
     type: params.type,
     createdBy: params.createdBy,
@@ -695,7 +696,7 @@ export function sendChatMessage(params: {
     slowModeTimers.set(params.roomId, timers);
   }
   const message: ChatMessage = {
-    id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `msg_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     roomId: params.roomId,
     senderId: params.senderId,
     senderName: params.senderName,
@@ -774,7 +775,7 @@ export function createLivePoll(params: {
   options: string[]; multipleChoice?: boolean; durationSeconds?: number;
 }): LivePoll {
   const poll: LivePoll = {
-    id: `poll_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `poll_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     roomId: params.roomId,
     creatorId: params.creatorId,
     question: params.question,
@@ -902,7 +903,7 @@ export function setStreamChatMode(streamId: string, settings: Partial<Pick<Strea
 function broadcastToChannel(channel: string, event: Omit<RealtimeEvent, "id" | "timestamp" | "channel">): void {
   const full: RealtimeEvent = {
     ...event,
-    id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `evt_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     timestamp: new Date(),
     channel,
   };

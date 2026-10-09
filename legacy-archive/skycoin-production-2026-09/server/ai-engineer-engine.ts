@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * AI ENGINEER ENGINE
  * ══════════════════════════════════════════════════════════════════
@@ -271,7 +272,7 @@ for (const botId of Object.keys(BOT_DEFINITIONS) as BotId[]) {
     tasksCompleted: 0,
     linesGenerated: 0,
     lastActive: new Date(),
-    uptime: Math.floor(Math.random() * 86400),
+    uptime: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 86400),
   });
 }
 

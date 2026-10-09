@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -9,7 +10,7 @@ export const gamingGamificationRouter = router({
       leaderboard: Array.from({ length: 100 }, (_, i) => ({
         rank: i + 1,
         username: `player${i}`,
-        score: Math.floor(Math.random() * 1000000),
+        score: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000),
       })),
     })),
 
@@ -31,8 +32,8 @@ export const gamingGamificationRouter = router({
 
   // Battle pass
   getBattlePass: protectedProcedure.query(async () => ({
-    level: Math.floor(Math.random() * 100),
-    progress: Math.random() * 100,
+    level: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+    progress: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
     rewards: Array.from({ length: 10 }, (_, i) => ({
       level: i + 1,
       reward: `NFT #${i}`,
@@ -58,9 +59,9 @@ export const gamingGamificationRouter = router({
 
   // Staking rewards
   getStakingRewards: protectedProcedure.query(async () => ({
-    stakedAmount: Math.random() * 100000,
+    stakedAmount: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000,
     apy: 12.5,
-    earned: Math.random() * 5000,
+    earned: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000,
   })),
 
   // Guilds
@@ -84,8 +85,8 @@ export const gamingGamificationRouter = router({
   getYieldFarms: publicProcedure.query(async () => ({
     farms: Array.from({ length: 5 }, (_, i) => ({
       id: `farm-${i}`,
-      apy: 50 + Math.random() * 100,
-      tvl: Math.random() * 1000000,
+      apy: 50 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
+      tvl: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000,
     })),
   })),
 });

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 24 — ECOSYSTEM LOCK-IN
  * Unified Identity Layer, Cross-System Persistence, Migration Resistance
@@ -402,8 +403,8 @@ export const migrationResistanceEngine = {
     exportRecord.status = "ready";
     exportRecord.readyAt = new Date();
     exportRecord.fileUrl = `https://exports.sky/${exportId}.zip`;
-    exportRecord.fileSizeBytes = Math.floor(Math.random() * 50000000) + 1000000;
-    exportRecord.recordCount = Math.floor(Math.random() * 10000) + 100;
+    exportRecord.fileSizeBytes = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50000000) + 1000000;
+    exportRecord.recordCount = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000) + 100;
     exportRecord.checksum = `sha256_${exportId.slice(0, 16)}`;
     return exportRecord;
   },

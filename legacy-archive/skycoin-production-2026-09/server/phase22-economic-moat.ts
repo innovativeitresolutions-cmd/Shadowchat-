@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 22 — ECONOMIC MOAT ENGINE
  * Token Utility Expansion, Liquidity Systems, NFT Utility Layer
@@ -174,7 +175,7 @@ const _nftUnlockables = new Map<string, NFTUnlockable>();
 
 export const tokenUtilityEngine = {
   recordAction(params: Omit<TokenUtilityAction, "id" | "status" | "createdAt">): TokenUtilityAction {
-    const id = `tua_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `tua_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const action: TokenUtilityAction = {
       ...params, id,
       status: "pending",
@@ -250,7 +251,7 @@ export const tokenUtilityEngine = {
 
   // Governance Proposals
   createProposal(params: Omit<GovernanceProposal, "id" | "status" | "votesFor" | "votesAgainst" | "votesAbstain">): GovernanceProposal {
-    const id = `prop_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `prop_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const proposal: GovernanceProposal = {
       ...params, id,
       status: "active",

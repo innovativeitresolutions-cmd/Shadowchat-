@@ -21,7 +21,6 @@ const STORY_DURATION = 5000;
 
 const REACTION_EMOJIS = ["❤️", "🔥", "😍", "😂", "👏", "💎", "🚀", "💋"];
 
-// Mock NSFW story groups for demo (real data from trpc.story.feed)
 const DEMO_STORY_GROUPS = [
   {
     userId: 1, userName: "skyler.blue", isLive: true, hasUnviewed: true, isNSFW: false,

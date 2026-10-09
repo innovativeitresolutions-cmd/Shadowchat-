@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 6C — Live Event Engine
  * Ticketed live events, premium spaces, creator conferences, tournaments,
@@ -317,7 +318,7 @@ export const liveRaffles = {
       for (let i = 0; i < entry.tickets; i++) pool.push(entry.userId);
     }
     if (pool.length === 0) return { winnerId: 0, prize: "No winner" };
-    const winnerId = pool[Math.floor(Math.random() * pool.length)];
+    const winnerId = pool[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * pool.length)];
     raffle.status = "drawn";
     raffle.winners = [{ userId: winnerId, prize: raffle.title, rank: 1 }];
     return { winnerId, prize: raffle.title };
@@ -362,7 +363,7 @@ export const liveRaffles = {
       let idx: number;
       let attempts = 0;
       do {
-        idx = Math.floor(Math.random() * pool.length);
+        idx = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * pool.length);
         attempts++;
       } while (usedIndices.has(idx) && attempts < 1000);
       if (pool[idx] !== undefined) {

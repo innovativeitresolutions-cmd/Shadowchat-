@@ -82,7 +82,7 @@ export function generatePrintCatalog(): ArtPrint[] {
     for (let i = 1; i <= printsInSeries && prints.length < 144; i++) {
       const edition = i;
       const totalEdition = printsInSeries;
-      const price = 49 + Math.floor(Math.random() * 200);
+      const price = 49 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200);
       const coaHash = crypto
         .createHash("sha256")
         .update(`${series}-${edition}-skyler-blue-spillers`)
@@ -99,12 +99,12 @@ export function generatePrintCatalog(): ArtPrint[] {
         currency: "USD",
         imageUrl: `https://placehold.co/800x800/1a0533/bf00ff?text=${encodeURIComponent(series)}+${edition}`,
         thumbnailUrl: `https://placehold.co/400x400/1a0533/bf00ff?text=${encodeURIComponent(series)}+${edition}`,
-        dimensions: ["8x10 in", "11x14 in", "16x20 in", "24x36 in"][Math.floor(Math.random() * 4)],
-        medium: ["Digital Print on Archival Paper", "Giclée on Canvas", "Metallic Print", "Fine Art Paper"][Math.floor(Math.random() * 4)],
-        year: 2024 + Math.floor(Math.random() * 2),
+        dimensions: ["8x10 in", "11x14 in", "16x20 in", "24x36 in"][Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 4)],
+        medium: ["Digital Print on Archival Paper", "Giclée on Canvas", "Metallic Print", "Fine Art Paper"][Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 4)],
+        year: 2024 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2),
         description: `Original signed limited edition print from the "${series}" series by Skyler Blue Spillers. Each print is hand-signed and comes with a Certificate of Authenticity (COA) with blockchain verification.`,
         tags: [series.toLowerCase().replace(/\s+/g, "-"), "signed", "limited-edition", "digital-art", "skyler-blue-spillers"],
-        isSold: Math.random() < 0.15,
+        isSold: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.15,
         coaHash,
       });
       id++;

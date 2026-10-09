@@ -197,8 +197,7 @@ export default function ComponentsShowcase() {
   const [isChatLoading, setIsChatLoading] = useState(false);
 
   const handleDialogSubmit = () => {
-    console.log("Dialog submitted with value:", dialogInput);
-    sonnerToast.success("Submitted successfully", {
+        sonnerToast.success("Submitted successfully", {
       description: `Input: ${dialogInput}`,
     });
     setDialogInput("");
@@ -1294,7 +1293,7 @@ export default function ComponentsShowcase() {
             <Card>
               <CardContent className="pt-6">
                 <ResizablePanelGroup
-                  direction="horizontal"
+                  orientation="horizontal"
                   className="min-h-[200px] rounded-lg border"
                 >
                   <ResizablePanel defaultSize={50}>

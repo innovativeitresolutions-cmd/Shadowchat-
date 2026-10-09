@@ -1,6 +1,6 @@
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { promisify } from 'util';
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, createWriteStream, statSync, promises as fsPromises } from 'fs';
 import { join } from 'path';
 import { notifyOwner } from './_core/notification';
 
@@ -62,8 +62,7 @@ class BackupSystem {
         this.backups = new Map(Object.entries(data));
       }
     } catch (error) {
-      console.error('Failed to load backup metadata:', error);
-    }
+          }
   }
 
   /**
@@ -74,8 +73,7 @@ class BackupSystem {
       const data = Object.fromEntries(this.backups);
       writeFileSync(this.metadataFile, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error('Failed to save backup metadata:', error);
-    }
+          }
   }
 
   /**
@@ -91,8 +89,7 @@ class BackupSystem {
 
     while (retries < this.config.maxRetries) {
       try {
-        console.log(`[Backup] Starting backup attempt ${retries + 1}/${this.config.maxRetries}...`);
-
+        
         // Get database URL from environment
         const dbUrl = process.env.DATABASE_URL;
         if (!dbUrl) throw new Error('DATABASE_URL not configured');
@@ -106,15 +103,46 @@ class BackupSystem {
         const port = urlObj.port || '3306';
 
         // Create backup using mysqldump
-        const cmd = `mysqldump -h ${host} -u ${user} -p${password} -P ${port} ${database} > ${backupFile}`;
-        await execAsync(cmd);
+        const args = [
+          `-h${host}`,
+          `-u${user}`,
+          `-p${password}`,
+          `-P${port}`,
+          database,
+        ];
+        const mysqldumpProcess = spawn("mysqldump", args, { stdio: ["ignore", "pipe", "inherit"] });
+        const outputStream = createWriteStream(backupFile);
+        mysqldumpProcess.stdout.pipe(outputStream);
+
+        await new Promise<void>((resolve, reject) => {
+          mysqldumpProcess.on("close", (code) => {
+            if (code === 0) {
+              resolve();
+            } else {
+              reject(new Error(`mysqldump process exited with code ${code}`));
+            }
+          });
+          mysqldumpProcess.on("error", (err) => reject(err));
+        });
 
         // Get backup size
-        const sizeResult = await execAsync(`stat -f%z ${backupFile} 2>/dev/null || stat -c%s ${backupFile}`);
-        const backupSize = parseInt(sizeResult.stdout.trim());
+        const backupSize = existsSync(backupFile) ? statSync(backupFile).size : 0;
 
         // Calculate checksum
-        const { stdout: checksum } = await execAsync(`md5sum ${backupFile} | awk '{print $1}'`);
+        const checksumProcess = spawn("md5sum", [backupFile], { stdio: ["ignore", "pipe", "inherit"] });
+        let checksumOutput = "";
+        checksumProcess.stdout.on("data", (data) => (checksumOutput += data.toString()));
+        await new Promise<void>((resolve, reject) => {
+          checksumProcess.on("close", (code) => {
+            if (code === 0) {
+              resolve();
+            } else {
+              reject(new Error(`md5sum process exited with code ${code}`));
+            }
+          });
+          checksumProcess.on("error", (err) => reject(err));
+        });
+        const checksum = checksumOutput.split(" ")[0];
 
         const metadata: BackupMetadata = {
           id: backupId,
@@ -130,7 +158,6 @@ class BackupSystem {
         this.backups.set(backupId, metadata);
         this.saveMetadata();
 
-        console.log(`[Backup] Backup ${backupId} created successfully (${(backupSize / 1024 / 1024).toFixed(2)} MB)`);
 
         // Send notification
         await notifyOwner({
@@ -142,8 +169,7 @@ class BackupSystem {
       } catch (error) {
         lastError = error as Error;
         retries++;
-        console.error(`[Backup] Attempt ${retries} failed:`, error);
-
+        
         if (retries < this.config.maxRetries) {
           // Wait before retry (exponential backoff)
           await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, retries - 1)));
@@ -166,8 +192,7 @@ class BackupSystem {
     this.backups.set(backupId, metadata);
     this.saveMetadata();
 
-    console.error(`[Backup] All ${this.config.maxRetries} attempts failed:`, lastError);
-
+    
     // Send failure notification
     await notifyOwner({
       title: 'Backup Failed',
@@ -194,7 +219,20 @@ class BackupSystem {
       const backupFile = join(this.config.destination, `${backupId}.sql`);
 
       // Verify checksum before restore
-      const { stdout: checksum } = await execAsync(`md5sum ${backupFile} | awk '{print $1}'`);
+      const checksumProcess = spawn("md5sum", [backupFile], { stdio: ["ignore", "pipe", "inherit"] });
+      let checksumOutput = "";
+      checksumProcess.stdout.on("data", (data) => (checksumOutput += data.toString()));
+      await new Promise<void>((resolve, reject) => {
+        checksumProcess.on("close", (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(`md5sum process exited with code ${code}`));
+          }
+        });
+        checksumProcess.on("error", (err) => reject(err));
+      });
+      const checksum = checksumOutput.split(" ")[0];
       if (checksum.trim() !== metadata.checksum) {
         throw new Error('Backup checksum mismatch - file may be corrupted');
       }
@@ -211,11 +249,29 @@ class BackupSystem {
       const port = urlObj.port || '3306';
 
       // Restore database
-      const cmd = `mysql -h ${host} -u ${user} -p${password} -P ${port} ${database} < ${backupFile}`;
-      await execAsync(cmd);
+      const args = [
+        `-h${host}`,
+        `-u${user}`,
+        `-p${password}`,
+        `-P${port}`,
+        database,
+      ];
+      const mysqlProcess = spawn("mysql", args, { stdio: ["ignore", "pipe", "inherit"] });
+      const inputStream = createReadStream(backupFile);
+      inputStream.pipe(mysqlProcess.stdin);
 
-      console.log(`[Restore] Successfully restored from backup ${backupId}`);
+      await new Promise<void>((resolve, reject) => {
+        mysqlProcess.on("close", (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(`mysql process exited with code ${code}`));
+          }
+        });
+        mysqlProcess.on("error", (err) => reject(err));
+      });
 
+      
       await notifyOwner({
         title: 'Restore Successful',
         content: `Database restored from backup ${backupId}`,
@@ -223,8 +279,7 @@ class BackupSystem {
 
       return true;
     } catch (error) {
-      console.error(`[Restore] Failed to restore from backup ${backupId}:`, error);
-
+      
       await notifyOwner({
         title: 'Restore Failed',
         content: `Failed to restore from backup ${backupId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -247,20 +302,21 @@ class BackupSystem {
         try {
           const backupFile = join(this.config.destination, `${backupId}.sql`);
           if (existsSync(backupFile)) {
-            await execAsync(`rm ${backupFile}`);
+            // Ensure backupFile is within the designated backup directory before deletion
+            if (!backupFile.startsWith(this.config.destination)) {
+              throw new Error("Invalid backup file path for deletion");
+            }
+            await fsPromises.rm(backupFile);
           }
           this.backups.delete(backupId);
           deletedCount++;
-          console.log(`[Cleanup] Deleted backup ${backupId}`);
-        } catch (error) {
-          console.error(`[Cleanup] Failed to delete backup ${backupId}:`, error);
-        }
+                  } catch (error) {
+                  }
       }
     }
 
     this.saveMetadata();
-    console.log(`[Cleanup] Deleted ${deletedCount} old backups`);
-
+    
     return deletedCount;
   }
 
@@ -304,15 +360,26 @@ class BackupSystem {
 
     try {
       const backupFile = join(this.config.destination, `${backupId}.sql`);
-      const { stdout: checksum } = await execAsync(`md5sum ${backupFile} | awk '{print $1}'`);
+      const checksumProcess = spawn("md5sum", [backupFile], { stdio: ["ignore", "pipe", "inherit"] });
+      let checksumOutput = "";
+      checksumProcess.stdout.on("data", (data) => (checksumOutput += data.toString()));
+      await new Promise<void>((resolve, reject) => {
+        checksumProcess.on("close", (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(`md5sum process exited with code ${code}`));
+          }
+        });
+        checksumProcess.on("error", (err) => reject(err));
+      });
+      const checksum = checksumOutput.split(" ")[0];
 
       const isValid = checksum.trim() === metadata.checksum;
-      console.log(`[Verify] Backup ${backupId} integrity check: ${isValid ? 'PASS' : 'FAIL'}`);
-
+      
       return isValid;
     } catch (error) {
-      console.error(`[Verify] Failed to verify backup ${backupId}:`, error);
-      return false;
+            return false;
     }
   }
 }

@@ -47,12 +47,10 @@ export class AIMiningOptimizer {
       try {
         const result = await this.optimize();
         if (result.shouldSwitch) {
-          console.log(`[AI Mining] Switching to ${result.recommendedStrategy.coin} for +${result.profitIncreasePercentage.toFixed(1)}% profit`);
           await this.executeMiningSwitch(result.recommendedStrategy);
         }
       } catch (error) {
-        console.error('[AI Mining] Optimization error:', error);
-      }
+              }
     }, 300000); // Run every 5 minutes
   }
 
@@ -165,8 +163,7 @@ Provide analysis and recommendation.`,
       const content = response.choices[0].message.content;
       return typeof content === 'string' ? content : 'AI analysis unavailable';
     } catch (error) {
-      console.error('[AI Mining] Failed to get LLM analysis:', error);
-      return 'Unable to get AI analysis at this time.';
+            return 'Unable to get AI analysis at this time.';
     }
   }
 
@@ -174,8 +171,7 @@ Provide analysis and recommendation.`,
    * Execute mining switch
    */
   private async executeMiningSwitch(strategy: MiningStrategy): Promise<void> {
-    console.log(`[AI Mining] Executing switch to ${strategy.coin}`);
-    this.currentStrategy = strategy;
+        this.currentStrategy = strategy;
     
     // In a real implementation, this would:
     // 1. Stop current mining operation

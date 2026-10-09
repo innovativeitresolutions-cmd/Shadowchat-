@@ -64,8 +64,7 @@ export async function createCheckoutSession(
 
     return session;
   } catch (error) {
-    console.error("[Stripe] Checkout session creation failed:", error);
-    throw error;
+        throw error;
   }
 }
 
@@ -108,8 +107,7 @@ export async function createOrUpdateSubscription(
 
     return sub as any;
   } catch (error) {
-    console.error("[Stripe] Subscription creation failed:", error);
-    throw error;
+        throw error;
   }
 }
 
@@ -139,8 +137,7 @@ export async function cancelSubscription(userId: number) {
       })
       .where(eq(subscriptions.userId, userId));
   } catch (error) {
-    console.error("[Stripe] Subscription cancellation failed:", error);
-    throw error;
+        throw error;
   }
 }
 
@@ -167,8 +164,7 @@ export async function getOrCreateCustomer(userId: number, email: string, name?: 
 
     return customer;
   } catch (error) {
-    console.error("[Stripe] Customer creation failed:", error);
-    throw error;
+        throw error;
   }
 }
 
@@ -191,10 +187,8 @@ export async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Se
       .set({ status: "paid" })
       .where(eq(orders.id, orderId));
 
-    console.log(`[Stripe] Order ${orderId} marked as paid`);
-  } catch (error) {
-    console.error("[Stripe] Checkout session completion handler failed:", error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -217,10 +211,8 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
       .set({ status: "active" })
       .where(eq(subscriptions.userId, userId));
 
-    console.log(`[Stripe] Invoice ${invoice.id} paid for user ${userId}`);
-  } catch (error) {
-    console.error("[Stripe] Invoice paid handler failed:", error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -250,10 +242,8 @@ export async function handleSubscriptionUpdated(subscription: Stripe.Subscriptio
       })
       .where(eq(subscriptions.userId, userId));
 
-    console.log(`[Stripe] Subscription ${subscription.id} updated for user ${userId}`);
-  } catch (error) {
-    console.error("[Stripe] Subscription updated handler failed:", error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -279,10 +269,8 @@ export async function handleSubscriptionDeleted(subscription: Stripe.Subscriptio
       })
       .where(eq(subscriptions.userId, userId));
 
-    console.log(`[Stripe] Subscription ${subscription.id} deleted for user ${userId}`);
-  } catch (error) {
-    console.error("[Stripe] Subscription deleted handler failed:", error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -296,7 +284,6 @@ export function verifyWebhookSignature(
     if (!stripe) return null;
     return stripe.webhooks.constructEvent(body, signature, secret);
   } catch (error) {
-    console.error("[Stripe] Webhook signature verification failed:", error);
-    return null;
+        return null;
   }
 }

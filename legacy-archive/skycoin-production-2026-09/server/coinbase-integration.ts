@@ -51,8 +51,7 @@ class CoinbaseIntegration {
     this.apiSecret = process.env.COINBASE_PRIVATE_KEY || '';
 
     if (!this.apiKey || !this.apiSecret) {
-      console.warn('[Coinbase] API credentials not configured. Withdrawal functionality disabled.');
-    }
+          }
   }
 
   /**
@@ -61,8 +60,7 @@ class CoinbaseIntegration {
   async getAccountBalance(): Promise<{ btc: number; eth: number; usd: number }> {
     try {
       if (!this.apiKey) {
-        console.warn('[Coinbase] API key not configured');
-        return { btc: 0, eth: 0, usd: 0 };
+                return { btc: 0, eth: 0, usd: 0 };
       }
 
       const response = await fetch(`${this.baseUrl}/accounts`, {
@@ -93,11 +91,9 @@ class CoinbaseIntegration {
         if (account.currency === 'USD') balances.usd = amount;
       }
 
-      console.log('[Coinbase] Account balances:', balances);
-      return balances;
+            return balances;
     } catch (error) {
-      console.error('[Coinbase] Failed to get account balance:', error);
-      return { btc: 0, eth: 0, usd: 0 };
+            return { btc: 0, eth: 0, usd: 0 };
     }
   }
 
@@ -123,8 +119,7 @@ class CoinbaseIntegration {
 
       return amount * rate;
     } catch (error) {
-      console.error('[Coinbase] Failed to convert to USD:', error);
-      return 0;
+            return 0;
     }
   }
 
@@ -178,7 +173,6 @@ class CoinbaseIntegration {
       const result = await sellResponse.json();
       const usdAmount = parseFloat(result.data.amount.amount);
 
-      console.log(`[Coinbase] Sold ${amount} ${currency} for $${usdAmount.toFixed(2)}`);
 
       await notifyOwner({
         title: '💱 Crypto Sold on Coinbase',
@@ -191,8 +185,7 @@ class CoinbaseIntegration {
         transactionId: result.data.id,
       };
     } catch (error) {
-      console.error('[Coinbase] Failed to sell crypto:', error);
-
+      
       await notifyOwner({
         title: '❌ Coinbase Sale Failed',
         content: `Failed to sell ${amount} ${currency}: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -273,7 +266,6 @@ class CoinbaseIntegration {
       this.withdrawals.push(withdrawal);
       this.totalWithdrawn += amount;
 
-      console.log(`[Coinbase] Withdrawal initiated: $${amount.toFixed(2)} to bank account ${bankAccountId}`);
 
       await notifyOwner({
         title: '🏦 Withdrawal Initiated',
@@ -284,8 +276,7 @@ class CoinbaseIntegration {
     } catch (error) {
       withdrawal.status = 'failed';
 
-      console.error('[Coinbase] Withdrawal failed:', error);
-
+      
       await notifyOwner({
         title: '❌ Withdrawal Failed',
         content: `Failed to withdraw $${amount.toFixed(2)}: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -315,15 +306,14 @@ class CoinbaseIntegration {
   private generateSignature(method: string, path: string, body: string): string {
     // This is a simplified version - in production, use proper HMAC-SHA256
     // For now, return a placeholder
-    return 'signature-placeholder';
+    throw new Error('Coinbase request signing is not configured; live trading and withdrawals are disabled.');
   }
 
   /**
    * Automated daily withdrawal to bank
    */
   async startAutomatedWithdrawals(bankAccountId: string, dailyAmount: number): Promise<void> {
-    console.log(`[Coinbase] Starting automated daily withdrawals of $${dailyAmount} to bank account ${bankAccountId}`);
-
+    
     // Run daily at 2 AM UTC
     const now = new Date();
     const nextRun = new Date();
@@ -343,11 +333,10 @@ class CoinbaseIntegration {
         if (balance.usd >= dailyAmount) {
           await this.withdrawToBank(dailyAmount, bankAccountId);
         } else {
-          console.log(`[Coinbase] Insufficient USD balance. Current: $${balance.usd.toFixed(2)}, Required: $${dailyAmount.toFixed(2)}`);
+          console.warn('Automated withdrawal skipped: insufficient USD balance');
         }
       } catch (error) {
-        console.error('[Coinbase] Automated withdrawal failed:', error);
-      }
+              }
 
       // Schedule next withdrawal
       setInterval(async () => {
@@ -358,8 +347,7 @@ class CoinbaseIntegration {
             await this.withdrawToBank(dailyAmount, bankAccountId);
           }
         } catch (error) {
-          console.error('[Coinbase] Automated withdrawal failed:', error);
-        }
+                  }
       }, 86400000); // 24 hours
     }, delay);
   }

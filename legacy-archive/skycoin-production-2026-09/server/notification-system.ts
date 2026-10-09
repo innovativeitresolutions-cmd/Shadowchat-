@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Push Notification System for SKYCOIN4444
  * 
@@ -253,7 +254,7 @@ export async function sendNotification(
   actionUrl?: string
 ) {
   const notification: Notification = {
-    id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    id: `notif_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`,
     userId,
     type,
     title,

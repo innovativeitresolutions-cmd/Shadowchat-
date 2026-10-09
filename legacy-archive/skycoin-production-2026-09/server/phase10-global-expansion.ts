@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 10 — GLOBAL EXPANSION LAYER
  * Localization Engine, Regional Economy, Global Discovery, International Compliance
@@ -60,7 +61,7 @@ export const localizationEngine = {
       targetLanguage,
       sourceText,
       translatedText: `[${targetLanguage.toUpperCase()}] ${sourceText}`,
-      confidence: 0.92 + Math.random() * 0.07,
+      confidence: 0.92 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.07,
       createdAt: new Date(),
     };
     _translations.set(id, translation);

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 7 Engines — Ecosystem Expansion Layer
  * 7A: Developer Platform | 7B: Business Layer | 7C: Brand Economy
@@ -45,7 +46,7 @@ const _oauthApps = new Map<string, OAuthApp>();
 export const developerPlatform = {
   createAPIKey(developerId: number, appId: string, name: string, scopes: string[], rateLimit = 1000): APIKey {
     const id = `apikey_${developerId}_${Date.now()}`;
-    const key = `sk_${Buffer.from(Math.random().toString()).toString("base64").slice(0, 32)}`;
+    const key = `sk_${Buffer.from((crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString()).toString("base64").slice(0, 32)}`;
     const apiKey: APIKey = { id, developerId, appId, key, name, scopes, rateLimit, requestCount: 0, active: true, createdAt: new Date() };
     _apiKeys.set(id, apiKey);
     return apiKey;
@@ -80,7 +81,7 @@ export const developerPlatform = {
     const app: OAuthApp = {
       id, developerId, name, description, redirectUris, scopes,
       clientId: `client_${id}`,
-      clientSecret: `secret_${Buffer.from(Math.random().toString()).toString("base64").slice(0, 32)}`,
+      clientSecret: `secret_${Buffer.from((crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString()).toString("base64").slice(0, 32)}`,
       status: "pending", installs: 0, createdAt: new Date(),
     };
     _oauthApps.set(id, app);

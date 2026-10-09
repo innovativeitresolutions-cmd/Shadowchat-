@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * AI PERSONALIZATION x44 ENGINE
  * Hyper-Personalized Everything
@@ -76,8 +77,8 @@ export class AIPersonalizationX44Engine {
       recommendations.push({
         type: 'content',
         category: interest,
-        score: Math.random() * 100,
-        personalizationScore: 95 + Math.random() * 5, // 95-100
+        score: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100,
+        personalizationScore: 95 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5, // 95-100
       });
     }
 
@@ -151,7 +152,7 @@ export class AIPersonalizationX44Engine {
     let churnScore = 0;
 
     // Simulate ML prediction
-    const daysSinceLogin = Math.random() * 30;
+    const daysSinceLogin = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30;
     churnScore += Math.min(daysSinceLogin / 30, 1) * 40; // 0-40 points
 
     const sessionFrequency = (profile.behaviors.get('sessions_per_week') || 0) / 5;

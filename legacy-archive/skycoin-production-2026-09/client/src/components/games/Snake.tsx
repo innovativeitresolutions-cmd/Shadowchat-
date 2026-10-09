@@ -46,7 +46,7 @@ export default function Snake({ onEnd }: { onEnd: (score: number, result: string
         const next = [head, ...prev];
         if (head.x === food.x && head.y === food.y) {
           setScore(s => s + 1);
-          setFood({ x: Math.floor(Math.random() * SIZE), y: Math.floor(Math.random() * SIZE) });
+          setFood({ x: Math.floor((Math.random()) * SIZE), y: Math.floor((Math.random()) * SIZE) });
         } else next.pop();
         return next;
       });

@@ -122,8 +122,7 @@ export function useAIRecommendations() {
 
       setRecommendations(newRecommendations.slice(0, 5)); // Top 5 recommendations
     } catch (error) {
-      console.error('Failed to generate recommendations:', error);
-    } finally {
+          } finally {
       setIsLoading(false);
     }
   }, [behavior]);

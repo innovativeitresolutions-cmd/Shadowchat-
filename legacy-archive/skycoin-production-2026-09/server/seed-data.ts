@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { db } from './db';
 import {
   users,
@@ -50,19 +51,19 @@ const POST_TEMPLATES = [
  * Generate random user
  */
 function generateUser() {
-  const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
-  const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
+  const firstName = FIRST_NAMES[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * FIRST_NAMES.length)];
+  const lastName = LAST_NAMES[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * LAST_NAMES.length)];
   const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
 
   return {
     email,
     firstName,
     lastName,
-    bio: BIO_TEMPLATES[Math.floor(Math.random() * BIO_TEMPLATES.length)],
+    bio: BIO_TEMPLATES[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * BIO_TEMPLATES.length)],
     profileImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
     emailVerified: true,
     profileComplete: true,
-    createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000),
+    createdAt: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 90 * 24 * 60 * 60 * 1000),
   };
 }
 
@@ -72,11 +73,11 @@ function generateUser() {
 function generatePost(userId: string) {
   return {
     userId,
-    content: POST_TEMPLATES[Math.floor(Math.random() * POST_TEMPLATES.length)],
-    likes: Math.floor(Math.random() * 1000),
-    comments: Math.floor(Math.random() * 100),
-    shares: Math.floor(Math.random() * 50),
-    createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+    content: POST_TEMPLATES[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * POST_TEMPLATES.length)],
+    likes: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000),
+    comments: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+    shares: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50),
+    createdAt: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30 * 24 * 60 * 60 * 1000),
   };
 }
 
@@ -85,8 +86,7 @@ function generatePost(userId: string) {
  */
 export async function seedDatabase() {
   try {
-    console.log('🌱 Starting database seeding...');
-
+    
     // Create 50 users
     const userIds: string[] = [];
     for (let i = 0; i < 50; i++) {
@@ -94,26 +94,24 @@ export async function seedDatabase() {
       const result = await db.insert(users).values(user);
       userIds.push(result.insertId);
     }
-    console.log(`✅ Created ${userIds.length} users`);
-
+    
     // Create posts for each user
     let postCount = 0;
     for (const userId of userIds) {
-      const postsPerUser = Math.floor(Math.random() * 5) + 1;
+      const postsPerUser = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5) + 1;
       for (let i = 0; i < postsPerUser; i++) {
         const post = generatePost(userId);
         await db.insert(posts).values(post);
         postCount++;
       }
     }
-    console.log(`✅ Created ${postCount} posts`);
-
+    
     // Create follows (users following each other)
     let followCount = 0;
     for (let i = 0; i < userIds.length; i++) {
-      const followersPerUser = Math.floor(Math.random() * 10) + 1;
+      const followersPerUser = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10) + 1;
       for (let j = 0; j < followersPerUser; j++) {
-        const followeeIndex = Math.floor(Math.random() * userIds.length);
+        const followeeIndex = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * userIds.length);
         if (i !== followeeIndex) {
           await db.insert(follows).values({
             followerId: userIds[i],
@@ -124,8 +122,7 @@ export async function seedDatabase() {
         }
       }
     }
-    console.log(`✅ Created ${followCount} follow relationships`);
-
+    
     // Create game scores
     let gameScoreCount = 0;
     const gameIds = [
@@ -137,22 +134,21 @@ export async function seedDatabase() {
     ];
 
     for (const userId of userIds) {
-      const gamesPerUser = Math.floor(Math.random() * 10) + 1;
+      const gamesPerUser = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10) + 1;
       for (let i = 0; i < gamesPerUser; i++) {
-        const gameId = gameIds[Math.floor(Math.random() * gameIds.length)];
+        const gameId = gameIds[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * gameIds.length)];
         await db.insert(gameScores).values({
           userId,
           gameId,
-          score: Math.floor(Math.random() * 10000),
-          level: Math.floor(Math.random() * 50) + 1,
-          earnedRewards: Math.floor(Math.random() * 500),
-          playedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+          score: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
+          level: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50) + 1,
+          earnedRewards: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500),
+          playedAt: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30 * 24 * 60 * 60 * 1000),
         });
         gameScoreCount++;
       }
     }
-    console.log(`✅ Created ${gameScoreCount} game scores`);
-
+    
     // Award achievements to random users
     let achievementCount = 0;
     const achievementIds = [
@@ -165,16 +161,16 @@ export async function seedDatabase() {
     ];
 
     for (const userId of userIds) {
-      const achievementsPerUser = Math.floor(Math.random() * 4);
+      const achievementsPerUser = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 4);
       for (let i = 0; i < achievementsPerUser; i++) {
         const achievementId =
-          achievementIds[Math.floor(Math.random() * achievementIds.length)];
+          achievementIds[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * achievementIds.length)];
         try {
           await db.insert(achievements).values({
             userId,
             achievementId,
-            unlockedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-            reward: Math.floor(Math.random() * 500),
+            unlockedAt: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30 * 24 * 60 * 60 * 1000),
+            reward: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500),
           });
           achievementCount++;
         } catch (e) {
@@ -182,10 +178,8 @@ export async function seedDatabase() {
         }
       }
     }
-    console.log(`✅ Created ${achievementCount} achievements`);
-
-    console.log('🎉 Database seeding complete!');
-    return {
+    
+        return {
       success: true,
       stats: {
         users: userIds.length,
@@ -196,8 +190,7 @@ export async function seedDatabase() {
       },
     };
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
-    return {
+        return {
       success: false,
       error: 'Failed to seed database',
     };
@@ -209,8 +202,7 @@ export async function seedDatabase() {
  */
 export async function clearSeedData() {
   try {
-    console.log('🗑️ Clearing seed data...');
-
+    
     // Delete in order of dependencies
     await db.delete(achievements);
     await db.delete(gameScores);
@@ -220,11 +212,9 @@ export async function clearSeedData() {
     await db.delete(follows);
     await db.delete(users);
 
-    console.log('✅ All seed data cleared');
-    return { success: true };
+        return { success: true };
   } catch (error) {
-    console.error('❌ Error clearing seed data:', error);
-    return { success: false, error: 'Failed to clear seed data' };
+        return { success: false, error: 'Failed to clear seed data' };
   }
 }
 

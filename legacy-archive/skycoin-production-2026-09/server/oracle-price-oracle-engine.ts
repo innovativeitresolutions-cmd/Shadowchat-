@@ -256,8 +256,7 @@ class PriceFeedAggregator {
 
   public addPriceData(data: PriceData): void {
     if (!SUPPORTED_ASSET_PAIRS.includes(data.assetPair)) {
-      console.warn(`Unsupported asset pair: ${data.assetPair}. Data not stored.`);
-      return;
+            return;
     }
     const currentData = this.priceDataStore.get(data.assetPair) || [];
     currentData.push(data);
@@ -323,8 +322,7 @@ class TWAPCalculator {
 
   public addPrice(assetPair: string, price: number, timestamp: number): void {
     if (!SUPPORTED_ASSET_PAIRS.includes(assetPair)) {
-      console.warn(`Unsupported asset pair: ${assetPair}. Price not added to history.`);
-      return;
+            return;
     }
     const history = this.priceHistory.get(assetPair) || [];
     history.push({ timestamp, price });
@@ -392,8 +390,7 @@ class CrossChainPriceFeed {
   public async fetchCrossChainPrice(chain: string, assetPair: string): Promise<PriceData | null> {
     const url = this.config.crossChainFeedUrls[chain];
     if (!url) {
-      console.warn(`No cross-chain feed URL configured for chain: ${chain}`);
-      return null;
+            return null;
     }
 
     try {
@@ -412,11 +409,9 @@ class CrossChainPriceFeed {
           confidence: parsedResponse.confidence,
         };
       }
-      console.error('Invalid LLM response format for cross-chain price:', llmRaw.choices[0]?.message?.content || "");
-      return null;
+            return null;
     } catch (error) {
-      console.error(`Error fetching cross-chain price for ${assetPair} on ${chain}:`, error);
-      return null;
+            return null;
     }
   }
 }
@@ -455,8 +450,7 @@ export class OracleEngine {
     let aggregated = this.aggregator.getAggregatedPrice(assetPair, this.config);
 
     if (!aggregated && this.config.fallbackAssetPair) {
-      console.warn(`No reliable price for ${assetPair}. Attempting fallback to ${this.config.fallbackAssetPair}.`);
-      aggregated = this.aggregator.getAggregatedPrice(this.config.fallbackAssetPair, this.config);
+            aggregated = this.aggregator.getAggregatedPrice(this.config.fallbackAssetPair, this.config);
       if (aggregated) {
         // Adjust the assetPair to reflect the original request, but note it's a fallback
         aggregated.assetPair = `${assetPair} (fallback from ${this.config.fallbackAssetPair})`;
@@ -550,12 +544,10 @@ export class OracleEngine {
       if (parsedResponse.normalizedData) {
         return parsedResponse.normalizedData as MarketData;
       } else {
-        console.warn('LLM did not return normalizedData, using basic normalization.');
-        return normalized;
+                return normalized;
       }
     } catch (error) {
-      console.error('Error during LLM-powered market data normalization:', error);
-      return normalized;
+            return normalized;
     }
   }
 
@@ -583,8 +575,7 @@ export const oracleEngine = new OracleEngine();
 // Example Usage (for demonstration and testing purposes, not part of core engine logic)
 /*
 async function runExample() {
-  console.log('--- Oracle Engine Example ---');
-
+  
   // Ingest some sample price data
   oracleEngine.ingestPriceData({ source: 'Binance', assetPair: 'BTC/USD', price: 60000, timestamp: Date.now() - 5000, confidence: 0.95 });
   oracleEngine.ingestPriceData({ source: 'Coinbase', assetPair: 'BTC/USD', price: 60100, timestamp: Date.now() - 4000, confidence: 0.98 });
@@ -598,49 +589,43 @@ async function runExample() {
   // Get aggregated price
   const btcPrice = oracleEngine.getPrice('BTC/USD');
   if (btcPrice) {
-    console.log(`Aggregated BTC/USD Price: ${btcPrice.price.toFixed(2)} USD (Confidence: ${btcPrice.confidenceScore.toFixed(2)}, Volatility: ${btcPrice.volatility.toFixed(4)}, Manipulated: ${btcPrice.isManipulated})`);
+    } USD (Confidence: ${btcPrice.confidenceScore.toFixed(2)}, Volatility: ${btcPrice.volatility.toFixed(4)}, Manipulated: ${btcPrice.isManipulated})`);
   } else {
-    console.log('Could not get reliable BTC/USD price.');
-  }
+      }
 
   const ethPrice = oracleEngine.getPrice('ETH/USD');
   if (ethPrice) {
-    console.log(`Aggregated ETH/USD Price: ${ethPrice.price.toFixed(2)} USD (Confidence: ${ethPrice.confidenceScore.toFixed(2)}, Volatility: ${ethPrice.volatility.toFixed(4)}, Manipulated: ${ethPrice.isManipulated})`);
+    } USD (Confidence: ${ethPrice.confidenceScore.toFixed(2)}, Volatility: ${ethPrice.volatility.toFixed(4)}, Manipulated: ${ethPrice.isManipulated})`);
   } else {
-    console.log('Could not get reliable ETH/USD price for ETH/USD.');
-  }
+      }
 
   // Calculate TWAP
   const btcTWAP = oracleEngine.getTWAP('BTC/USD');
   if (btcTWAP) {
-    console.log(`BTC/USD TWAP (1hr): ${btcTWAP.toFixed(2)} USD`);
+    : ${btcTWAP.toFixed(2)} USD`);
   } else {
-    console.log('Could not calculate BTC/USD TWAP.');
-  }
+      }
 
   // Detect price deviation
   const deviationDetected = oracleEngine.detectPriceDeviation('BTC/USD');
-  console.log(`BTC/USD Price Deviation Detected: ${deviationDetected}`);
-
+  
   // Get price history
   const btcHistory = oracleEngine.getPriceHistory('BTC/USD', 5);
-  console.log('BTC/USD Price History (last 5):', btcHistory);
+  :', btcHistory);
 
   // Get volatility
   const btcVolatility = oracleEngine.getVolatility('BTC/USD');
   if (btcVolatility) {
-    console.log(`BTC/USD Volatility (1hr): ${btcVolatility.toFixed(4)}`);
+    : ${btcVolatility.toFixed(4)}`);
   } else {
-    console.log('Could not calculate BTC/USD volatility.');
-  }
+      }
 
   // Fetch cross-chain price
   const ethCrossChainPrice = await oracleEngine.getCrossChainPrice('ethereum', 'ETH/USD');
   if (ethCrossChainPrice) {
-    console.log(`Cross-chain ETH/USD Price (Ethereum): ${ethCrossChainPrice.price.toFixed(2)} USD (Source: ${ethCrossChainPrice.source}, Confidence: ${ethCrossChainPrice.confidence})`);
+    : ${ethCrossChainPrice.price.toFixed(2)} USD (Source: ${ethCrossChainPrice.source}, Confidence: ${ethCrossChainPrice.confidence})`);
   } else {
-    console.log('Could not fetch cross-chain ETH/USD price from Ethereum.');
-  }
+      }
 
   // Normalize market data
   const rawMarketData = {
@@ -651,11 +636,10 @@ async function runExample() {
     unrecognizedField: 'some value'
   };
   const normalizedMarketData = await oracleEngine.normalizeMarketData(rawMarketData);
-  console.log('Normalized Market Data:', normalizedMarketData);
-
+  
   // Update config and re-check
   oracleEngine.updateConfig({ maxPriceDeviation: 0.05 });
-  console.log('Updated config:', oracleEngine.getConfig());
+  );
 }
 
 // runExample();

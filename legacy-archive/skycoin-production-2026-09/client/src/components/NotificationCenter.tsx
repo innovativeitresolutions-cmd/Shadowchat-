@@ -27,7 +27,7 @@ export function dispatchRealtimeNotification(notification: any) {
 // Achievement notification
 export function notifyAchievementUnlocked(achievementName: string, reward: number) {
   dispatchRealtimeNotification({
-    id: Math.random().toString(36).substr(2, 9),
+    id: (Math.random()).toString(36).substr(2, 9),
     type: 'achievement',
     title: '🎉 Achievement Unlocked!',
     message: `You've unlocked "${achievementName}" and earned ${reward} SKY444!`,
@@ -38,7 +38,7 @@ export function notifyAchievementUnlocked(achievementName: string, reward: numbe
 // VPN notification
 export function notifyVPNConnected(nodeCount: number, location: string) {
   dispatchRealtimeNotification({
-    id: Math.random().toString(36).substr(2, 9),
+    id: (Math.random()).toString(36).substr(2, 9),
     type: 'vpn_status',
     title: '🔒 VPN Connected',
     message: `Connected through ${nodeCount} nodes via ${location}`,
@@ -49,7 +49,7 @@ export function notifyVPNConnected(nodeCount: number, location: string) {
 // Security alert
 export function notifySecurityAlert(title: string, message: string) {
   dispatchRealtimeNotification({
-    id: Math.random().toString(36).substr(2, 9),
+    id: (Math.random()).toString(36).substr(2, 9),
     type: 'security_alert',
     title: `🔐 ${title}`,
     message,

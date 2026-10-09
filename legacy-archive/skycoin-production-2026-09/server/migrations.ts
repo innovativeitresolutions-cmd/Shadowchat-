@@ -24,8 +24,7 @@ class MigrationManager {
    * Run all pending migrations
    */
   async runMigrations() {
-    console.log('🔄 Starting database migrations...');
-    const startTime = Date.now();
+        const startTime = Date.now();
 
     try {
       // Run Drizzle migrations
@@ -34,16 +33,14 @@ class MigrationManager {
       });
 
       const duration = Date.now() - startTime;
-      console.log(`✓ Migrations completed successfully in ${duration}ms`);
-
+      
       return {
         success: true,
         duration,
         message: 'All migrations applied successfully',
       };
     } catch (error) {
-      console.error('✗ Migration failed:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -56,8 +53,7 @@ class MigrationManager {
       const sqlFiles = files.filter((f) => f.endsWith('.sql'));
       return sqlFiles;
     } catch (error) {
-      console.error('Error reading migrations:', error);
-      return [];
+            return [];
     }
   }
 
@@ -134,9 +130,7 @@ class MigrationManager {
    * Rollback to specific migration
    */
   async rollbackToMigration(migrationName: string) {
-    console.log(`⚠️  Rolling back to migration: ${migrationName}`);
-    console.log('Note: Rollback functionality requires custom implementation');
-    // This would require custom rollback logic based on your migration strategy
+            // This would require custom rollback logic based on your migration strategy
   }
 
   /**
@@ -149,11 +143,9 @@ class MigrationManager {
 
     try {
       fs.writeFileSync(filepath, sql);
-      console.log(`✓ Migration created: ${filename}`);
-      return filename;
+            return filename;
     } catch (error) {
-      console.error(`✗ Failed to create migration: ${error}`);
-      throw error;
+            throw error;
     }
   }
 }
@@ -170,12 +162,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       migrationManager
         .runMigrations()
         .then((result) => {
-          console.log(result);
-          process.exit(0);
+                    process.exit(0);
         })
         .catch((error) => {
-          console.error(error);
-          process.exit(1);
+                    process.exit(1);
         });
       break;
 
@@ -183,12 +173,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       migrationManager
         .getPendingMigrations()
         .then((migrations) => {
-          console.log('Pending migrations:', migrations);
-          process.exit(0);
+                    process.exit(0);
         })
         .catch((error) => {
-          console.error(error);
-          process.exit(1);
+                    process.exit(1);
         });
       break;
 
@@ -196,12 +184,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       migrationManager
         .validateMigrations()
         .then((result) => {
-          console.log(result);
-          process.exit(result.valid ? 0 : 1);
+                    process.exit(result.valid ? 0 : 1);
         })
         .catch((error) => {
-          console.error(error);
-          process.exit(1);
+                    process.exit(1);
         });
       break;
 
@@ -209,25 +195,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       migrationManager
         .generateMigrationReport()
         .then((report) => {
-          console.log(JSON.stringify(report, null, 2));
+          console.info(report);
           process.exit(0);
         })
         .catch((error) => {
-          console.error(error);
-          process.exit(1);
+                    process.exit(1);
         });
       break;
 
     default:
-      console.log(`
-Usage: node migrations.ts [command]
-
-Commands:
-  run       - Run all pending migrations
-  pending   - List pending migrations
-  validate  - Validate migration files
-  report    - Generate migration report
-      `);
-      process.exit(0);
+            process.exit(0);
   }
 }

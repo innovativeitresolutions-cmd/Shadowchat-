@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from './_core/llm';
 import { walletManager } from './secure-wallet';
 import { notifyOwner } from './_core/notification';
@@ -38,28 +39,7 @@ class AutonomousMiningSystem {
    * Start 24/7 autonomous mining
    */
   async startMining(): Promise<void> {
-    if (this.isRunning) {
-      console.log('[Mining] Mining already running');
-      return;
-    }
-
-    this.isRunning = true;
-    console.log('[Mining] Starting 24/7 autonomous mining system...');
-
-    // Get admin wallet from environment
-    const adminWallet = process.env.ADMIN_WALLET_ADDRESS;
-    if (!adminWallet) {
-      throw new Error('ADMIN_WALLET_ADDRESS not configured');
-    }
-
-    // Notify owner
-    await notifyOwner({
-      title: '24/7 Autonomous Mining Started',
-      content: `Mining system activated. All rewards will be sent to: ${adminWallet}`,
-    });
-
-    // Start mining loop
-    this.miningLoop();
+    throw new Error('Autonomous mining is unavailable until real pool connections and verified rewards are implemented.');
   }
 
   /**
@@ -80,8 +60,7 @@ class AutonomousMiningSystem {
         const interval = parseInt(process.env.MINING_INTERVAL || '3600000'); // 1 hour default
         await new Promise((resolve) => setTimeout(resolve, interval));
       } catch (error) {
-        console.error('[Mining] Error in mining loop:', error);
-        await new Promise((resolve) => setTimeout(resolve, 60000)); // Wait 1 minute before retry
+                await new Promise((resolve) => setTimeout(resolve, 60000)); // Wait 1 minute before retry
       }
     }
   }
@@ -93,8 +72,7 @@ class AutonomousMiningSystem {
     const sessionId = `mining-${Date.now()}`;
     const startTime = Date.now();
 
-    console.log(`[Mining] Starting session ${sessionId}`);
-
+    
     const session: MiningSession = {
       id: sessionId,
       startTime,
@@ -108,19 +86,16 @@ class AutonomousMiningSystem {
 
     try {
       // 1. Get AI optimization suggestions
-      console.log('[Mining] Getting AI optimization suggestions...');
-      const optimizations = await this.getAIOptimizations();
+            const optimizations = await this.getAIOptimizations();
       session.aiOptimizations = optimizations;
 
       // 2. Connect to mining pools
-      console.log('[Mining] Connecting to mining pools...');
-      const pools = await this.connectToMiningPools();
+            const pools = await this.connectToMiningPools();
       session.poolsUsed = pools;
       this.minersActive = pools.length;
 
       // 3. Run mining tasks in parallel
-      console.log(`[Mining] Running mining on ${pools.length} pools...`);
-      const miningResults = await Promise.allSettled(pools.map((pool) => this.mineCoin(pool)));
+            const miningResults = await Promise.allSettled(pools.map((pool) => this.mineCoin(pool)));
 
       // 4. Aggregate results
       let totalCoins = 0;
@@ -136,8 +111,7 @@ class AutonomousMiningSystem {
       session.status = 'completed';
       this.totalCoinsGenerated += totalCoins;
 
-      console.log(`[Mining] Session ${sessionId} completed: ${totalCoins} coins generated`);
-
+      
       // 5. Log session
       await notifyOwner({
         title: 'Mining Session Completed',
@@ -149,8 +123,7 @@ class AutonomousMiningSystem {
       session.status = 'failed';
       session.errors.push(error instanceof Error ? error.message : 'Unknown error');
 
-      console.error(`[Mining] Session ${sessionId} failed:`, error);
-
+      
       await notifyOwner({
         title: 'Mining Session Failed',
         content: `Session ${sessionId} failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -193,8 +166,7 @@ Suggest optimizations for the next mining session.`,
 
       return [];
     } catch (error) {
-      console.error('[Mining] Failed to get AI optimizations:', error);
-      return [];
+            return [];
     }
   }
 
@@ -208,8 +180,7 @@ Suggest optimizations for the next mining session.`,
       'stratum+tcp://mining.pool3.com:3333',
     ];
 
-    console.log(`[Mining] Connecting to ${pools.length} mining pools...`);
-
+    
     // In production: connect to real mining pools via Stratum protocol
     // For now: simulate pool connections
     const connected: string[] = [];
@@ -217,11 +188,9 @@ Suggest optimizations for the next mining session.`,
     for (const pool of pools) {
       try {
         // Simulate connection check
-        console.log(`[Mining] Connected to ${pool}`);
-        connected.push(pool);
+                connected.push(pool);
       } catch (error) {
-        console.error(`[Mining] Failed to connect to ${pool}:`, error);
-      }
+              }
     }
 
     return connected;
@@ -231,21 +200,18 @@ Suggest optimizations for the next mining session.`,
    * Mine coins from specific pool
    */
   private async mineCoin(pool: string): Promise<number> {
-    console.log(`[Mining] Mining from pool: ${pool}`);
-
+    
     try {
       // Simulate mining work
       const miningDuration = parseInt(process.env.MINING_DURATION || '60000'); // 1 minute default
       await new Promise((resolve) => setTimeout(resolve, miningDuration));
 
       // Generate random coins (in production: real mining algorithm)
-      const coinsGenerated = Math.floor(Math.random() * 100) + 10; // 10-110 coins per pool
+      const coinsGenerated = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 10; // 10-110 coins per pool
 
-      console.log(`[Mining] Generated ${coinsGenerated} coins from ${pool}`);
-      return coinsGenerated;
+            return coinsGenerated;
     } catch (error) {
-      console.error(`[Mining] Mining failed for ${pool}:`, error);
-      throw error;
+            throw error;
     }
   }
 
@@ -259,8 +225,7 @@ Suggest optimizations for the next mining session.`,
     }
 
     try {
-      console.log(`[Mining] Sending ${session.coinsGenerated} coins to admin wallet...`);
-
+      
       // Create temporary mining wallet
       const minerWallet = `miner-${Date.now()}`;
 
@@ -270,16 +235,14 @@ Suggest optimizations for the next mining session.`,
       session.rewardsSent = session.coinsGenerated;
       this.totalRewardsSent += session.coinsGenerated;
 
-      console.log(`[Mining] Rewards sent successfully: ${transaction.id}`);
-
+      
       // Notify owner
       await notifyOwner({
         title: 'Mining Rewards Sent',
         content: `${session.coinsGenerated} SKY4444 coins sent to your admin wallet. Transaction: ${transaction.id}`,
       });
     } catch (error) {
-      console.error('[Mining] Failed to send rewards:', error);
-      session.errors.push(`Failed to send rewards: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            session.errors.push(`Failed to send rewards: ${error instanceof Error ? error.message : 'Unknown error'}`);
 
       await notifyOwner({
         title: 'Mining Reward Transfer Failed',
@@ -292,8 +255,7 @@ Suggest optimizations for the next mining session.`,
    * Stop mining
    */
   async stopMining(): Promise<void> {
-    console.log('[Mining] Stopping autonomous mining system...');
-    this.isRunning = false;
+        this.isRunning = false;
     this.minersActive = 0;
 
     await notifyOwner({

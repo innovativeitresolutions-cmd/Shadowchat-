@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM, listLLMModels } from './server/_core/llm';
 
 interface AITask {
@@ -160,7 +161,7 @@ class AdvancedAIBrain {
     const content = response.choices[0].message.content;
     return {
       threats: content.split('\n').filter(line => line.trim()),
-      severity: Math.random() * 10
+      severity: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10
     };
   }
 

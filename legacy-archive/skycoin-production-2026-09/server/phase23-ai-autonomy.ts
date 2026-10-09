@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 23 — AI AUTONOMY ENGINE
  * Autonomous Platform Agents, Self-Healing Systems, AI Decision Layer
@@ -442,7 +443,7 @@ export const aiDecisionLayer = {
       // Use fallback
     }
 
-    const id = `decision_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `decision_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const log: AIDecisionLog = {
       id,
       decisionCategory: params.category,

@@ -108,8 +108,7 @@ function logQuery(key: string, durationMs: number, cached: boolean) {
     };
     slowQueryLog.push(entry);
     if (slowQueryLog.length > 100) slowQueryLog.shift();
-    console.warn(`[SlowQuery] ${durationMs}ms — ${key}`);
-  }
+      }
 }
 
 export function getSlowQueryLog(): QueryStats[] {

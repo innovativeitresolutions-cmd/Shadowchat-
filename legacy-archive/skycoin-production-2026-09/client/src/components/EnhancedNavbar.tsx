@@ -203,13 +203,11 @@ export function EnhancedNavbar() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/">
-            <a className="flex items-center gap-2 font-bold text-xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                SK
-              </div>
-              <span>SKY4444</span>
-            </a>
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
+              SK
+            </div>
+            <span>SKY4444</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -222,11 +220,9 @@ export function EnhancedNavbar() {
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 {item.href ? (
-                  <Link href={item.href}>
-                    <a className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-300 hover:text-pink-400 transition-colors whitespace-nowrap">
-                      {item.icon}
-                      {item.label}
-                    </a>
+                  <Link href={item.href} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-300 hover:text-pink-400 transition-colors whitespace-nowrap">
+                    {item.icon}
+                    {item.label}
                   </Link>
                 ) : (
                   <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-300 hover:text-pink-400 transition-colors whitespace-nowrap">
@@ -240,13 +236,11 @@ export function EnhancedNavbar() {
                 {item.submenu && (
                   <div className="absolute left-0 mt-0 w-56 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
                     {item.submenu.map((sub) => (
-                      <Link key={sub.label} href={sub.href}>
-                        <a className="block px-4 py-2.5 text-sm text-slate-300 hover:bg-pink-600/20 hover:text-pink-400 transition-colors border-l-2 border-transparent hover:border-pink-500">
-                          <div className="font-medium">{sub.label}</div>
-                          {sub.description && (
-                            <div className="text-xs text-slate-500">{sub.description}</div>
-                          )}
-                        </a>
+                      <Link key={sub.label} href={sub.href} className="block px-4 py-2.5 text-sm text-slate-300 hover:bg-pink-600/20 hover:text-pink-400 transition-colors border-l-2 border-transparent hover:border-pink-500">
+                        <div className="font-medium">{sub.label}</div>
+                        {sub.description && (
+                          <div className="text-xs text-slate-500">{sub.description}</div>
+                        )}
                       </Link>
                     ))}
                   </div>
@@ -257,10 +251,8 @@ export function EnhancedNavbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-3">
-            <Link href="/dashboard">
-              <a className="hidden sm:inline-flex px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg font-medium hover:from-pink-700 hover:to-purple-700 transition-all shadow-lg">
-                Dashboard
-              </a>
+            <Link href="/dashboard" className="hidden sm:inline-flex px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg font-medium hover:from-pink-700 hover:to-purple-700 transition-all shadow-lg">
+              Dashboard
             </Link>
 
             {/* Mobile Menu Button */}

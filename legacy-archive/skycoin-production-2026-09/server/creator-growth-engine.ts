@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * CREATOR GROWTH ENGINE
  *
@@ -189,7 +190,7 @@ export class ReferralTreeService {
   private referredByMap = new Map<number, number>(); // referredId -> referrerId
 
   generateReferralCode(creatorId: number): string {
-    const code = `REF_${creatorId}_${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    const code = `REF_${creatorId}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8).toUpperCase()}`;
     this.codeToReferrer.set(code, creatorId);
     return code;
   }

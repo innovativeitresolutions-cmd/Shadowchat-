@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * VIRAL GROWTH ENGINE x44
  * Maximum Viral Loops & Social Features
@@ -321,7 +322,7 @@ export class ViralGrowthEngine {
    */
   private getLeaderboardRank(userId: string, referralCount: number): number {
     // Simplified - would be actual leaderboard lookup
-    return Math.floor(Math.random() * 1000) + 1;
+    return Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000) + 1;
   }
 
   /**
@@ -329,7 +330,7 @@ export class ViralGrowthEngine {
    */
   private getRandomLoopType(): ViralLoop['type'] {
     const types: ViralLoop['type'][] = ['referral', 'share', 'challenge', 'leaderboard', 'community'];
-    return types[Math.floor(Math.random() * types.length)];
+    return types[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * types.length)];
   }
 
   /**

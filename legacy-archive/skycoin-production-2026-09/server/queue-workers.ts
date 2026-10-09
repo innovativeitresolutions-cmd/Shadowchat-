@@ -852,7 +852,7 @@ export const cacheLayer = cache;
 // queueManager.enqueue - synchronous job submission
 const _enqueueOriginal = queueManager;
 (queueManager as any).enqueue = function(queueName: string, payload: Record<string, unknown>): { jobId: string; queueName: string; status: string } {
-  const jobId = `job_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const jobId = `job_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
   return { jobId, queueName, status: "queued" };
 };
 

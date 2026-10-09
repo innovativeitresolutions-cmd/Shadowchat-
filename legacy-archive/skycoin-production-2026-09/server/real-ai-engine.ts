@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * REAL AI ENGINE FOR SKYCOIN4444
  * 
@@ -107,7 +108,7 @@ export class RealAIEngine {
 
       // Add user message to history
       const userMsg: Message = {
-        id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `msg_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`,
         role: 'user',
         content: userMessage,
         timestamp: Date.now(),
@@ -160,8 +161,7 @@ export class RealAIEngine {
 
       return aiResponse;
     } catch (error) {
-      console.error('AI Engine Error:', error);
-      throw new Error(`Failed to process message: ${(error as Error).message}`);
+            throw new Error(`Failed to process message: ${(error as Error).message}`);
     }
   }
 
@@ -174,7 +174,7 @@ export class RealAIEngine {
   ): Promise<AIResponse> {
     const provider = AIConfig.defaultProvider;
     const timestamp = Date.now();
-    const responseId = `resp_${timestamp}_${Math.random().toString(36).substr(2, 9)}`;
+    const responseId = `resp_${timestamp}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 
     // Build system prompt with context
     const systemPrompt = this.buildSystemPrompt(conversation);
@@ -265,8 +265,7 @@ export class RealAIEngine {
         tokensUsed,
       };
     } catch (error) {
-      console.error('OpenAI Error:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -329,8 +328,7 @@ export class RealAIEngine {
         tokensUsed,
       };
     } catch (error) {
-      console.error('Claude Error:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -534,8 +532,6 @@ const response = await aiEngine.processMessage(
   { market: 'crypto', timeframe: '1h' }
 );
 
-console.log(response.content);
-console.log('Confidence:', response.confidence);
 \`\`\`
 
 ## API Response Format

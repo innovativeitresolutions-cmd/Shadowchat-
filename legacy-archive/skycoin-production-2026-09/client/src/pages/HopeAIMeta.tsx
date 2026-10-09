@@ -92,7 +92,7 @@ export default function HopeAIMeta() {
       await new Promise(resolve => setTimeout(resolve, 1200));
 
       let responseContent = "";
-      const thinkingTime = Math.random() * 2000 + 500;
+      const thinkingTime = (Math.random()) * 2000 + 500;
 
       const responses: Record<string, string> = {
         code: `\`\`\`javascript
@@ -104,7 +104,6 @@ function solution() {
 
 // Usage:
 const result = solution();
-console.log(result);
 \`\`\`
 
 **Key Features:**
@@ -295,9 +294,9 @@ Upload an image to analyze!`
         timestamp: Date.now(),
         capability: selectedCapability,
         metadata: {
-          tokensUsed: Math.floor(Math.random() * 1000) + 100,
+          tokensUsed: Math.floor((Math.random()) * 1000) + 100,
           thinkingTime: Math.floor(thinkingTime),
-          confidence: Math.random() * 0.3 + 0.85
+          confidence: (Math.random()) * 0.3 + 0.85
         }
       };
 

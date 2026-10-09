@@ -159,7 +159,7 @@ export class AdvancedReasoningEngine {
       event,
       rootCauses: rootCauses.map((cause) => ({
         cause,
-        probability: Math.random() * 0.4 + 0.5, // 50-90%
+        probability: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.5, // 50-90%
         evidence: this.gatherEvidence(cause),
       })),
       contributingFactors,

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * MEDIA CORE ENGINE — Production-Grade Creator Content Infrastructure
  *
@@ -504,12 +505,12 @@ export class ImageOptimizationService {
 
   private generateBlurhash(): string {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~";
-    return Array.from({ length: 28 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return Array.from({ length: 28 }, () => chars[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * chars.length)]).join("");
   }
 
   private extractDominantColors(): string[] {
     const palette = ["#1a1a2e", "#16213e", "#0f3460", "#533483", "#e94560", "#f5a623", "#7ed321", "#4a90e2"];
-    return palette.sort(() => Math.random() - 0.5).slice(0, 5);
+    return palette.sort(() => (crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5).slice(0, 5);
   }
 }
 

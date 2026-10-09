@@ -564,8 +564,7 @@ export class ABTestingEngine {
    */
   recordConversion(userId: string, testId: string, metric: string, value: number): void {
     // In production: persist to DB and compute statistical significance
-    console.log(`[A/B] Conversion: user=${userId} test=${testId} metric=${metric} value=${value}`);
-  }
+      }
 }
 
 // ─────────────────────────────────────────────

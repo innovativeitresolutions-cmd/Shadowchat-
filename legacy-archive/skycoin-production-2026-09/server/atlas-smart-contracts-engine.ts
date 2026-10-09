@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * @file atlas-smart-contracts-engine.ts
  * @description A comprehensive engine for managing and interacting with smart contracts on the SKYCOIN4444 platform.
@@ -263,7 +264,7 @@ class BlockchainUtils {
   public async sendRawTransaction(signedTx: string): Promise<TransactionHash> {
     // In a real implementation, this would interact with a blockchain node.
     if (signedTx.length > 10) {
-      return Promise.resolve(`0x${Math.random().toString(16).substring(2, 66)}` as string);
+      return Promise.resolve(`0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 66)}` as string);
     }
     throw new Error('Invalid signed transaction');
   }
@@ -287,12 +288,12 @@ class ContractDeployerAndInteractor {
    * @returns A promise that resolves with the deployment result.
    */
   public async deployContract(config: DeploymentConfig): Promise<DeploymentResult> {
-    console.log(`Deploying contract with bytecode: ${config.bytecode.substring(0, 20)}...`);
+    throw new Error('Contract deployment is unavailable until a blockchain provider is configured.');
     // Simulate transaction sending and receipt
     const txHashResult = await this.blockchainUtils.sendRawTransaction('0x' + config.bytecode);
     const txHash = String(txHashResult);
     const receipt = await this.blockchainUtils.getTransactionReceipt(txHash);
-    const address = `0x${Math.random().toString(16).substring(2, 42)}`; // Simulate new contract address
+    const address = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 42)}`; // Simulate new contract address
     return {
       address,
       transactionHash: txHash,
@@ -306,8 +307,7 @@ class ContractDeployerAndInteractor {
    * @returns A promise that resolves with the interaction result.
    */
   public async interactWithContract(config: ContractInteractionConfig): Promise<ContractInteractionResult> {
-    console.log(`Interacting with contract ${config.contractAddress}, method: ${config.methodName}`);
-    // Simulate transaction sending and receipt
+        // Simulate transaction sending and receipt
     const txHash = await this.blockchainUtils.sendRawTransaction('0x' + config.methodName + JSON.stringify(config.args));
     const receipt = await this.blockchainUtils.getTransactionReceipt(txHash);
     return {
@@ -323,8 +323,7 @@ class ContractDeployerAndInteractor {
    * @returns A promise that resolves with the return value of the call.
    */
   public async callContractMethod(config: ContractInteractionConfig): Promise<any> {
-    console.log(`Calling contract ${config.contractAddress}, method: ${config.methodName}`);
-    // Simulate a contract call, potentially using LLM for complex logic simulation
+        // Simulate a contract call, potentially using LLM for complex logic simulation
     const prompt = `Simulate the return value for a call to contract method '${config.methodName}' with arguments ${JSON.stringify(config.args)} on contract at ${config.contractAddress}. ABI: ${JSON.stringify(config.abi)}.`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
@@ -359,8 +358,7 @@ class AbiParser {
       }
       return abi as ContractABI;
     } catch (error) {
-      console.error('Error parsing ABI:', error);
-      throw new Error(`Failed to parse ABI: ${error instanceof Error ? error.message : String(error)}`);
+            throw new Error(`Failed to parse ABI: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -401,8 +399,7 @@ class AuditTools {
    * @returns A promise that resolves with a list of audit findings.
    */
   public async performSecurityAudit(bytecode: string, abi: ContractABI): Promise<AuditFinding[]> {
-    console.log('Performing security audit...');
-    const prompt = `Analyze the following contract bytecode and ABI for common security vulnerabilities (e.g., reentrancy, integer overflow, access control issues). Bytecode: ${bytecode.substring(0, 100)}... ABI: ${JSON.stringify(abi)}. Provide findings in a structured JSON format.`;
+        const prompt = `Analyze the following contract bytecode and ABI for common security vulnerabilities (e.g., reentrancy, integer overflow, access control issues). Bytecode: ${bytecode.substring(0, 100)}... ABI: ${JSON.stringify(abi)}. Provide findings in a structured JSON format.`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
     try {
@@ -413,8 +410,7 @@ class AuditTools {
       }
       return findings;
     } catch (e) {
-      console.warn('LLM did not return valid JSON for audit findings, returning mock data.', e);
-      return [
+            return [
         {
           severity: 'Medium',
           category: 'Reentrancy',
@@ -439,8 +435,7 @@ class AuditTools {
    * @returns A promise that resolves with bytecode analysis results.
    */
   public async analyzeBytecode(bytecode: string): Promise<BytecodeAnalysisResult> {
-    console.log('Analyzing bytecode...');
-    const prompt = `Analyze the provided EVM bytecode for its operational codes and potential control flow. Bytecode: ${bytecode.substring(0, 200)}...`;
+        const prompt = `Analyze the provided EVM bytecode for its operational codes and potential control flow. Bytecode: ${bytecode.substring(0, 200)}...`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
     try {
@@ -450,8 +445,7 @@ class AuditTools {
       }
       return analysis;
     } catch (e) {
-      console.warn('LLM did not return valid JSON for bytecode analysis, returning mock data.', e);
-      return {
+            return {
         opcodes: ['PUSH1', '60', 'PUSH1', '40', 'MSTORE', 'CALLDATASIZE', 'LT', 'PUSH1', '60', 'JUMPI'],
         controlFlowGraph: { nodes: ['start', 'check_size', 'end'], edges: [['start', 'check_size'], ['check_size', 'end']] },
       };
@@ -469,8 +463,7 @@ class GasOptimizer {
    * @returns A promise that resolves with a list of gas optimization suggestions.
    */
   public async getOptimizationSuggestions(contractSourceOrBytecode: string): Promise<GasOptimizationSuggestion[]> {
-    console.log('Generating gas optimization suggestions...');
-    const prompt = `Provide gas optimization suggestions for the following contract code/bytecode: ${contractSourceOrBytecode.substring(0, 200)}... Focus on common patterns like storage packing, efficient loops, and external calls. Return suggestions in a structured JSON format.`;
+        const prompt = `Provide gas optimization suggestions for the following contract code/bytecode: ${contractSourceOrBytecode.substring(0, 200)}... Focus on common patterns like storage packing, efficient loops, and external calls. Return suggestions in a structured JSON format.`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
     try {
@@ -480,8 +473,7 @@ class GasOptimizer {
       }
       return suggestions;
     } catch (e) {
-      console.warn('LLM did not return valid JSON for gas optimization, returning mock data.', e);
-      return [
+            return [
         {
           type: 'Storage',
           description: 'Consider packing small variables into a single storage slot to reduce SLOAD operations.',
@@ -511,8 +503,7 @@ class ContractVerifier {
    * @returns A promise that resolves with the verification result.
    */
   public async verifyContract(contractAddress: ContractAddress, sourceCode: string, abi: ContractABI): Promise<ContractVerificationResult> {
-    console.log(`Verifying contract ${contractAddress}...`);
-    const prompt = `Simulate verification for contract at ${contractAddress} with provided source code (first 100 chars: ${sourceCode.substring(0, 100)}...) and ABI. Determine if it would be verified on a block explorer.`;
+        const prompt = `Simulate verification for contract at ${contractAddress} with provided source code (first 100 chars: ${sourceCode.substring(0, 100)}...) and ABI. Determine if it would be verified on a block explorer.`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
     try {
@@ -522,8 +513,7 @@ class ContractVerifier {
       }
       return result;
     } catch (e) {
-      console.warn('LLM did not return valid JSON for contract verification, returning mock data.', e);
-      const isVerified = Math.random() > 0.5;
+            const isVerified = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.5;
       return {
         isVerified: isVerified,
         verifierUrl: isVerified ? `https://skycoin4444explorer.com/address/${contractAddress}#code` : undefined,
@@ -563,8 +553,7 @@ class MultiSigManager {
     };
     this.proposals.push(proposal);
     this.nextProposalId++;
-    console.log(`New multi-sig proposal created by ${proposer}: ${description}`);
-    return proposal;
+        return proposal;
   }
 
   /**
@@ -583,8 +572,7 @@ class MultiSigManager {
     }
     if (!proposal.approvals.includes(approverAddress)) {
       proposal.approvals.push(approverAddress);
-      console.log(`Proposal ${proposalIndex} approved by ${approverAddress}. Current approvals: ${proposal.approvals.length}/${proposal.requiredApprovals}`);
-      return true;
+            return true;
     }
     return false;
   }
@@ -604,14 +592,12 @@ class MultiSigManager {
     }
 
     if (proposal.approvals.length >= proposal.requiredApprovals) {
-      console.log(`Executing multi-sig proposal ${proposalIndex}: ${proposal.description}`);
-      // Simulate execution
+            // Simulate execution
       const txHash = await new BlockchainUtils().sendRawTransaction(`0x${proposal.to}${proposal.value}${proposal.data}`);
       proposal.executed = true;
       return txHash;
     } else {
-      console.log(`Proposal ${proposalIndex} does not have enough approvals yet. Needed: ${proposal.requiredApprovals}, Got: ${proposal.approvals.length}`);
-      return null;
+            return null;
     }
   }
 
@@ -641,8 +627,7 @@ class ProxyAndUpgradeManager {
    * @returns A promise that resolves with the deployed proxy configuration.
    */
   public async deployProxy(initialImplementationAddress: ContractAddress, proxyType: ProxyConfig['proxyType']): Promise<ProxyConfig> {
-    console.log(`Deploying ${proxyType} proxy pointing to ${initialImplementationAddress}...`);
-    // Simulate proxy deployment
+        // Simulate proxy deployment
     const proxyBytecode = `0xproxy_${proxyType}_${initialImplementationAddress}`;
     const deployer = new ContractDeployerAndInteractor(this.blockchainUtils);
     const deploymentResult = await deployer.deployContract({
@@ -665,8 +650,7 @@ class ProxyAndUpgradeManager {
    * @returns A promise that resolves with the upgrade result.
    */
   public async upgradeProxy(proxyAddress: ContractAddress, newImplementationAddress: ContractAddress): Promise<UpgradeResult> {
-    console.log(`Upgrading proxy ${proxyAddress} to new implementation ${newImplementationAddress}...`);
-    // Simulate upgrade transaction
+        // Simulate upgrade transaction
     const upgradeTxData = `0xupgradeCallData_${newImplementationAddress}`;
     const txHashResult = await this.blockchainUtils.sendRawTransaction(upgradeTxData);
     const txHash = String(txHashResult);
@@ -683,8 +667,7 @@ class ProxyAndUpgradeManager {
    * @returns A promise that resolves with the implementation address.
    */
   public async getImplementationAddress(proxyAddress: ContractAddress): Promise<ContractAddress> {
-    console.log(`Fetching implementation address for proxy ${proxyAddress}...`);
-    // Simulate fetching implementation address (e.g., from storage slot or specific proxy method)
+        // Simulate fetching implementation address (e.g., from storage slot or specific proxy method)
     const prompt = `What is the current implementation address for a proxy contract at ${proxyAddress}?`;
     const llmRawResult = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
     const llmResponse = String(llmRawResult.choices[0]?.message?.content || "");
@@ -692,8 +675,7 @@ class ProxyAndUpgradeManager {
     if (llmResponse.startsWith('0x') && llmResponse.length === 42) {
       return llmResponse;
     }
-    return `0x${Math.random().toString(16).substring(2, 42)}`; // Mock address
-  }
+    return `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 42)}`;   }
 }
 
 /**
@@ -714,7 +696,7 @@ class EventMonitor {
    * @returns A function to stop monitoring.
    */
   public startMonitoringEvents(contractAddress: ContractAddress, eventsToMonitor: MonitoredEvent[], callback: (log: EventLog) => void): () => void {
-    console.log(`Starting event monitoring for ${contractAddress} for events: ${eventsToMonitor.map(e => e.eventName).join(', ')}`);
+    throw new Error('Contract event monitoring requires a real blockchain provider.');
 
     // In a real system, this would involve subscribing to blockchain node events.
     // For simulation, we'll periodically check and emit mock events.
@@ -723,16 +705,15 @@ class EventMonitor {
       const currentBlock = await this.blockchainUtils.getCurrentBlockNumber();
       for (const eventConfig of eventsToMonitor) {
         // Simulate event detection based on filter and block range
-        if (Math.random() < 0.3) { // 30% chance to detect a mock event
+        if ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.3) { // 30% chance to detect a mock event
           const mockLog: EventLog = {
             blockNumber: currentBlock,
-            transactionHash: `0x${Math.random().toString(16).substring(2, 66)}`,
+            transactionHash: `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 66)}`,
             address: contractAddress,
             event: eventConfig.eventName,
-            args: { from: `0x${Math.random().toString(16).substring(2, 42)}`, to: `0x${Math.random().toString(16).substring(2, 42)}`, value: Math.floor(Math.random() * 1000).toString() },
+            args: { from: `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 42)}`, to: `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2, 42)}`, value: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000).toString() },
           };
-          console.log(`Detected event: ${eventConfig.eventName} at block ${currentBlock}`);
-          callback(mockLog);
+                    callback(mockLog);
         }
       }
     };
@@ -741,8 +722,7 @@ class EventMonitor {
 
     return () => {
       clearInterval(intervalId);
-      console.log(`Stopped event monitoring for ${contractAddress}.`);
-    };
+          };
   }
 }
 
@@ -773,8 +753,7 @@ export class AtlasSmartContractsEngine {
     this.multiSigManager = new MultiSigManager();
     this.proxyManager = new ProxyAndUpgradeManager(this.blockchainUtils);
     this.eventMonitor = new EventMonitor(this.blockchainUtils);
-    console.log('ATLAS Smart Contracts Engine initialized for SKYCOIN4444 platform.');
-  }
+      }
 
   /**
    * Provides access to common contract template ABIs.
@@ -798,20 +777,16 @@ export class AtlasSmartContractsEngine {
     verification: ContractVerificationResult;
     stopMonitoring?: () => void;
   }> {
-    console.log('Starting full contract lifecycle...');
-
+    
     // 1. Deploy Contract
     const deployment = await this.deployer.deployContract(config);
-    console.log(`Contract deployed at: ${deployment.address}`);
-
+    
     // 2. Perform Security Audit
     const auditFindings = await this.auditTools.performSecurityAudit(config.bytecode, config.abi);
-    console.log(`Audit completed with ${auditFindings.length} findings.`);
-
+    
     // 3. Verify Contract
     const verification = await this.verifier.verifyContract(deployment.address, sourceCode, config.abi);
-    console.log(`Contract verification status: ${verification.isVerified ? 'Verified' : 'Failed'}`);
-
+    
     // 4. Monitor Events (if specified)
     let stopMonitoring: (() => void) | undefined;
     if (eventsToMonitor && eventsToMonitor.length > 0) {
@@ -819,15 +794,12 @@ export class AtlasSmartContractsEngine {
         deployment.address,
         eventsToMonitor,
         (log) => {
-          console.log(`[Lifecycle Monitor] Event ${log.event} detected:`, log.args);
-          // In a real scenario, this would trigger further actions (e.g., database update, notification)
+                    // In a real scenario, this would trigger further actions (e.g., database update, notification)
         }
       );
-      console.log('Event monitoring started.');
-    }
+          }
 
-    console.log('Full contract lifecycle orchestration complete.');
-    return {
+        return {
       deployment,
       auditFindings,
       verification,

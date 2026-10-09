@@ -89,8 +89,7 @@ export class ProductionLLMEngine {
 
       return response;
     } catch (error) {
-      console.error('LLM Error:', error);
-      return this.getFallbackResponse(userMessage, context);
+            return this.getFallbackResponse(userMessage, context);
     }
   }
 
@@ -361,8 +360,7 @@ Guidelines:
         content: fullResponse,
       });
     } catch (error) {
-      console.error('Stream error:', error);
-      yield 'Error streaming response. Please try again.';
+            yield 'Error streaming response. Please try again.';
     }
   }
 }

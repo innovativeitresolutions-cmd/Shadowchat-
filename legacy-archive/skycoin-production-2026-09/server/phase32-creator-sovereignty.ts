@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 32 — CREATOR SOVEREIGNTY ENGINE
  * Audience ownership exports, creator-owned storefronts, memberships,
@@ -240,7 +241,7 @@ const _affiliateLinks = new Map<string, AffiliateLink>();
 const _rewardSystems = new Map<string, CreatorRewardSystem>();
 
 function _id(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
 }
 
 // ─── STOREFRONT ENGINE ────────────────────────────────────────────────────────
@@ -656,7 +657,7 @@ export const payrollEngine = {
       currency: entry.currency,
       status: "completed",
       paidAt: new Date(),
-      txHash: `0x${Math.random().toString(16).slice(2).padStart(64, "0")}`,
+      txHash: `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2).padStart(64, "0")}`,
       createdAt: new Date(),
     };
     _payrollPayments.set(payment.id, payment);
@@ -848,7 +849,7 @@ export const affiliateNetworkEngine = {
     const program = _affiliatePrograms.get(programId);
     if (!program || !program.isActive) return null;
 
-    const code = `${program.creatorId}_${affiliateId}_${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    const code = `${program.creatorId}_${affiliateId}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8).toUpperCase()}`;
     const link: AffiliateLink = {
       id: _id("afflink"),
       affiliateId,

@@ -144,7 +144,7 @@ export default function HopeAIAdvanced() {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       let responseContent = "";
-      const thinkingTime = Math.random() * 2000 + 500;
+      const thinkingTime = (Math.random()) * 2000 + 500;
 
       switch (mode) {
         case "code":
@@ -210,9 +210,9 @@ What would you like help with? You can also switch modes using the buttons above
         timestamp: Date.now(),
         mode,
         metadata: {
-          tokensUsed: Math.floor(Math.random() * 1000) + 100,
+          tokensUsed: Math.floor((Math.random()) * 1000) + 100,
           thinkingTime: Math.floor(thinkingTime),
-          confidence: Math.random() * 0.3 + 0.7
+          confidence: (Math.random()) * 0.3 + 0.7
         }
       };
 

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Simulation Engine — Tick-Based World Loop
  *
@@ -230,12 +231,12 @@ class SimulationEngine {
   }
 
   private generateContent(entity: SimEntity): string {
-    const template = CONTENT_TEMPLATES[Math.floor(Math.random() * CONTENT_TEMPLATES.length)];
-    const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
-    const insight = INSIGHTS[Math.floor(Math.random() * INSIGHTS.length)];
-    const metric = Math.floor(Math.random() * 40 + 10);
-    const direction = Math.random() > 0.5 ? "increase" : "accelerate";
-    const confidence = Math.floor(Math.random() * 20 + 75);
+    const template = CONTENT_TEMPLATES[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * CONTENT_TEMPLATES.length)];
+    const topic = TOPICS[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * TOPICS.length)];
+    const insight = INSIGHTS[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * INSIGHTS.length)];
+    const metric = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 40 + 10);
+    const direction = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.5 ? "increase" : "accelerate";
+    const confidence = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20 + 75);
 
     return template
       .replace("{topic}", topic)
@@ -257,8 +258,8 @@ class SimulationEngine {
             entityA: a.id,
             entityB: b.id,
             compatibility,
-            emotionalAlignment: Math.min(100, compatibility + Math.floor(Math.random() * 20 - 10)),
-            behaviorMatch: Math.min(100, compatibility + Math.floor(Math.random() * 15 - 7)),
+            emotionalAlignment: Math.min(100, compatibility + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20 - 10)),
+            behaviorMatch: Math.min(100, compatibility + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 15 - 7)),
             aiReason: this.generateCompatibilityReason(a, b, compatibility),
           });
         }
@@ -282,7 +283,7 @@ class SimulationEngine {
       if ((aVal > 80 && bVal < 40) || (aVal < 40 && bVal > 80)) return sum + 5;
       return sum;
     }, 0);
-    return Math.min(100, Math.floor(similarity * 0.7 + complementBonus + Math.random() * 10));
+    return Math.min(100, Math.floor(similarity * 0.7 + complementBonus + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10));
   }
 
   private generateCompatibilityReason(a: SimEntity, b: SimEntity, score: number): string {
@@ -361,7 +362,7 @@ class SimulationEngine {
     let newMomentum = entity.momentum * 0.98;
 
     // Random perturbation (world noise)
-    newMomentum += (Math.random() - 0.5) * 0.05;
+    newMomentum += ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.05;
     newMomentum = Math.max(-1, Math.min(1, newMomentum));
 
     // State transitions
@@ -385,33 +386,33 @@ class SimulationEngine {
     const now = Date.now();
 
     // High energy entities generate posts
-    if (entity.energy > 80 && Math.random() < 0.3) {
+    if (entity.energy > 80 && (crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.3) {
       events.push({
         id: `evt-${now}-${entity.id}-post`,
         type: "post_generated",
         entityId: entity.id,
         entityName: entity.name,
-        payload: { content: this.generateContent(entity), tags: [TOPICS[Math.floor(Math.random() * TOPICS.length)]] },
+        payload: { content: this.generateContent(entity), tags: [TOPICS[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * TOPICS.length)]] },
         impact: Math.floor(entity.energy * 0.8),
         timestamp: now,
       });
     }
 
     // Trend spikes from high-momentum entities
-    if (entity.momentum > 0.6 && Math.random() < 0.2) {
+    if (entity.momentum > 0.6 && (crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.2) {
       events.push({
         id: `evt-${now}-${entity.id}-trend`,
         type: "trend_spike",
         entityId: entity.id,
         entityName: entity.name,
-        payload: { topic: TOPICS[Math.floor(Math.random() * TOPICS.length)], spike: Math.floor(entity.momentum * 50) },
+        payload: { topic: TOPICS[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * TOPICS.length)], spike: Math.floor(entity.momentum * 50) },
         impact: Math.floor(entity.momentum * 100),
         timestamp: now,
       });
     }
 
     // Behavior signals from all entities
-    if (Math.random() < 0.15) {
+    if ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.15) {
       events.push({
         id: `evt-${now}-${entity.id}-behavior`,
         type: "behavior_signal",
@@ -464,13 +465,13 @@ class SimulationEngine {
 
   private tickMarket(signals: MarketSignal[]): MarketSignal[] {
     return signals.map(s => {
-      const change = (Math.random() - 0.48) * 2; // slight upward bias
+      const change = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.48) * 2; // slight upward bias
       return {
         ...s,
         price: Math.max(0.001, s.price * (1 + change / 100)),
-        change24h: s.change24h + (Math.random() - 0.5) * 0.5,
-        momentum: Math.max(-1, Math.min(1, s.momentum + (Math.random() - 0.5) * 0.1)),
-        sentiment: Math.max(0, Math.min(100, s.sentiment + (Math.random() - 0.5) * 2)),
+        change24h: s.change24h + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.5,
+        momentum: Math.max(-1, Math.min(1, s.momentum + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.1)),
+        sentiment: Math.max(0, Math.min(100, s.sentiment + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 2)),
       };
     });
   }
@@ -540,8 +541,8 @@ class SimulationEngine {
     return {
       likelyActions: ["view_feed", "like_post", "check_wallet"].slice(0, 2),
       contentPreferences: topTrends,
-      datingReadiness: Math.floor(Math.random() * 30 + 60),
-      economicActivity: Math.floor(Math.random() * 40 + 50),
+      datingReadiness: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30 + 60),
+      economicActivity: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 40 + 50),
     };
   }
 

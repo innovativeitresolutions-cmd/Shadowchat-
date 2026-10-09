@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * @file storm-devops-engine.ts
  * @description Production TypeScript engine file for SKYCOIN4444 platform: STORM DevOps Engine.
@@ -155,9 +156,12 @@ class Logger {
       component,
       metadata,
     };
-    console.log(`[${entry.timestamp.toISOString()}] [${entry.level.toUpperCase()}] [${entry.service}/${entry.component}] ${entry.message}`);
+    const line = `[${entry.timestamp.toISOString()}] [${entry.level.toUpperCase()}] [${entry.service}/${entry.component}] ${entry.message}`;
+    if (level === 'error') console.error(line, metadata ?? '');
+    else if (level === 'warn') console.warn(line, metadata ?? '');
+    else console.info(line, metadata ?? '');
     if (metadata) {
-      console.log('  Metadata:', JSON.stringify(metadata));
+      // Metadata was emitted with the log entry above.
     }
   }
 
@@ -194,9 +198,9 @@ class HealthChecker {
     try {
       const response = await new Promise<boolean>(resolve => {
         setTimeout(() => {
-          const isHealthy = Math.random() > 0.1; 
+          const isHealthy = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.1; 
           resolve(isHealthy);
-        }, Math.random() * timeoutMs);
+        }, (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * timeoutMs);
       });
 
       if (response) {
@@ -216,7 +220,7 @@ class HealthChecker {
     this.logger.info(`Performing container health check for ${containerId} with command: ${command.join(' ')}`, 'CONTAINER_CHECK');
     const success = await new Promise<boolean>(resolve => {
       setTimeout(() => {
-        const isHealthy = Math.random() > 0.05; 
+        const isHealthy = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.05; 
         resolve(isHealthy);
       }, 2000);
     });
@@ -300,9 +304,9 @@ class PipelineManager {
 
       const stageSuccess = await new Promise<boolean>(resolve => {
         setTimeout(() => {
-          const success = Math.random() > 0.2; 
+          const success = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.2; 
           resolve(success);
-        }, Math.random() * 5000 + 1000);
+        }, (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000 + 1000);
       });
 
       stage.endTime = new Date();
@@ -401,7 +405,7 @@ class DeploymentAutomation {
     this.logger.info(`Monitoring canary group for ${serviceName} for 10 seconds.`, 'Canary');
     await new Promise(resolve => setTimeout(resolve, 10000));
 
-    const monitorResult = Math.random() > 0.15; 
+    const monitorResult = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.15; 
     if (!monitorResult) {
       this.logger.error(`Canary monitoring detected issues for ${serviceName}. Rolling back.`, 'Canary');
       await this.rollbackDeployment(serviceName, 'canary_failure');
@@ -548,21 +552,21 @@ class MonitoringAndAlerting {
 
       switch (sla.metric) {
         case 'uptime':
-          const uptime = Math.random() * 10 + 90; 
+          const uptime = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10 + 90; 
           currentValue = parseFloat(uptime.toFixed(2));
           if (currentValue < sla.threshold) {
             isViolated = true;
           }
           break;
         case 'response_time':
-          const responseTime = Math.random() * 1000; 
+          const responseTime = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000; 
           currentValue = parseFloat(responseTime.toFixed(2));
           if (currentValue > sla.threshold) {
             isViolated = true;
           }
           break;
         case 'error_rate':
-          const errorRate = Math.random() * 5; 
+          const errorRate = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5; 
           currentValue = parseFloat(errorRate.toFixed(2));
           if (currentValue > sla.threshold) {
             isViolated = true;

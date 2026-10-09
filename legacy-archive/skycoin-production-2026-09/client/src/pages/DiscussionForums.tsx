@@ -48,7 +48,6 @@ interface Reply {
   isAnswer: boolean;
 }
 
-// Mock data
 const MOCK_POSTS: Post[] = [
   {
     id: "p1",

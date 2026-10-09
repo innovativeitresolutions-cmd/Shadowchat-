@@ -72,7 +72,7 @@ export default function CreateAudio() {
           <div className="flex items-center justify-center gap-0.5 h-16 mb-6">
             {Array.from({ length: 40 }).map((_, i) => (
               <div key={i} className={`w-1 rounded-full transition-all ${recording ? "bg-purple-400 animate-pulse" : hasRecording ? "bg-purple-500/60" : "bg-border/50"}`}
-                style={{ height: recording ? `${20 + Math.random() * 40}px` : hasRecording ? `${8 + Math.sin(i * 0.4) * 20 + 20}px` : "8px" }} />
+                style={{ height: recording ? `${20 + (Math.random()) * 40}px` : hasRecording ? `${8 + Math.sin(i * 0.4) * 20 + 20}px` : "8px" }} />
             ))}
           </div>
 

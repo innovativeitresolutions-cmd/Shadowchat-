@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * @file titan-orchestrator-engine.ts
  * @description TITAN Orchestrator Engine for SKYCOIN4444 platform.
@@ -151,7 +152,7 @@ const CRON_CHECK_INTERVAL_MS = 5000;
 // --- Utility Functions ---
 
 function generateUniqueId(): string {
-  return `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `task-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 }
 
 function parseCronSchedule(cron: string): number {
@@ -187,8 +188,7 @@ export class TitanOrchestratorEngine {
   private cronSchedulerInterval: NodeJS.Timeout | null = null;
 
   private constructor() {
-    console.log("TitanOrchestratorEngine initialized.");
-    this.startCronScheduler();
+        this.startCronScheduler();
   }
 
   public static getInstance(): TitanOrchestratorEngine {
@@ -216,8 +216,7 @@ export class TitanOrchestratorEngine {
     };
     this.taskQueue.push(newTask);
     this.sortTaskQueue();
-    console.log(`Task added: ${newTask.id} with priority ${newTask.priority}`);
-    this.assignTasksToWorkers();
+        this.assignTasksToWorkers();
     return newTask;
   }
 
@@ -250,8 +249,7 @@ export class TitanOrchestratorEngine {
       if (status === TaskStatus.COMPLETED || status === TaskStatus.FAILED || status === TaskStatus.CANCELLED) {
         task.completedAt = Date.now();
       }
-      console.log(`Task ${taskId} status updated to ${status}`);
-      this.processWorkflowDependencies(taskId, status);
+            this.processWorkflowDependencies(taskId, status);
       return true;
     }
     return false;
@@ -282,7 +280,6 @@ export class TitanOrchestratorEngine {
       id: generateUniqueId(),
     };
     this.workflowDefinitions.set(newDefinition.id, newDefinition);
-    console.log(`Workflow defined: ${newDefinition.name} (${newDefinition.id})`);
     return newDefinition;
   }
 
@@ -294,8 +291,7 @@ export class TitanOrchestratorEngine {
   public startWorkflow(workflowDefinitionId: string): WorkflowInstance | undefined {
     const definition = this.workflowDefinitions.get(workflowDefinitionId);
     if (!definition) {
-      console.error(`Workflow definition ${workflowDefinitionId} not found.`);
-      return undefined;
+            return undefined;
     }
 
     const instanceId = generateUniqueId();
@@ -326,8 +322,7 @@ export class TitanOrchestratorEngine {
 
     newInstance.status = TaskStatus.RUNNING;
     newInstance.startedAt = Date.now();
-    console.log(`Workflow instance ${instanceId} started for definition ${workflowDefinitionId}`);
-    return newInstance;
+        return newInstance;
   }
 
   /**
@@ -344,8 +339,7 @@ export class TitanOrchestratorEngine {
         if (status === TaskStatus.FAILED) {
           instance.failedTasks.push(completedTaskId);
           instance.status = TaskStatus.FAILED; // Mark workflow as failed if any task fails
-          console.error(`Workflow instance ${instance.id} failed due to task ${completedTaskId}`);
-          return;
+                    return;
         }
 
         const definition = this.workflowDefinitions.get(instance.definitionId);
@@ -367,8 +361,7 @@ export class TitanOrchestratorEngine {
             this.addTask(depTaskData);
             instance.taskStates.set(dependentTask.id, TaskStatus.RUNNING);
             instance.currentTasks.push(dependentTask.id);
-            console.log(`Dependent task ${dependentTask.id} added to queue for workflow ${instance.id}`);
-          }
+                      }
         });
 
         // Check if workflow is complete
@@ -379,8 +372,7 @@ export class TitanOrchestratorEngine {
         if (allTasksCompleted) {
           instance.status = TaskStatus.COMPLETED;
           instance.completedAt = Date.now();
-          console.log(`Workflow instance ${instance.id} completed successfully.`);
-        }
+                  }
       }
     });
   }
@@ -407,7 +399,6 @@ export class TitanOrchestratorEngine {
       nextRunAt: parseCronSchedule(job.cronSchedule),
     };
     this.scheduledJobs.set(newJob.id, newJob);
-    console.log(`Job scheduled: ${newJob.name} (${newJob.id}) to run at ${new Date(newJob.nextRunAt).toISOString()}`);
     return newJob;
   }
 
@@ -419,8 +410,7 @@ export class TitanOrchestratorEngine {
       clearInterval(this.cronSchedulerInterval);
     }
     this.cronSchedulerInterval = setInterval(() => this.checkScheduledJobs(), CRON_CHECK_INTERVAL_MS);
-    console.log("Cron scheduler started.");
-  }
+      }
 
   /**
    * Checks for scheduled jobs that are due to run and adds them to the task queue.
@@ -429,15 +419,13 @@ export class TitanOrchestratorEngine {
     const now = Date.now();
     this.scheduledJobs.forEach(job => {
       if (job.enabled && job.nextRunAt <= now) {
-        console.log(`Triggering scheduled job: ${job.name} (${job.id})`);
         // Assuming the taskId in ScheduledJob refers to a predefined task or workflow
         const taskDefinition = this.getTaskFromWorkflow(job.taskId);
         if (taskDefinition) {
           const { status: _ts, id: _tid, createdAt: _tca, retriesAttempted: _tra, ...taskDefData } = taskDefinition;
           this.addTask(taskDefData);
         } else {
-          console.warn(`Scheduled job ${job.id} refers to unknown task ID ${job.taskId}`);
-        }
+                  }
         job.lastRunAt = now;
         job.nextRunAt = parseCronSchedule(job.cronSchedule);
         this.scheduledJobs.set(job.id, job);
@@ -461,8 +449,7 @@ export class TitanOrchestratorEngine {
       capabilities: capabilities,
     };
     this.workers.set(workerId, newWorker);
-    console.log(`Worker registered: ${workerId}`);
-    this.assignTasksToWorkers();
+        this.assignTasksToWorkers();
     return newWorker;
   }
 
@@ -480,8 +467,7 @@ export class TitanOrchestratorEngine {
       worker.lastHeartbeat = Date.now();
       worker.currentTaskId = currentTaskId;
       this.workers.set(workerId, worker);
-      console.log(`Worker ${workerId} status updated to ${status}`);
-      return true;
+            return true;
     }
     return false;
   }
@@ -514,8 +500,7 @@ export class TitanOrchestratorEngine {
 
         // In a real system, this would send the task to the worker for execution.
         // For this simulation, we'll just log and assume execution happens.
-        console.log(`Task ${task.id} assigned to worker ${worker.id}`);
-        // Simulate task completion/failure after a delay
+                // Simulate task completion/failure after a delay
         setTimeout(() => this.simulateTaskExecution(task), DEFAULT_TASK_TIMEOUT_MS / 2);
       } else {
         break; // No more suitable tasks for this worker
@@ -529,7 +514,7 @@ export class TitanOrchestratorEngine {
    * @param task The task to simulate execution for.
    */
   private simulateTaskExecution(task: Task): void {
-    const success = Math.random() > 0.2; // 80% success rate
+    const success = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.2; // 80% success rate
     if (success) {
       this.updateTaskStatus(task.id, TaskStatus.COMPLETED, { simulatedResult: `Task ${task.id} completed.` });
     } else {
@@ -556,7 +541,6 @@ export class TitanOrchestratorEngine {
 
     if (task.retriesAttempted <= retryPolicy.maxAttempts) {
       const delay = retryPolicy.delayMs * Math.pow(retryPolicy.backoffFactor, task.retriesAttempted - 1);
-      console.warn(`Task ${task.id} failed. Retrying in ${delay}ms (attempt ${task.retriesAttempted}/${retryPolicy.maxAttempts}).`);
       this.updateTaskStatus(task.id, TaskStatus.RETRYING, undefined, errorMessage);
       setTimeout(() => {
         task.status = TaskStatus.PENDING; // Re-add to queue for retry
@@ -565,8 +549,7 @@ export class TitanOrchestratorEngine {
         this.assignTasksToWorkers();
       }, delay);
     } else {
-      console.error(`Task ${task.id} failed after ${task.retriesAttempted} retries. Moving to Dead Letter Queue.`);
-      this.moveToDeadLetterQueue(task, errorMessage);
+            this.moveToDeadLetterQueue(task, errorMessage);
       this.updateTaskStatus(task.id, TaskStatus.FAILED, undefined, errorMessage);
     }
   }
@@ -619,10 +602,8 @@ export class TitanOrchestratorEngine {
   public setWorkerPoolSize(size: number): void {
     if (size > 0) {
       this.workerPoolSize = size;
-      console.log(`Worker pool size set to ${size}`);
-    } else {
-      console.warn("Worker pool size must be greater than 0.");
-    }
+          } else {
+          }
   }
 
   /**
@@ -644,8 +625,7 @@ export class TitanOrchestratorEngine {
       this.taskMonitors.set(record.taskId, []);
     }
     this.taskMonitors.get(record.taskId)?.push(record);
-    console.log(`Metric recorded for task ${record.taskId}: ${record.metric} = ${record.value}`);
-  }
+      }
 
   /**
    * Retrieves monitoring records for a specific task.
@@ -682,13 +662,11 @@ export class TitanOrchestratorEngine {
    * @returns A promise that resolves to the LLM's response.
    */
   public async suggestWorkflowImprovements(prompt: string): Promise<string> {
-    console.log("Invoking LLM for workflow improvements...");
-    try {
+        try {
       const response = await invokeLLM({ messages: [{ role: "user", content: prompt }] });
       return String(response.choices[0]?.message?.content || "");
     } catch (error) {
-      console.error("Error invoking LLM:", error);
-      return `Error suggesting improvements: ${error instanceof Error ? error.message : String(error)}`;
+            return `Error suggesting improvements: ${error instanceof Error ? error.message : String(error)}`;
     }
   }
 
@@ -700,8 +678,7 @@ export class TitanOrchestratorEngine {
       clearInterval(this.cronSchedulerInterval);
       this.cronSchedulerInterval = null;
     }
-    console.log("TitanOrchestratorEngine stopped.");
-  }
+      }
 }
 
 // --- Singleton Export ---

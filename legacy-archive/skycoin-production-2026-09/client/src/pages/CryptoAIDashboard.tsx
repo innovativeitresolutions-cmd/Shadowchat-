@@ -53,8 +53,7 @@ export function CryptoAIDashboard() {
         ];
         setDefiOps(mockDefi);
       } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
+              } finally {
         setLoading(false);
       }
     };

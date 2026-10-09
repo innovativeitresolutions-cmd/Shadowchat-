@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 const adminProcedure = protectedProcedure;
 import { z } from "zod";
@@ -24,8 +25,8 @@ export const socialEngagementRouter = router({
 
   // Creator rewards
   getCreatorRewards: protectedProcedure.query(async () => ({
-    totalEarnings: Math.random() * 10000,
-    thisMonth: Math.random() * 2000,
+    totalEarnings: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000,
+    thisMonth: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2000,
     breakdown: { tips: 500, subscriptions: 1000, nft: 500 },
   })),
 
@@ -77,15 +78,15 @@ export const socialEngagementRouter = router({
     .query(async ({ input }) => ({
       posts: Array.from({ length: 50 }, (_, i) => ({
         id: `post-${i}`,
-        engagement: Math.random() * 1000,
+        engagement: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000,
       })),
-      totalCount: Math.floor(Math.random() * 100000),
+      totalCount: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
     })),
 
   // Social graph
   getSocialGraph: protectedProcedure.query(async () => ({
-    followers: Math.floor(Math.random() * 100000),
-    following: Math.floor(Math.random() * 10000),
-    mutualConnections: Math.floor(Math.random() * 5000),
+    followers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
+    following: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
+    mutualConnections: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000),
   })),
 });

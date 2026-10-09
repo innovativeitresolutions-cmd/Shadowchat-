@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 14 — PLATFORM PERMANENCE LAYER
  * Durability, Governance Permanence, Legacy Systems, Disaster Recovery
@@ -517,7 +518,7 @@ export const disasterRecovery = {
     expiresAt.setFullYear(expiresAt.getFullYear() + 7);
     const backup: ColdStorageBackup = {
       id, type, region,
-      sizeGB: type === "full" ? 500 + Math.random() * 200 : 50 + Math.random() * 50,
+      sizeGB: type === "full" ? 500 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200 : 50 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50,
       encryptionKey: `bk_key_${id}`,
       storageClass: type === "full" ? "deep_archive" : "glacier",
       status: "creating",
@@ -548,9 +549,9 @@ export const disasterRecovery = {
       scenario,
       startedAt: new Date(),
       completedAt: new Date(),
-      rto: 15 + Math.floor(Math.random() * 30),
-      rpo: 5 + Math.floor(Math.random() * 10),
-      passed: Math.random() > 0.15,
+      rto: 15 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30),
+      rpo: 5 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10),
+      passed: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.15,
       findings: [
         "Database failover completed within SLA",
         "CDN failover triggered successfully",

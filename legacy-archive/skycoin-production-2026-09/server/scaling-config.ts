@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SCALING CONFIGURATION — COMMANDMENTS 5 & 6
  * Commandment 5: Monetization must be executable
@@ -772,7 +773,7 @@ export const healthChecker = {
 export const scalingConfig = {
   // Instance configuration
   instance: {
-    id: process.env.INSTANCE_ID ?? `instance_${Math.random().toString(36).slice(2, 8)}`,
+    id: process.env.INSTANCE_ID ?? `instance_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     region: process.env.AWS_REGION ?? "us-east-1",
     zone: process.env.AVAILABILITY_ZONE ?? "us-east-1a",
     maxMemoryMb: parseInt(process.env.MAX_MEMORY_MB ?? "2048"),

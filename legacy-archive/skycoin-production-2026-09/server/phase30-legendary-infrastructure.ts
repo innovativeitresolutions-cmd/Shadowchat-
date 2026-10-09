@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 30 — LEGENDARY INFRASTRUCTURE
  * Multi-Region Orchestration, Auto-Sharding, Cost Intelligence,
@@ -429,7 +430,7 @@ export const trafficManager = {
 
     // Weighted random selection
     const total = eligibleWeights.reduce((s, [, w]) => s + w, 0);
-    let rand = Math.random() * total;
+    let rand = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * total;
     for (const [regionId, weight] of eligibleWeights) {
       rand -= weight;
       if (rand <= 0) return regionId;
@@ -507,7 +508,7 @@ export const slaMonitor = {
 
 export const incidentManager = {
   createIncident(params: Omit<Incident, "id" | "timeline" | "createdAt">): Incident {
-    const id = `inc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `inc_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const incident: Incident = {
       ...params,
       id,
@@ -569,7 +570,7 @@ export const incidentManager = {
 
 export const costIntelligenceEngine = {
   recordCost(params: Omit<CostRecord, "id" | "createdAt">): CostRecord {
-    const id = `cost_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `cost_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const record: CostRecord = { ...params, id, createdAt: new Date() };
     _costRecords.set(id, record);
     return record;
@@ -731,7 +732,7 @@ export const dataSovereigntyEngine = {
 
 export const observabilityEngine = {
   recordMetric(params: Omit<ObservabilityMetric, "id">): ObservabilityMetric {
-    const id = `metric_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `metric_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const metric: ObservabilityMetric = { ...params, id };
     _metrics.push(metric);
     return metric;

@@ -14,15 +14,13 @@ const clients = new Map<number, WebSocketClient[]>();
 
 export function setupWebSocketServer(wss: WebSocketServer) {
   wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
-    console.log('[WebSocket] New connection from', req.socket.remoteAddress);
-
+    
     let userId: number | null = null;
 
     ws.on('message', async (data: Buffer) => {
       try {
         const message = JSON.parse(data.toString());
-        console.log('[WebSocket] Received:', message.type);
-
+        
         if (message.type === 'auth') {
           userId = message.data.userId;
           if (userId && !clients.has(userId)) {
@@ -31,8 +29,7 @@ export function setupWebSocketServer(wss: WebSocketServer) {
           if (userId) {
             clients.get(userId)!.push({ ws, userId, isAlive: true });
           }
-          console.log(`[WebSocket] User ${userId} authenticated`);
-
+          
           ws.send(
             JSON.stringify({
               type: 'auth_success',
@@ -79,8 +76,7 @@ export function setupWebSocketServer(wss: WebSocketServer) {
           );
         }
       } catch (error) {
-        console.error('[WebSocket] Error processing message:', error);
-      }
+              }
     });
 
     ws.on('pong', () => {
@@ -104,12 +100,10 @@ export function setupWebSocketServer(wss: WebSocketServer) {
           clients.delete(userId);
         }
       }
-      console.log('[WebSocket] Connection closed');
-    });
+          });
 
     ws.on('error', (error) => {
-      console.error('[WebSocket] Error:', error);
-    });
+          });
   });
 
   // Heartbeat to detect dead connections
@@ -144,8 +138,7 @@ export async function broadcastNotification(
 ) {
   const userClients = clients.get(userId);
   if (!userClients || userClients.length === 0) {
-    console.log(`[WebSocket] No active connections for user ${userId}`);
-    return;
+        return;
   }
 
   const message = JSON.stringify({
@@ -163,8 +156,7 @@ export async function broadcastNotification(
     }
   });
 
-  console.log(`[WebSocket] Notification sent to user ${userId}`);
-}
+  }
 
 export async function broadcastMatch(
   userId1: number,

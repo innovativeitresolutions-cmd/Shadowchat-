@@ -44,9 +44,6 @@ class SecureWalletManager {
     // Use environment variable for encryption key
     this.encryptionKey = process.env.WALLET_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
 
-    if (!process.env.WALLET_ENCRYPTION_KEY) {
-      console.warn('[Wallet] WALLET_ENCRYPTION_KEY not set - using random key (data will be lost on restart)');
-    }
   }
 
   /**
@@ -86,37 +83,7 @@ class SecureWalletManager {
     type: 'admin' | 'user' | 'mining' | 'treasury',
     multisigRequired = 1
   ): Promise<WalletConfig> {
-    console.log(`[Wallet] Creating ${type} wallet on ${blockchain}: ${address}`);
-
-    // Encrypt private key
-    const encryptedPrivateKey = this.encrypt(privateKey);
-
-    // Generate public key (simplified - in production use proper key derivation)
-    const publicKey = crypto.createHash('sha256').update(privateKey).digest('hex').substring(0, 66);
-
-    const wallet: WalletConfig = {
-      address,
-      encryptedPrivateKey,
-      publicKey,
-      blockchain,
-      type,
-      multisigRequired,
-      multisigApprovals: 0,
-      createdAt: Date.now(),
-    };
-
-    this.walletCache.set(address, wallet);
-
-    // Log creation
-    await this.logAudit('CREATE_WALLET', address, `Created ${type} wallet on ${blockchain}`, 'system');
-
-    // Notify owner
-    await notifyOwner({
-      title: 'Wallet Created',
-      content: `New ${type} wallet created on ${blockchain}: ${address}`,
-    });
-
-    return wallet;
+    throw new Error('Private-key wallet creation is unavailable until authentication and durable key storage are implemented.');
   }
 
   /**
@@ -140,18 +107,7 @@ class SecureWalletManager {
    * Get decrypted private key (requires authorization)
    */
   async getPrivateKey(address: string, userId: string): Promise<string> {
-    console.log(`[Wallet] Private key access requested by ${userId} for ${address}`);
-
-    const wallet = await this.getWallet(address);
-    if (!wallet) {
-      throw new Error(`Wallet ${address} not found`);
-    }
-
-    // Log access
-    await this.logAudit('ACCESS_PRIVATE_KEY', address, `Private key accessed by ${userId}`, userId);
-
-    // Decrypt and return
-    return this.decrypt(wallet.encryptedPrivateKey);
+    throw new Error('Private key export is unavailable until caller authorization and a durable audit trail are implemented.');
   }
 
   /**
@@ -164,109 +120,21 @@ class SecureWalletManager {
     token: string,
     userId: string
   ): Promise<Transaction> {
-    console.log(`[Wallet] Transfer: ${amount} ${token} from ${fromAddress} to ${toAddress}`);
-
-    const wallet = await this.getWallet(fromAddress);
-    if (!wallet) {
-      throw new Error(`Wallet ${fromAddress} not found`);
-    }
-
-    // Check multisig requirement
-    if (wallet.multisigRequired > 1 && wallet.multisigApprovals < wallet.multisigRequired) {
-      throw new Error(`Multisig approval required (${wallet.multisigApprovals}/${wallet.multisigRequired})`);
-    }
-
-    const transaction: Transaction = {
-      id: `tx-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-      fromWallet: fromAddress,
-      toWallet: toAddress,
-      amount,
-      token,
-      status: 'pending',
-      timestamp: Date.now(),
-    };
-
-    // Log transaction
-    await this.logAudit(
-      'TRANSFER_FUNDS',
-      fromAddress,
-      `Transferred ${amount} ${token} to ${toAddress}`,
-      userId
-    );
-
-    // In production: broadcast to blockchain
-    // const txHash = await this.broadcastTransaction(transaction, wallet);
-    // transaction.txHash = txHash;
-    // transaction.status = 'confirmed';
-
-    console.log(`[Wallet] Transaction created: ${transaction.id}`);
-
-    // Notify owner
-    await notifyOwner({
-      title: 'Wallet Transfer',
-      content: `Transfer of ${amount} ${token} from ${fromAddress} to ${toAddress}`,
-    });
-
-    return transaction;
+    throw new Error('Wallet transfers are unavailable until a signed blockchain broadcast is implemented.');
   }
 
   /**
    * Route mining rewards to admin wallet
    */
   async routeMiningRewards(minerAddress: string, amount: number, token: string): Promise<Transaction> {
-    console.log(`[Wallet] Routing mining reward: ${amount} ${token} to admin wallet`);
-
-    // Get admin wallet address from environment
-    const adminWallet = process.env.ADMIN_WALLET_ADDRESS;
-    if (!adminWallet) {
-      throw new Error('ADMIN_WALLET_ADDRESS not configured');
-    }
-
-    // Get or create admin wallet
-    let wallet = await this.getWallet(adminWallet);
-    if (!wallet) {
-      wallet = {
-        address: adminWallet,
-        userId: 'system',
-        balance: 0,
-        token,
-        encryptedPrivateKey: '',
-        multisigRequired: 1,
-        multisigApprovals: 0,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-    }
-
-    // Credit mining rewards directly to admin wallet
-    wallet.balance += amount;
-    wallet.updatedAt = Date.now();
-
-    // Create transaction record
-    const transaction: Transaction = {
-      id: `tx-mining-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-      fromWallet: minerAddress,
-      toWallet: adminWallet,
-      amount,
-      token,
-      status: 'confirmed',
-      timestamp: Date.now(),
-    };
-
-    // Log as mining reward
-    await this.logAudit('MINING_REWARD', minerAddress, `Mining reward credited: ${amount} ${token}`, 'system');
-
-    console.log(`[Wallet] Mining reward credited to admin wallet: ${transaction.id}`);
-
-    return transaction;
+    throw new Error('Mining reward transfer is unavailable until verified on-chain rewards and a signed broadcast are implemented.');
   }
 
   /**
    * Approve multisig transaction
    */
   async approveTransaction(walletAddress: string, userId: string): Promise<boolean> {
-    console.log(`[Wallet] Multisig approval from ${userId} for ${walletAddress}`);
-
+    
     const wallet = await this.getWallet(walletAddress);
     if (!wallet) {
       throw new Error(`Wallet ${walletAddress} not found`);
@@ -284,8 +152,7 @@ class SecureWalletManager {
    * Get transaction history
    */
   async getTransactionHistory(walletAddress: string, limit = 50): Promise<Transaction[]> {
-    console.log(`[Wallet] Fetching transaction history for ${walletAddress}`);
-
+    
     // In production: query from database
     // const transactions = await db.query.walletTransactions.findMany({
     //   where: eq(walletTransactions.fromWallet, walletAddress),
@@ -301,8 +168,7 @@ class SecureWalletManager {
    * Get audit log
    */
   async getAuditLog(walletAddress: string, limit = 100): Promise<AuditLog[]> {
-    console.log(`[Wallet] Fetching audit log for ${walletAddress}`);
-
+    
     // In production: query from database
     // const logs = await db.query.walletAuditLog.findMany({
     //   where: eq(walletAuditLog.walletAddress, walletAddress),
@@ -319,7 +185,7 @@ class SecureWalletManager {
    */
   private async logAudit(action: string, walletAddress: string, details: string, userId: string): Promise<void> {
     const log: AuditLog = {
-      id: `audit-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+      id: `audit-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7)}`,
       action,
       walletAddress,
       details,
@@ -327,8 +193,7 @@ class SecureWalletManager {
       userId,
     };
 
-    console.log(`[Audit] ${action}: ${details}`);
-
+    
     // In production: save to database
     // await db.insert(walletAuditLog).values(log);
   }

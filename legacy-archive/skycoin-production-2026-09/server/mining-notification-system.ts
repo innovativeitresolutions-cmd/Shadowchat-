@@ -48,8 +48,7 @@ export class MiningNotificationSystem {
   setPreferences(prefs: NotificationPreferences): void {
     this.preferences.set(prefs.userId, prefs);
     this.alerts.set(prefs.userId, []);
-    console.log(`[Notifications] Preferences set for user ${prefs.userId}`);
-  }
+      }
 
   /**
    * Get notification preferences
@@ -94,8 +93,7 @@ export class MiningNotificationSystem {
       await this.sendSMSAlert(prefs.phone, alert);
     }
 
-    console.log(`[Notifications] Temperature alert sent: ${alert.title}`);
-  }
+      }
 
   /**
    * Send hashrate drop alert
@@ -131,8 +129,7 @@ export class MiningNotificationSystem {
       await this.sendEmailAlert(prefs.email, alert);
     }
 
-    console.log(`[Notifications] Hashrate alert sent: ${alert.title}`);
-  }
+      }
 
   /**
    * Send rejection rate alert
@@ -163,8 +160,7 @@ export class MiningNotificationSystem {
       await this.sendEmailAlert(prefs.email, alert);
     }
 
-    console.log(`[Notifications] Rejection alert sent: ${alert.title}`);
-  }
+      }
 
   /**
    * Send earnings alert
@@ -195,8 +191,7 @@ export class MiningNotificationSystem {
       await this.sendEmailAlert(prefs.email, alert);
     }
 
-    console.log(`[Notifications] Earnings alert sent`);
-  }
+      }
 
   /**
    * Send pool disconnection alert
@@ -227,8 +222,7 @@ export class MiningNotificationSystem {
       await this.sendSMSAlert(prefs.phone, alert);
     }
 
-    console.log(`[Notifications] Pool disconnect alert sent: ${poolName}`);
-  }
+      }
 
   /**
    * Send worker offline alert
@@ -259,8 +253,7 @@ export class MiningNotificationSystem {
       await this.sendSMSAlert(prefs.phone, alert);
     }
 
-    console.log(`[Notifications] Worker offline alert sent: ${workerName}`);
-  }
+      }
 
   /**
    * Send email alert
@@ -271,10 +264,8 @@ export class MiningNotificationSystem {
         title: alert.title,
         content: `[${alert.severity.toUpperCase()}] ${alert.message}`,
       });
-      console.log(`[Notifications] Alert notification sent for ${alert.title}`);
-    } catch (error) {
-      console.error('[Notifications] Notification send failed:', error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -283,10 +274,8 @@ export class MiningNotificationSystem {
   private async sendSMSAlert(phone: string, alert: Alert): Promise<void> {
     try {
       // Integrate with Twilio or similar SMS service
-      console.log(`[Notifications] SMS sent to ${phone}: ${alert.message}`);
-    } catch (error) {
-      console.error('[Notifications] SMS send failed:', error);
-    }
+          } catch (error) {
+          }
   }
 
   /**

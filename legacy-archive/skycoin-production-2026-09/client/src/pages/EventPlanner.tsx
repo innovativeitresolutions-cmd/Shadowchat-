@@ -21,7 +21,7 @@ export default function EventPlanner() {
 
   const addTable = () => {
     const id = `t${Date.now()}`;
-    setTables(p => [...p, { id, x: 50 + Math.random()*300, y: 50 + Math.random()*200, label: `Table ${p.length+1}`, seats: 6, color: COLORS[p.length % COLORS.length] }]);
+    setTables(p => [...p, { id, x: 50 + (Math.random())*300, y: 50 + (Math.random())*200, label: `Table ${p.length+1}`, seats: 6, color: COLORS[p.length % COLORS.length] }]);
   };
 
   const onMouseDown = (e: React.MouseEvent, id: string) => {

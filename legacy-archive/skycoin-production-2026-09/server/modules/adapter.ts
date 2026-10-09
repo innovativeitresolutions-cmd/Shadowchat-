@@ -33,8 +33,7 @@ export async function fetchRealMarketData() {
     cacheTime = now;
     return marketCache;
   } catch (error) {
-    console.error('CoinGecko API error:', error);
-    return marketCache || [];
+        return marketCache || [];
   }
 }
 
@@ -129,8 +128,7 @@ export async function moderateContent(text: string) {
     const content = typeof response.choices[0]?.message.content === 'string' ? response.choices[0].message.content : '{}';
     return JSON.parse(content);
   } catch (error) {
-    console.error('Content moderation error:', error);
-    return { flagged: false, reason: 'Unable to moderate' };
+        return { flagged: false, reason: 'Unable to moderate' };
   }
 }
 
@@ -150,8 +148,7 @@ export async function analyzeSentiment(text: string) {
     const sentiment = contentStr.trim().toLowerCase() || 'neutral';
     return { sentiment };
   } catch (error) {
-    console.error('Sentiment analysis error:', error);
-    return { sentiment: 'neutral' };
+        return { sentiment: 'neutral' };
   }
 }
 
@@ -170,7 +167,6 @@ export async function hopeAIChat(message: string) {
     const contentStr = typeof response.choices[0]?.message.content === 'string' ? response.choices[0].message.content : 'Unable to process request';
     return { response: contentStr };
   } catch (error) {
-    console.error('HopeAI chat error:', error);
-    return { response: 'Sorry, I encountered an error. Please try again.' };
+        return { response: 'Sorry, I encountered an error. Please try again.' };
   }
 }

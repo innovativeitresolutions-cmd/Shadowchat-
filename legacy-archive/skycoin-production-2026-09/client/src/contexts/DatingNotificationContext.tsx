@@ -45,8 +45,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
   const { isConnected: wsConnected, send } = useWebSocket({
     url: wsUrl,
     onConnect: () => {
-      console.log('[DatingNotifications] WebSocket connected');
-      setIsConnected(true);
+            setIsConnected(true);
       // Send auth message first
       if (user?.id) {
         send({
@@ -65,8 +64,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
       }
     },
     onDisconnect: () => {
-      console.log('[DatingNotifications] WebSocket disconnected');
-      setIsConnected(false);
+            setIsConnected(false);
     },
     onMessage: (message) => {
       if (message.type === 'notification') {
@@ -84,8 +82,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
       }
     },
     onError: (error) => {
-      console.error('[DatingNotifications] WebSocket error:', error);
-      // Don't block rendering on WebSocket error
+            // Don't block rendering on WebSocket error
     },
     autoReconnect: true,
     reconnectInterval: 3000,
@@ -109,8 +106,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
         )
       );
     } catch (error) {
-      console.error('Failed to mark notification as read:', error);
-    }
+          }
   }, []);
 
   const clearNotifications = useCallback(async () => {
@@ -122,8 +118,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
 
       setNotifications([]);
     } catch (error) {
-      console.error('Failed to clear notifications:', error);
-    }
+          }
   }, []);
 
   const deleteNotification = useCallback(async (notificationId: number) => {
@@ -134,8 +129,7 @@ export function DatingNotificationProvider({ children }: { children: React.React
 
       setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     } catch (error) {
-      console.error('Failed to delete notification:', error);
-    }
+          }
   }, []);
 
   const value: DatingNotificationContextType = {

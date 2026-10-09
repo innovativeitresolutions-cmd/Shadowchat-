@@ -55,8 +55,7 @@ export const useAudioNarration = () => {
       try {
         setConfig(JSON.parse(saved));
       } catch (e) {
-        console.error('Failed to load audio config:', e);
-      }
+              }
     }
   }, []);
 
@@ -109,16 +108,14 @@ export const useAudioNarration = () => {
         };
 
         utterance.onerror = (event) => {
-          console.error('Speech synthesis error:', event);
-          setIsPlaying(false);
+                    setIsPlaying(false);
           setCurrentAudio(null);
         };
 
         utteranceRef.current = utterance;
         synthRef.current.speak(utterance);
       } catch (error) {
-        console.error('Failed to speak:', error);
-      }
+              }
     },
     [config, synthRef]
   );

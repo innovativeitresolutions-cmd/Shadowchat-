@@ -220,18 +220,18 @@ export class AutonomousTradingAgents {
    */
   private calculateRSI(token: string): number {
     // Simplified RSI calculation
-    return 45 + Math.random() * 20;
+    return 45 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20;
   }
 
   private calculateMACD(token: string) {
     return {
-      positive: Math.random() > 0.5,
+      positive: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.5,
     };
   }
 
   private calculateBollingerBands(token: string) {
     return {
-      nearBottom: Math.random() > 0.7,
+      nearBottom: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.7,
     };
   }
 
@@ -240,7 +240,7 @@ export class AutonomousTradingAgents {
    */
   private getMarketPrice(token: string): number {
     // In production, fetch from market data provider
-    return 125 + Math.random() * 50;
+    return 125 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50;
   }
 
   /**

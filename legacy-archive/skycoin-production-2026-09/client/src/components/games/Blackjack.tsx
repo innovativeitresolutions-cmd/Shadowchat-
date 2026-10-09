@@ -11,7 +11,7 @@ const RANKS: [string, number][] = [
 function makeDeck(): Card[] {
   const deck: Card[] = [];
   for (const s of SUITS) for (const [rank, value] of RANKS) deck.push({ rank, suit: s, value });
-  return deck.sort(() => Math.random() - 0.5);
+  return deck.sort(() => (Math.random()) - 0.5);
 }
 function handValue(cards: Card[]): number {
   let total = cards.reduce((a, c) => a + c.value, 0);

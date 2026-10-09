@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SYSTEM COMPLETION TEST SUITE
  * 
@@ -111,7 +112,7 @@ vi.mock("./media-pipeline", () => {
   return {
     uploadFlow: {
       createSession: vi.fn().mockImplementation(async (params: { userId: number; filename: string; mimeType: string; sizeBytes: number }) => {
-        const sessionId = "sess_" + Math.random().toString(36).slice(2, 10);
+        const sessionId = "sess_" + (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 10);
         const mediaType = params.mimeType.startsWith("video") ? "video" : params.mimeType.startsWith("audio") ? "audio" : "image";
         const session = {
           sessionId,
@@ -135,9 +136,9 @@ vi.mock("./media-pipeline", () => {
         if (session.confirmed) throw new Error(`Upload session ${sessionId} already confirmed`);
         session.confirmed = true;
         return {
-          assetId: "asset_" + Math.random().toString(36).slice(2, 10),
+          assetId: "asset_" + (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 10),
           cdnUrl: `https://cdn.shadowchat.com/${session.s3Key}`,
-          transcodeJobId: session.mediaType === "video" ? "job_" + Math.random().toString(36).slice(2, 8) : undefined,
+          transcodeJobId: session.mediaType === "video" ? "job_" + (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8) : undefined,
           moderationQueued: true,
         };
       }),

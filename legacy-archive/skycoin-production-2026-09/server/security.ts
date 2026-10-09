@@ -240,8 +240,7 @@ export function validatePayloadSize(maxBytes: number) {
  */
 export function logSuspiciousActivity(userId: string | null, action: string, details: string) {
   const timestamp = new Date().toISOString();
-  console.warn(`[SECURITY] ${timestamp} | user=${userId || "anonymous"} | action=${action} | ${details}`);
-}
+  }
 
 // ═══════════════════════════════════════════════════════════════
 // SECURITY ENGINE v2 — ADVANCED MODULES
@@ -404,15 +403,14 @@ export function recordSecurityEvent(
 ): SecurityEvent {
   const full: SecurityEvent = {
     ...e,
-    id: `sec_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `sec_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     timestamp: Date.now(),
     resolved: false,
   };
   _securityEvents.push(full);
   if (_securityEvents.length > 50_000) _securityEvents.splice(0, 5_000);
   if (full.severity === "critical") {
-    console.error(`[SECURITY CRITICAL] ${full.type} from ${full.ip}`, full.metadata);
-  }
+      }
   return full;
 }
 
@@ -467,7 +465,7 @@ export function writeAuditLog(entry: Omit<AuditEntry, "id" | "hash" | "previousH
   const hash = crypto.createHash("sha256").update(content).digest("hex");
   const full: AuditEntry = {
     ...entry,
-    id: `audit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `audit_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     hash,
     previousHash: _lastAuditHash,
   };
@@ -571,7 +569,7 @@ export function analyzeSpam(content: string, userId?: number): {
   for (const kw of SPAM_KEYWORDS) {
     if (lower.includes(kw)) { score += 20; reasons.push(`Spam keyword: "${kw}"`); }
   }
-  const fp = crypto.createHash("md5").update(content.trim().toLowerCase().replace(/\s+/g, " ")).digest("hex");
+  const fp = crypto.createHash('sha256').update(content.trim().toLowerCase().replace(/\s+/g, " ")).digest("hex");
   const fpc = (_spamFP.get(fp) || 0) + 1;
   _spamFP.set(fp, fpc);
   if (fpc > 3) { score += 30 * Math.min(fpc - 3, 3); reasons.push(`Duplicate content (${fpc}x)`); }

@@ -165,8 +165,7 @@ export function useVoiceNav() {
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      console.warn('Speech Recognition not supported');
-      return;
+            return;
     }
 
     recognitionRef.current = new SpeechRecognition();
@@ -197,8 +196,7 @@ export function useVoiceNav() {
     };
 
     recognitionRef.current.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
-      setTranscript(`⚠️ Error: ${event.error}`);
+            setTranscript(`⚠️ Error: ${event.error}`);
     };
 
     return () => {

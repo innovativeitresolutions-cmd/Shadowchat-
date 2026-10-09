@@ -52,9 +52,9 @@ export default function TradingDashboard() {
     const interval = setInterval(() => {
       setTrades(prev => prev.map(trade => ({
         ...trade,
-        price: trade.price * (1 + (Math.random() - 0.5) * 0.001),
-        change: trade.change + (Math.random() - 0.5) * 10,
-        changePercent: trade.changePercent + (Math.random() - 0.5) * 0.1,
+        price: trade.price * (1 + ((Math.random()) - 0.5) * 0.001),
+        change: trade.change + ((Math.random()) - 0.5) * 10,
+        changePercent: trade.changePercent + ((Math.random()) - 0.5) * 0.1,
       })));
     }, 3000);
 

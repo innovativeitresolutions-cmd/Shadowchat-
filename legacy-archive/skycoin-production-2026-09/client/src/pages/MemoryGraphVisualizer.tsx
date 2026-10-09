@@ -24,8 +24,8 @@ export default function MemoryGraphVisualizer() {
 
     // Initialize positions if not set
     nodes.forEach((node: any, i: number) => {
-      if (!node.x) node.x = Math.random() * canvas.width;
-      if (!node.y) node.y = Math.random() * canvas.height;
+      if (!node.x) node.x = (Math.random()) * canvas.width;
+      if (!node.y) node.y = (Math.random()) * canvas.height;
       if (!node.vx) node.vx = 0;
       if (!node.vy) node.vy = 0;
     });

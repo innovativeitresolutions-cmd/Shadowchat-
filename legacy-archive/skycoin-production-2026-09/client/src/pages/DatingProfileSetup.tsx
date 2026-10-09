@@ -96,9 +96,7 @@ export default function DatingProfileSetup() {
   };
 
   const handleSubmit = () => {
-    console.log('Profile data:', formData);
-    // TODO: Send to backend
-  };
+          };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-4">

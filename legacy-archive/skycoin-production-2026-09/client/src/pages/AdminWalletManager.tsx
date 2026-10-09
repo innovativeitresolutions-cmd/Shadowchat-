@@ -69,8 +69,7 @@ export default function AdminWalletManager() {
           setWallets(data.wallets || wallets);
         }
       } catch (error) {
-        console.error('Failed to fetch wallet data:', error);
-      }
+              }
     };
 
     const interval = setInterval(fetchWalletData, 5000); // Update every 5 seconds
@@ -91,8 +90,7 @@ export default function AdminWalletManager() {
           setTransactions(data.transactions || []);
         }
       } catch (error) {
-        console.error('Failed to fetch transactions:', error);
-      }
+              }
     };
 
     const interval = setInterval(fetchTransactions, 10000); // Update every 10 seconds

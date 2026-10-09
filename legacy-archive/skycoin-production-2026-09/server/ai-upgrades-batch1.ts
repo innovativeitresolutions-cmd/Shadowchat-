@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -14,7 +15,7 @@ export const aiUpgradesRouter = router({
         },
         consensus: "Synthesized response from all models",
         confidence: 0.95,
-        latency: Math.random() * 100 + 50,
+        latency: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 + 50,
       };
     }),
 
@@ -33,7 +34,7 @@ export const aiUpgradesRouter = router({
       return {
         solution: "Final solution based on deep thinking",
         thoughts,
-        totalTime: Math.random() * 5000 + 2000,
+        totalTime: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000 + 2000,
       };
     }),
 
@@ -59,7 +60,7 @@ export const aiUpgradesRouter = router({
           relevance: 1 - (i * 0.08),
           content: `Semantically relevant result ${i + 1}`,
         })),
-        searchTime: Math.random() * 200 + 50,
+        searchTime: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200 + 50,
       };
     }),
 
@@ -85,7 +86,7 @@ export const aiUpgradesRouter = router({
       return {
         jobId: `finetune-${Date.now()}`,
         status: "queued",
-        estimatedTime: Math.random() * 3600 + 1800,
+        estimatedTime: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3600 + 1800,
         trainingExamples: input.trainingData,
       };
     }),
@@ -179,7 +180,7 @@ export const aiUpgradesRouter = router({
     .input(z.object({ userId: z.string() }))
     .query(async ({ input }) => {
       return {
-        requestsRemaining: Math.floor(Math.random() * 1000),
+        requestsRemaining: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000),
         resetTime: Date.now() + 3600000,
         tier: "pro",
         unlimited: false,
@@ -189,8 +190,8 @@ export const aiUpgradesRouter = router({
   // Queue management
   getQueueStatus: publicProcedure.query(async () => {
     return {
-      queueLength: Math.floor(Math.random() * 100),
-      averageWait: Math.random() * 5000 + 1000,
+      queueLength: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+      averageWait: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000 + 1000,
       priorityQueues: { high: 5, medium: 20, low: 75 },
     };
   }),

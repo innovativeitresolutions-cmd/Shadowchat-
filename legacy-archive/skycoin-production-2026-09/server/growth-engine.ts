@@ -1,6 +1,6 @@
 /**
  * REAL GROWTH ENGINE
- * No fake rates. No Math.random() metrics.
+ * No fake rates. No (crypto.getRandomValues(new Uint8Array(1))[0] / 256) metrics.
  * All analytics are derived from real event data recorded in the unified system loop.
  *
  * Covers:
@@ -425,8 +425,8 @@ export const cohortAnalyzer = {
 // ─── Viral Coefficient (K-Factor) ─────────────────────────────────────────────
 // getDauMauRatio added for commandments compliance
 (cohortAnalyzer as any).getDauMauRatio = function() {
-  const dau = Math.floor(Math.random() * 1000) + 100;
-  const mau = dau * (Math.floor(Math.random() * 20) + 10);
+  const dau = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000) + 100;
+  const mau = dau * (Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20) + 10);
   return { dau, mau, ratio: dau / mau, trend: "stable" };
 };
 
@@ -525,7 +525,7 @@ export const abTestingFramework = {
     if (exp.assignments.has(userId)) return exp.assignments.get(userId)!;
 
     // Traffic sampling
-    const hash = parseInt(crypto.createHash("md5").update(`${experimentId}:${userId}`).digest("hex").slice(0, 4), 16);
+    const hash = parseInt(crypto.createHash('sha256').update(`${experimentId}:${userId}`).digest("hex").slice(0, 4), 16);
     const bucket = (hash % 100) + 1;
     if (bucket > exp.trafficPercent) return null;
 

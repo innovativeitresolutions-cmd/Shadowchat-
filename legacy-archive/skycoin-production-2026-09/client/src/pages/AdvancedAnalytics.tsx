@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-// Mock analytics data
 const revenueData = [
   { month: 'Jan', revenue: 4000, users: 2400, transactions: 240 },
   { month: 'Feb', revenue: 3000, users: 1398, transactions: 221 },

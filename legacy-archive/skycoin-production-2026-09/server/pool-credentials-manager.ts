@@ -44,7 +44,7 @@ export class PoolCredentialsManager {
     poolUrl: string,
     poolPort: number
   ): PoolCredential {
-    const id = `pool-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `pool-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
     
     const credential: PoolCredential = {
       id,
@@ -59,7 +59,6 @@ export class PoolCredentialsManager {
     };
 
     this.credentials.set(id, credential);
-    console.log(`[Pool] Added credentials for ${poolName} (${coin})`);
 
     return credential;
   }
@@ -117,8 +116,7 @@ export class PoolCredentialsManager {
     if (!cred) return false;
 
     cred.isActive = false;
-    console.log(`[Pool] Deactivated credentials: ${cred.poolName}`);
-    return true;
+        return true;
   }
 
   /**
@@ -131,7 +129,7 @@ export class PoolCredentialsManager {
     power: number,
     assignedPool: string
   ): MinerConfig {
-    const id = `miner-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `miner-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 
     const config: MinerConfig = {
       id,
@@ -145,7 +143,6 @@ export class PoolCredentialsManager {
     };
 
     this.minerConfigs.set(id, config);
-    console.log(`[Miner] Added configuration: ${name} (${hardwareType})`);
 
     return config;
   }
@@ -178,8 +175,7 @@ export class PoolCredentialsManager {
     if (!config) return false;
 
     config.assignedPool = poolId;
-    console.log(`[Miner] Updated pool assignment: ${config.name} -> ${poolId}`);
-    return true;
+        return true;
   }
 
   /**
@@ -190,8 +186,7 @@ export class PoolCredentialsManager {
     if (!config) return false;
 
     config.isActive = false;
-    console.log(`[Miner] Deactivated: ${config.name}`);
-    return true;
+        return true;
   }
 
   /**
@@ -257,8 +252,7 @@ export class PoolCredentialsManager {
       decrypted += decipher.final('utf8');
       return decrypted;
     } catch (error) {
-      console.error('[Pool] Decryption error:', error);
-      return '';
+            return '';
     }
   }
 
@@ -291,11 +285,9 @@ export class PoolCredentialsManager {
         this.minerConfigs.set(miner.id, miner);
       }
 
-      console.log(`[Pool] Imported configuration: ${data.credentials.length} pools, ${data.miners.length} miners`);
-      return true;
+            return true;
     } catch (error) {
-      console.error('[Pool] Import failed:', error);
-      return false;
+            return false;
     }
   }
 }

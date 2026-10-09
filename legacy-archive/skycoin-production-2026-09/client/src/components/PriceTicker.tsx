@@ -31,8 +31,8 @@ export function PriceTicker() {
     const interval = setInterval(() => {
       setPrices(prev => prev.map(p => ({
         ...p,
-        price: p.price * (1 + (Math.random() - 0.498) * 0.002),
-        change24h: p.change24h + (Math.random() - 0.5) * 0.1,
+        price: p.price * (1 + ((Math.random()) - 0.498) * 0.002),
+        change24h: p.change24h + ((Math.random()) - 0.5) * 0.1,
       })));
     }, 3000);
     return () => clearInterval(interval);

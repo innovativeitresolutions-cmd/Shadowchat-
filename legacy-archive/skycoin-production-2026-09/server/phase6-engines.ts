@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 6D–6I Engines
  * 6D: Economic Expansion | 6E: HOPE AI Dominance | 6F: Discovery Engine
@@ -757,7 +758,7 @@ export const trustEmpire = {
 const _grantPrograms = new Map<string, { id: string; name: string; totalBudget: number; currency: string; startDate: Date; endDate: Date; categories: string[]; applications: { id: string; grantId: string; applicantId: number; description: string; requestedAmount: number; approvedAmount?: number; status: string; createdAt: Date }[] }>();
 
 (communityGrants as any).createGrantProgram = function(name: string, totalBudget: number, currency: string, startDate: Date, endDate: Date, categories: string[]) {
-  const id = `gp_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const id = `gp_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
   const program = { id, name, totalBudget, currency, startDate, endDate, categories, applications: [] as any[] };
   _grantPrograms.set(id, program);
   return program;
@@ -765,7 +766,7 @@ const _grantPrograms = new Map<string, { id: string; name: string; totalBudget: 
 
 (communityGrants as any).applyForGrant = function(grantId: string, applicantId: number, description: string, requestedAmount: number) {
   const program = _grantPrograms.get(grantId);
-  const id = `app_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const id = `app_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
   const app = { id, grantId, applicantId, description, requestedAmount, status: "pending", createdAt: new Date() };
   if (program) program.applications.push(app);
   return app;

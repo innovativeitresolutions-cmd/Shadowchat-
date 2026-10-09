@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PULSE Database Engine v1.0
  * Query optimization, migrations, backup, replication, health monitoring for SKYCOIN4444
@@ -231,11 +232,11 @@ export class BackupEngine {
   async createBackup(type: BackupRecord["type"], tables?: string[]): Promise<BackupRecord> {
     const backup: BackupRecord = {
       id: `backup_${Date.now()}`,
-      type, size: Math.floor(Math.random() * 500000000) + 10000000,
+      type, size: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500000000) + 10000000,
       location: `s3://skycoin4444-backups/${type}_${Date.now()}.sql.gz`,
       startedAt: Date.now(), completedAt: Date.now() + 30000,
       success: true, tables: tables || ["all"],
-      rowCount: Math.floor(Math.random() * 1000000),
+      rowCount: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000),
     };
     this.backups.push(backup);
     return backup;

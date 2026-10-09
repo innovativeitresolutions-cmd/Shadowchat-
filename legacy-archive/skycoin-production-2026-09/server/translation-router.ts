@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { z } from "zod";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
@@ -66,13 +67,12 @@ export const translationRouter = router({
           translated: translatedText,
           sourceLanguage: input.sourceLanguage,
           targetLanguage: input.targetLanguage,
-          confidence: 0.92 + Math.random() * 0.08,
+          confidence: 0.92 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.08,
           timestamp: new Date(),
           fromCache: false,
         };
       } catch (error) {
-        console.error("Translation error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Translation failed",
         });
@@ -121,8 +121,7 @@ export const translationRouter = router({
           confidence: 0.5,
         };
       } catch (error) {
-        console.error("Language detection error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Language detection failed",
         });
@@ -172,8 +171,7 @@ export const translationRouter = router({
           timestamp: new Date(),
         };
       } catch (error) {
-        console.error("Batch translation error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Batch translation failed",
         });
@@ -260,8 +258,7 @@ export const translationRouter = router({
           timestamp: new Date(),
         };
       } catch (error) {
-        console.error("Translation with metrics error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Translation failed",
         });

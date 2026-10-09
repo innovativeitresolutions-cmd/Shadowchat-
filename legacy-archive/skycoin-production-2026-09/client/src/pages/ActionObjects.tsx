@@ -264,7 +264,7 @@ export default function ActionObjects() {
         };
         setIncomeFlow(prev => [flowEvent, ...prev]);
       }
-    }, 1500 + Math.random() * 1000);
+    }, 1500 + (Math.random()) * 1000);
   };
 
   // Income flow totals

@@ -133,10 +133,10 @@ const CryptoResearchHub: React.FC = () => {
     // Generate mock price history
     const history = Array.from({ length: 30 }, (_, i) => ({
       day: i,
-      BTC: 63800 + Math.random() * 5000 - 2500,
-      ETH: 3891 + Math.random() * 300 - 150,
-      SOL: 77.15 + Math.random() * 10 - 5,
-      DOGE: 0.072 + Math.random() * 0.01 - 0.005,
+      BTC: 63800 + (Math.random()) * 5000 - 2500,
+      ETH: 3891 + (Math.random()) * 300 - 150,
+      SOL: 77.15 + (Math.random()) * 10 - 5,
+      DOGE: 0.072 + (Math.random()) * 0.01 - 0.005,
     }));
     setPriceHistory(history);
 

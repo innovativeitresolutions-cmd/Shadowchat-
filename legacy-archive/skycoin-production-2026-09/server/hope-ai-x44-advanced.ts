@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * HOPE AI x44 Advanced Capabilities
  * 44x MORE POWERFUL than planned upgrades
@@ -27,7 +28,7 @@ export class QuantumReasoningEngine {
       results.push({
         path: i,
         reasoning: `Quantum path ${i}: Exploring alternative reasoning trajectory`,
-        confidence: Math.random() * 0.4 + 0.6,
+        confidence: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6,
         insights: this.generateInsights(),
       });
     }
@@ -438,7 +439,7 @@ export class EthicalOmniscienceEngine {
 
     const evaluations = frameworks.slice(0, this.ethicalFrameworks).map((framework, i) => ({
       framework,
-      ethicalScore: Math.random() * 0.4 + 0.6,
+      ethicalScore: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6,
       recommendation: `${framework}: ${this.generateRecommendation(i)}`,
       reasoning: `Evaluated through ${framework} lens`,
     }));
@@ -489,9 +490,9 @@ export class CreativeOmniscienceEngine {
     const solutions = creativeModes.slice(0, this.creativeModes).map((mode, i) => ({
       mode,
       solution: `Creative solution via ${mode}`,
-      novelty: Math.random() * 0.4 + 0.6,
-      feasibility: Math.random() * 0.4 + 0.6,
-      impact: Math.random() * 0.4 + 0.6,
+      novelty: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6,
+      feasibility: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6,
+      impact: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6,
     }));
 
     return {

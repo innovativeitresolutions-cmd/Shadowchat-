@@ -128,8 +128,7 @@ export async function playGame(
       message: 'Game recorded successfully',
     };
   } catch (error) {
-    console.error('Error recording game score:', error);
-    return { success: false, error: 'Failed to record game' };
+        return { success: false, error: 'Failed to record game' };
   }
 }
 
@@ -172,8 +171,7 @@ async function updateLeaderboard(
         },
       });
   } catch (error) {
-    console.error('Error updating leaderboard:', error);
-  }
+      }
 }
 
 /**
@@ -188,8 +186,7 @@ export async function getLeaderboard(gameId: string, limit = 100) {
       .orderBy(desc(leaderboards.highScore))
       .limit(limit);
   } catch (error) {
-    console.error('Error fetching leaderboard:', error);
-    return [];
+        return [];
   }
 }
 
@@ -224,8 +221,7 @@ async function checkAchievements(
       await awardAchievement(userId, achievementId);
     }
   } catch (error) {
-    console.error('Error checking achievements:', error);
-  }
+      }
 }
 
 /**
@@ -248,8 +244,7 @@ export async function awardAchievement(userId: string, achievementId: string) {
       })
       .onConflictDoNothing();
   } catch (error) {
-    console.error('Error awarding achievement:', error);
-  }
+      }
 }
 
 /**
@@ -279,8 +274,7 @@ export async function getUserGameStats(userId: string) {
       achievements: achievements.map((a) => a.achievementId),
     };
   } catch (error) {
-    console.error('Error fetching user game stats:', error);
-    return {
+        return {
       totalGamesPlayed: 0,
       totalRewards: 0,
       highestScore: 0,

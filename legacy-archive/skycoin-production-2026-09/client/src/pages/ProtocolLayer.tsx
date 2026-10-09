@@ -106,8 +106,8 @@ const result = await sc.actions.execute({
   userId: "user_123"
 });
 
-console.log(result.action); // PAYMENT
-console.log(result.amount); // 20`}</pre>
+ // PAYMENT
+ // 20`}</pre>
             </div>
             <div className="space-y-2">
               {SDK_FEATURES.map(f => (

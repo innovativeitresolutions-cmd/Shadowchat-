@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * ICO Router — SKY444 Token Sale Engine
  * Real Stripe checkout, tier pricing, referral codes, vesting schedules
@@ -192,7 +193,7 @@ export const icoRouter = router({
         return { code: r.code, uses: r.uses, totalBonusEarned: parseFloat(r.total_bonus_earned ?? "0") };
       }
       // Generate unique code
-      const code = `SKY${ctx.user.id.toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
+      const code = `SKY${ctx.user.id.toString(36).toUpperCase()}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 5).toUpperCase()}`;
       await db.execute(
         `INSERT INTO ico_referral_codes (user_id, code, uses, total_bonus_earned, created_at) VALUES (${ctx.user.id}, '${code}', 0, 0, ${Date.now()})`
       );
@@ -300,8 +301,7 @@ export const icoRouter = router({
           return { checkoutUrl: session.url, purchaseId, baseTokens, bonusTokens, totalTokens: baseTokens + bonusTokens };
         }
       } catch (e) {
-        console.error("[ICO] Stripe checkout failed:", e);
-      }
+              }
 
       // Fallback: simulate payment for dev/test
       await db.execute(

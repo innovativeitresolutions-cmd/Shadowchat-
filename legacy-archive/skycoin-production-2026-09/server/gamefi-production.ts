@@ -731,7 +731,7 @@ export const dailyChallengeEngine = {
     if (_dailyChallenges.has(date)) return _dailyChallenges.get(date)!;
 
     // Deterministic challenge generation based on date hash
-    const dateHash = parseInt(crypto.createHash("md5").update(date).digest("hex").slice(0, 8), 16);
+    const dateHash = parseInt(crypto.createHash('sha256').update(date).digest("hex").slice(0, 8), 16);
     const challengeTypes = [
       { title: "Social Butterfly", description: "Make 5 posts today", requirements: [{ action: "post_created", target: 5, current: 0 }], xpReward: 100, tokenReward: 10 },
       { title: "Engagement King", description: "Get 20 likes on your posts", requirements: [{ action: "like_received", target: 20, current: 0 }], xpReward: 150, tokenReward: 15 },
@@ -910,7 +910,7 @@ const _cmdQuestProgress = new Map<string, {questId: string; userId: number; prog
 
 // Patch gameFiEngine with createTournament and joinTournament
 (gameFiEngine as any).createTournament = async function(params: {name: string; gameType: string; entryFee: number; maxParticipants: number; startTime: Date; prizePool: number}) {
-  const id = `tournament_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const id = `tournament_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
   const t = { id, name: params.name, status: "registration", gameType: params.gameType, entryFee: params.entryFee, maxParticipants: params.maxParticipants, participants: [], prizePool: params.prizePool, startTime: params.startTime };
   _cmdTournaments.set(id, t);
   return t;
@@ -925,7 +925,7 @@ const _cmdQuestProgress = new Map<string, {questId: string; userId: number; prog
 
 // Patch questEngine with createQuest and updateProgress
 (questEngine as any).createQuest = async function(params: {name: string; description: string; category: string; xpReward: number; requirements: {action: string; count: number}[]; isDaily: boolean}) {
-  const id = `quest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const id = `quest_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
   const q = { id, ...params };
   _cmdQuests.set(id, q);
   return q;

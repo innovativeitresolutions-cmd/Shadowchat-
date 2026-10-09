@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * OPERATIONS CORE ENGINE — Enterprise Business Operations
  *
@@ -261,7 +262,7 @@ export class SupportTicketService {
     if (!ticket) return null;
 
     const message: TicketMessage = {
-      id: `msg_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `msg_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       authorId: params.authorId,
       isStaff: params.isStaff,
       content: params.content,
@@ -929,7 +930,7 @@ export class PartnerService {
 
   private generateAPIKey(): string {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return "sk_live_" + Array.from({ length: 48 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return "sk_live_" + Array.from({ length: 48 }, () => chars[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * chars.length)]).join("");
   }
 }
 

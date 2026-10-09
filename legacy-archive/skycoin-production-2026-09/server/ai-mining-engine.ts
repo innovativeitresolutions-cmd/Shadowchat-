@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from "./server/_core/llm";
 import { storagePut, storageGet } from "./storage";
 import { db } from "./db";
@@ -42,8 +43,7 @@ class AIMiningEngine {
     // Start mining process
     this.startMiningCycle(config.userId);
 
-    console.log(`[AI Mining] Initialized mining for user ${config.userId}`);
-  }
+      }
 
   /**
    * Start continuous mining cycle
@@ -87,10 +87,8 @@ class AIMiningEngine {
       // Send to wallet
       await this.sendToWallet(userId, config.walletAddress, result);
 
-      console.log(`[AI Mining] Mined ${result.amount} ${result.crypto} for user ${userId}`);
-    } catch (error) {
-      console.error(`[AI Mining] Error in mining cycle for ${userId}:`, error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -139,8 +137,7 @@ class AIMiningEngine {
       }
       return { selectedCrypto: config.cryptos[0]?.symbol || "BTC", power: 80, efficiency: 0.95 };
     } catch (error) {
-      console.error("[AI Mining] Strategy determination error:", error);
-      return { selectedCrypto: config.cryptos[0]?.symbol || "BTC", power: 80, efficiency: 0.95 };
+            return { selectedCrypto: config.cryptos[0]?.symbol || "BTC", power: 80, efficiency: 0.95 };
     }
   }
 
@@ -151,13 +148,13 @@ class AIMiningEngine {
     config: MiningConfig,
     crypto: string
   ): Promise<MiningResult> {
-    const difficulty = Math.random() * 100 + 50;
+    const difficulty = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 + 50;
     const hashRate = (config.miningPower / 100) * 1000000;
-    const efficiency = Math.random() * 0.2 + 0.8;
+    const efficiency = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.2 + 0.8;
 
     // Calculate mined amount based on difficulty and hash rate
     const baseAmount = (hashRate * efficiency) / (difficulty * 1000);
-    const amount = baseAmount * (Math.random() * 0.2 + 0.9);
+    const amount = baseAmount * ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.2 + 0.9);
 
     return {
       timestamp: Date.now(),
@@ -178,10 +175,8 @@ class AIMiningEngine {
       this.totalMined.set(userId, current + result.amount);
 
       // Store in database (implement based on your schema)
-      console.log(`[AI Mining] Stored result: ${result.amount} ${result.crypto}`);
-    } catch (error) {
-      console.error("[AI Mining] Error storing result:", error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -190,10 +185,8 @@ class AIMiningEngine {
   private async autoReinvestMining(userId: string, result: MiningResult): Promise<void> {
     try {
       // Logic to reinvest mined crypto
-      console.log(`[AI Mining] Auto-reinvesting ${result.amount} ${result.crypto}`);
-    } catch (error) {
-      console.error("[AI Mining] Error in auto-reinvest:", error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -206,12 +199,8 @@ class AIMiningEngine {
   ): Promise<void> {
     try {
       // Simulate sending to wallet
-      console.log(
-        `[AI Mining] Sent ${result.amount} ${result.crypto} to wallet ${walletAddress}`
-      );
-    } catch (error) {
-      console.error("[AI Mining] Error sending to wallet:", error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -224,8 +213,7 @@ class AIMiningEngine {
       this.miningIntervals.delete(userId);
     }
     this.configs.delete(userId);
-    console.log(`[AI Mining] Stopped mining for user ${userId}`);
-  }
+      }
 
   /**
    * Get mining statistics

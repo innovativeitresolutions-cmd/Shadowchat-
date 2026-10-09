@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from './_core/llm';
 
 /**
@@ -109,8 +110,7 @@ export class DatingMatcher {
         reasons: analysis.reasons || [],
       };
     } catch (error) {
-      console.error('AI compatibility analysis failed:', error);
-      return { valueAlignment: 0.5, reasons: ['AI analysis unavailable'] };
+            return { valueAlignment: 0.5, reasons: ['AI analysis unavailable'] };
     }
   }
 
@@ -175,7 +175,7 @@ export class DatingMatcher {
       // (This would be checked in the actual implementation)
 
       // Calculate distance (simplified - would use actual geolocation)
-      const distance = Math.random() * 50;
+      const distance = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50;
 
       // Check preference constraints
       if (candidate.age < preferences.minAge || candidate.age > preferences.maxAge) {

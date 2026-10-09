@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // ═══════════════════════════════════════════════════════════════
@@ -203,7 +204,7 @@ describe("AI Agent Engine", () => {
     }
 
     const createTask = (agentId: string, priority = 5): Task => ({
-      id: `task-${Date.now()}-${Math.random()}`,
+      id: `task-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256)}`,
       agentId,
       status: "pending",
       priority,
@@ -306,7 +307,7 @@ describe("Price Engine", () => {
     const createPriceData = (symbol: string, price: number): PriceData => ({
       symbol,
       price,
-      change24h: (Math.random() - 0.5) * 20,
+      change24h: ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 20,
       volume24h: price * 1_000_000,
       marketCap: price * 444_000_000,
       lastUpdated: Date.now(),

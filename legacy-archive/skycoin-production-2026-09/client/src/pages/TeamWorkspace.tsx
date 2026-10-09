@@ -391,10 +391,10 @@ export default function TeamWorkspace() {
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-xs font-medium">{m.name}</span>
-                          <span className="text-xs text-white/40">{Math.floor(Math.random() * 50 + 20)} actions</span>
+                          <span className="text-xs text-white/40">{Math.floor((Math.random()) * 50 + 20)} actions</span>
                         </div>
                         <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                          <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500" style={{ width: `${Math.floor(Math.random() * 60 + 40)}%` }} />
+                          <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500" style={{ width: `${Math.floor((Math.random()) * 60 + 40)}%` }} />
                         </div>
                       </div>
                     </div>

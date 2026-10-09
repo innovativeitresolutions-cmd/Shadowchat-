@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Feedback Collector
  * Collects feedback from all sources and feeds into Living Loop Engine
@@ -20,7 +21,7 @@ export class FeedbackCollector {
   async collectFeedback(entry: Omit<FeedbackEntry, 'id' | 'timestamp'>): Promise<FeedbackEntry> {
     const feedback: FeedbackEntry = {
       ...entry,
-      id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       sentiment: await this.analyzeSentiment(entry.comment),
     };

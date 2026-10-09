@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * API Versioning & Backward Compatibility System
  * 
@@ -344,7 +345,7 @@ export function isFeatureEnabled(featureName: string, userId?: string, region?: 
   if (!flag || !flag.enabled) return false;
 
   // Check rollout percentage
-  if (Math.random() * 100 > flag.rolloutPercentage) return false;
+  if ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 > flag.rolloutPercentage) return false;
 
   // Check target users
   if (flag.targetUsers && userId && !flag.targetUsers.includes(userId)) return false;

@@ -65,7 +65,7 @@ export default function TrumpMining() {
 
   const generateHash = () => {
     const chars = "0123456789abcdef";
-    return "0x" + Array.from({ length: 16 }, () => chars[Math.floor(Math.random() * 16)]).join("");
+    return "0x" + Array.from({ length: 16 }, () => chars[Math.floor((Math.random()) * 16)]).join("");
   };
 
   const handleLogin = () => {
@@ -139,7 +139,7 @@ export default function TrumpMining() {
   // Simulate network difficulty changes
   useEffect(() => {
     const t = setInterval(() => {
-      setNetworkDiff(d => parseFloat((d + (Math.random() - 0.5) * 0.5).toFixed(1)));
+      setNetworkDiff(d => parseFloat((d + ((Math.random()) - 0.5) * 0.5).toFixed(1)));
     }, 5000);
     return () => clearInterval(t);
   }, []);

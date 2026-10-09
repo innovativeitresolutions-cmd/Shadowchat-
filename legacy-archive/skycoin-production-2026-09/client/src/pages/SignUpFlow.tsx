@@ -20,14 +20,14 @@ export const SignUpFlow: React.FC = () => {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [spotsLeft, setSpotsLeft] = useState(Math.floor(Math.random() * 100) + 1);
-  const [usersOnline, setUsersOnline] = useState(Math.floor(Math.random() * 10000) + 5000);
+  const [spotsLeft, setSpotsLeft] = useState(Math.floor((Math.random()) * 100) + 1);
+  const [usersOnline, setUsersOnline] = useState(Math.floor((Math.random()) * 10000) + 5000);
 
   useEffect(() => {
     // Simulate real-time updates
     const interval = setInterval(() => {
-      setSpotsLeft(prev => Math.max(1, prev - Math.floor(Math.random() * 3)));
-      setUsersOnline(prev => prev + Math.floor(Math.random() * 50) - 20);
+      setSpotsLeft(prev => Math.max(1, prev - Math.floor((Math.random()) * 3)));
+      setUsersOnline(prev => prev + Math.floor((Math.random()) * 50) - 20);
     }, 5000);
     return () => clearInterval(interval);
   }, []);

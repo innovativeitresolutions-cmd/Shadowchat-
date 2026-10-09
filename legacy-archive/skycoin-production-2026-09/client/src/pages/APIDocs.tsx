@@ -28,7 +28,7 @@ export default function APIDocs() {
   }
 })
 .then(res => res.json())
-.then(data => console.log(data))`,
+.then(data => )`,
     },
     {
       id: 'roadmap-query',

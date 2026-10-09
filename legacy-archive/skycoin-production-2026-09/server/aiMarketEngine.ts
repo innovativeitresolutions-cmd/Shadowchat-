@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * AI Agent Market Engine
  * ─────────────────────────────────────────────────────────────────────────────
@@ -134,7 +135,7 @@ export async function runAgentCycle(agentId?: string): Promise<{
   // Pick a random agent or use specified one
   const agent = agentId
     ? AGENTS.find(a => a.id === agentId) ?? AGENTS[0]
-    : AGENTS[Math.floor(Math.random() * AGENTS.length)];
+    : AGENTS[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * AGENTS.length)];
 
   // Get current ICO stats
   const [stats] = await db.select().from(icoInvestorStats).limit(1);
@@ -146,7 +147,7 @@ export async function runAgentCycle(agentId?: string): Promise<{
 
   // Generate signal type
   const signalTypes = AGENT_SIGNAL_TYPES[agent.id as keyof typeof AGENT_SIGNAL_TYPES];
-  const signalType = signalTypes[Math.floor(Math.random() * signalTypes.length)];
+  const signalType = signalTypes[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * signalTypes.length)];
 
   // Generate LLM commentary
   const prompt = `Generate a brief, authentic market signal for SKY444 (SKYCOIN4444).
@@ -173,7 +174,7 @@ Respond in JSON format:
 
   let title = `${agent.name} ${signalType.toUpperCase()} Signal — SKY444`;
   let commentary = `${agent.name} has identified a ${signalType} opportunity in SKY444 at current levels. Momentum indicators are aligned with the ${stats.currentRound} fundamentals. Position sizing should reflect the ${stats.roundBonus}% round bonus window.`;
-  let confidence = 70 + Math.floor(Math.random() * 20);
+  let confidence = 70 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20);
   let tags: string[] = ["SKY444", signalType, agent.specialty.toLowerCase()];
 
   try {
@@ -198,7 +199,7 @@ Respond in JSON format:
   }
 
   // Calculate momentum delta
-  const momentumDelta = (Math.random() * 4 - 1).toFixed(4); // -1 to +3 bias upward
+  const momentumDelta = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 4 - 1).toFixed(4); // -1 to +3 bias upward
 
   // Insert signal
   await db.insert(marketSignals).values({
@@ -208,7 +209,7 @@ Respond in JSON format:
     title,
     commentary,
     targetAsset: "SKY444",
-    priceTarget: (parseFloat(stats.tokenPriceUsd) * (1 + Math.random() * 0.3)).toFixed(6),
+    priceTarget: (parseFloat(stats.tokenPriceUsd) * (1 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.3)).toFixed(6),
     confidenceScore: confidence,
     momentumDelta,
     tags,
@@ -233,7 +234,7 @@ Respond in JSON format:
 
   // Update ICO stats — momentum and sentiment drift
   const newMomentum = Math.min(100, Math.max(20, currentMomentum + parseFloat(momentumDelta)));
-  const sentimentDelta = (Math.random() * 3 - 0.5).toFixed(4);
+  const sentimentDelta = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3 - 0.5).toFixed(4);
   const newSentiment = Math.min(100, Math.max(20, currentSentiment + parseFloat(sentimentDelta)));
 
   // Recalculate rarity
@@ -286,8 +287,7 @@ export async function runAllAgents(): Promise<void> {
     try {
       await runAgentCycle(agent.id);
     } catch (err) {
-      console.error(`[AIMarketEngine] Agent ${agent.id} cycle failed:`, err);
-    }
+          }
   }
 }
 

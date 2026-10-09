@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYSCHOOL + CRYPTO MINE — HARDENED UNIFIED ENGINE
  * ─────────────────────────────────────────────────
@@ -100,9 +101,9 @@ const QUESTS = [
 const ACTIVE_CHALLENGES = new Map<string, { answer: number; issuedAt: number; game: string }>();
 
 function issueChallenge(userId: number, game: string): { token: string; puzzle: number[]; timeLimit: number } {
-  const nums = Array.from({ length: 6 }, () => Math.floor(Math.random() * 9) + 1);
+  const nums = Array.from({ length: 6 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 9) + 1);
   const answer = nums.reduce((a, b) => a + b, 0);
-  const token = `${userId}-${game}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const token = `${userId}-${game}-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
   ACTIVE_CHALLENGES.set(token, { answer, issuedAt: Date.now(), game });
   // Clean up old challenges
   if (ACTIVE_CHALLENGES.size > 10000) {
@@ -534,8 +535,8 @@ export const skyschoolMineHardenedRouter = router({
         const cfg = CONFIGS[input.token] ?? CONFIGS.SKY444;
         const hashesAttempted = Math.floor((hashPower * durationMs) / 1000);
         const probability = hashesAttempted / cfg.difficulty;
-        const blocksFound = Math.floor(probability + Math.random() * probability * 0.5); // reduced variance
-        const rawReward = parseFloat((blocksFound * cfg.baseReward * (1 + Math.random() * 0.05)).toFixed(8));
+        const blocksFound = Math.floor(probability + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * probability * 0.5); // reduced variance
+        const rawReward = parseFloat((blocksFound * cfg.baseReward * (1 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.05)).toFixed(8));
 
         // Cap reward to daily limit for SKY444
         let reward = rawReward;

@@ -18,7 +18,6 @@ const RATE_LIMIT_RULES = [
   { endpoint: "api.general", limit: 100, window: "1 min", description: "General API calls" },
 ];
 
-// MOCK_STATS removed — data comes from trpc.admin.realtimeMetrics
 
 export default function RateLimitDashboard() {
   const { user } = useAuth();

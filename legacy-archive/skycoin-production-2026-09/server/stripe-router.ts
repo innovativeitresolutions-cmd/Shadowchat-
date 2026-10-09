@@ -165,22 +165,18 @@ export const stripeRouter = router({
         case "payment_intent.succeeded":
           // Payment succeeded - update booking
           const paymentIntent = event.data.object;
-          console.log("[Stripe] Payment succeeded:", paymentIntent.id);
-          break;
+                    break;
 
         case "payment_intent.payment_failed":
           // Payment failed
-          console.log("[Stripe] Payment failed:", event.data.object.id);
-          break;
+                    break;
 
         case "charge.refunded":
           // Refund processed
-          console.log("[Stripe] Refund processed:", event.data.object.id);
-          break;
+                    break;
 
         default:
-          console.log("[Stripe] Unhandled event type:", event.type);
-      }
+                }
 
       return { received: true };
     }),
@@ -206,8 +202,7 @@ export const stripeRouter = router({
         });
 
         // Update teacher profile with Stripe account ID
-        // TODO: Wire to database update
-
+        
         return {
           accountId: account.id,
           onboardingUrl: await getStripe().accountLinks.create({
@@ -218,8 +213,7 @@ export const stripeRouter = router({
           }),
         };
       } catch (error) {
-        console.error("[Stripe] Error creating account:", error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -238,8 +232,7 @@ export const stripeRouter = router({
         expYear: pm.card?.exp_year,
       }));
     } catch (error) {
-      console.error("[Stripe] Error fetching payment methods:", error);
-      return [];
+            return [];
     }
   }),
 
@@ -277,8 +270,7 @@ export const stripeRouter = router({
           status: refund.status,
         };
       } catch (error) {
-        console.error("[Stripe] Error creating refund:", error);
-        throw error;
+                throw error;
       }
     }),
 });

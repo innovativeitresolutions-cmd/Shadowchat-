@@ -39,8 +39,7 @@ export function useWebSocket(options: UseWebSocketOptions) {
       const ws = new WebSocket(url);
 
       ws.onopen = () => {
-        console.log('[WebSocket] Connected:', url);
-        setIsConnected(true);
+                setIsConnected(true);
         reconnectCountRef.current = 0;
         onConnect?.();
       };
@@ -50,34 +49,28 @@ export function useWebSocket(options: UseWebSocketOptions) {
           const message: WebSocketMessage = JSON.parse(event.data);
           onMessage?.(message);
         } catch (error) {
-          console.error('[WebSocket] Failed to parse message:', error);
-        }
+                  }
       };
 
       ws.onerror = (error) => {
-        console.warn('[WebSocket] Connection error - continuing without real-time notifications');
-        // Don't call onError to avoid blocking rendering
+                // Don't call onError to avoid blocking rendering
       };
 
       ws.onclose = () => {
-        console.log('[WebSocket] Disconnected');
         setIsConnected(false);
         onDisconnect?.();
 
         // Attempt to reconnect
         if (autoReconnect && reconnectCountRef.current < maxReconnectAttempts) {
           reconnectCountRef.current++;
-          console.log(
-            `[WebSocket] Reconnecting... (${reconnectCountRef.current}/${maxReconnectAttempts})`
-          );
+          console.log(`Reconnecting... (attempt ${reconnectCountRef.current}/${maxReconnectAttempts})`);
           reconnectTimeoutRef.current = setTimeout(connect, reconnectInterval);
         }
       };
 
       wsRef.current = ws;
     } catch (error) {
-      console.error('[WebSocket] Connection failed:', error);
-      onError?.(error as Event);
+            onError?.(error as Event);
     }
   }, [url, onMessage, onConnect, onDisconnect, onError, autoReconnect, reconnectInterval, maxReconnectAttempts]);
 
@@ -96,8 +89,7 @@ export function useWebSocket(options: UseWebSocketOptions) {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
     } else {
-      console.warn('[WebSocket] Not connected, cannot send message');
-    }
+          }
   }, []);
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { db } from './db';
 import { datingMatches } from '../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
@@ -30,7 +31,7 @@ const pendingOffers = new Map<string, SDPOffer>();
 const iceCandidates = new Map<string, ICECandidate[]>();
 
 export function generateCallId(): string {
-  return `call_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  return `call_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 }
 
 export async function initiateVideoCall(
@@ -50,10 +51,6 @@ export async function initiateVideoCall(
 
   activeSessions.set(callId, session);
 
-  console.log(
-    `[Video Call] Initiated: ${initiatorId} -> ${recipientId} (Call: ${callId})`
-  );
-
   return session;
 }
 
@@ -68,8 +65,7 @@ export function acceptVideoCall(callId: string): VideoCallSession | null {
   session.status = 'active';
   session.startedAt = new Date();
 
-  console.log(`[Video Call] Accepted: ${callId}`);
-
+  
   return session;
 }
 
@@ -81,8 +77,7 @@ export function rejectVideoCall(callId: string): boolean {
   pendingOffers.delete(callId);
   iceCandidates.delete(callId);
 
-  console.log(`[Video Call] Rejected: ${callId}`);
-
+  
   return true;
 }
 
@@ -106,17 +101,12 @@ export function endVideoCall(callId: string): VideoCallSession | null {
     iceCandidates.delete(callId);
   }, 5000);
 
-  console.log(
-    `[Video Call] Ended: ${callId} (Duration: ${session.duration}s)`
-  );
-
   return session;
 }
 
 export function storeSDPOffer(callId: string, offer: SDPOffer): void {
   pendingOffers.set(callId, offer);
-  console.log(`[Video Call] SDP ${offer.type} stored: ${callId}`);
-}
+  }
 
 export function getSDPOffer(callId: string): SDPOffer | undefined {
   return pendingOffers.get(callId);
@@ -149,10 +139,7 @@ export async function recordCallMetrics(
   const session = activeSessions.get(callId);
   if (!session) return;
 
-  console.log(
-    `[Video Call Metrics] ${callId}: Audio=${metrics.audioQuality}%, Video=${metrics.videoQuality}%, Latency=${metrics.latency}ms, Loss=${metrics.packetLoss}%`
-  );
-}
+  }
 
 export function getActiveCallCount(): number {
   return Array.from(activeSessions.values()).filter(
@@ -192,6 +179,5 @@ export async function saveCallRecording(
   const session = activeSessions.get(callId);
   if (session) {
     session.recordingUrl = recordingUrl;
-    console.log(`[Video Call] Recording saved: ${callId}`);
-  }
+      }
 }

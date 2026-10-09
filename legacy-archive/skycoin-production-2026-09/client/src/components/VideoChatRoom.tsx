@@ -96,8 +96,7 @@ export function VideoChatRoom({
       setConnectionState('connected');
       startCallTimer();
     } catch (error) {
-      console.error('[Video Chat] Error initializing call:', error);
-      onError?.('Failed to access camera/microphone');
+            onError?.('Failed to access camera/microphone');
       endCall();
     }
   };
@@ -111,8 +110,7 @@ export function VideoChatRoom({
 
   const sendICECandidate = (candidate: RTCIceCandidate) => {
     // Send to server/peer
-    console.log('[Video Chat] ICE Candidate:', candidate);
-  };
+      };
 
   const toggleMute = () => {
     if (localStreamRef.current) {

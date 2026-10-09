@@ -100,7 +100,7 @@ export default function WatchEarn() {
         });
 
         // Earn every 3 real seconds (represents 1 video minute at 20x speed for demo)
-        if (Math.random() < 0.33) {
+        if ((Math.random()) < 0.33) {
           const xpGain = Math.round(selectedVideo.xpPerMinute * streak * 0.1);
           const skyGain = parseFloat((selectedVideo.skyPerMinute * streak * 0.1).toFixed(4));
           setSessionXp(x => x + xpGain);
@@ -123,7 +123,7 @@ export default function WatchEarn() {
   // Trigger puzzle every 5 minutes of watching
   useEffect(() => {
     if (watchedMinutes >= nextPuzzleAt && isPlaying && !showPuzzle) {
-      const q = PUZZLE_QUESTIONS[Math.floor(Math.random() * PUZZLE_QUESTIONS.length)];
+      const q = PUZZLE_QUESTIONS[Math.floor((Math.random()) * PUZZLE_QUESTIONS.length)];
       setCurrentPuzzle(q);
       setShowPuzzle(true);
       setPuzzleAnswered(false);

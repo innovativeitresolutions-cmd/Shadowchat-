@@ -70,7 +70,7 @@ export function HopeCompanion() {
   // Send greeting when opened for first time
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      const greeting = HOPE_GREETINGS[Math.floor(Math.random() * HOPE_GREETINGS.length)];
+      const greeting = HOPE_GREETINGS[Math.floor((Math.random()) * HOPE_GREETINGS.length)];
       setMessages([
         {
           id: "greeting",

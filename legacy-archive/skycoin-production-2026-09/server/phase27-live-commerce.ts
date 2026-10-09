@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 27 — LIVE COMMERCE ENGINE
  * Live Shopping Streams, Product Pinning, Timed Drops, Flash Auctions,
@@ -213,7 +214,7 @@ const _upsellOffers = new Map<string, UpsellOffer>();
 
 export const liveShoppingEngine = {
   createStream(params: Omit<LiveShoppingStream, "id" | "viewerCount" | "peakViewerCount" | "totalSales" | "totalRevenue" | "pinnedProductIds" | "createdAt">): LiveShoppingStream {
-    const id = `lss_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `lss_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const stream: LiveShoppingStream = {
       ...params,
       id,
@@ -335,7 +336,7 @@ export const liveShoppingEngine = {
 
 export const productEngine = {
   createProduct(params: Omit<ShoppingProduct, "id" | "soldCount" | "rating" | "reviewCount" | "createdAt" | "updatedAt">): ShoppingProduct {
-    const id = `prod_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `prod_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const product: ShoppingProduct = {
       ...params,
       id,
@@ -392,7 +393,7 @@ export const productEngine = {
 
 export const timedDropsEngine = {
   createDrop(params: Omit<TimedDrop, "id" | "remainingSupply" | "totalRevenue" | "createdAt">): TimedDrop {
-    const id = `drop_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `drop_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const drop: TimedDrop = {
       ...params,
       id,
@@ -428,7 +429,7 @@ export const timedDropsEngine = {
     drop.totalRevenue += drop.dropPrice * quantity;
     if (drop.remainingSupply === 0) drop.status = "sold_out";
 
-    const orderId = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const orderId = `ord_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const order: CommerceOrder = {
       id: orderId,
       buyerId,
@@ -471,7 +472,7 @@ export const timedDropsEngine = {
 
 export const flashAuctionEngine = {
   createAuction(params: Omit<FlashAuction, "id" | "currentBid" | "currentBidderId" | "bids" | "totalBids" | "winnerBidderId" | "finalPrice" | "createdAt">): FlashAuction {
-    const id = `auction_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `auction_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const auction: FlashAuction = {
       ...params,
       id,
@@ -520,7 +521,7 @@ export const flashAuctionEngine = {
       auction.finalPrice = auction.currentBid;
 
       // Create order
-      const orderId = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      const orderId = `ord_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
       const order: CommerceOrder = {
         id: orderId,
         buyerId: auction.winnerBidderId,
@@ -568,7 +569,7 @@ export const flashAuctionEngine = {
 
 export const orderEngine = {
   createOrder(params: Omit<CommerceOrder, "id" | "createdAt" | "updatedAt">): CommerceOrder {
-    const id = `ord_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `ord_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const order: CommerceOrder = { ...params, id, createdAt: new Date(), updatedAt: new Date() };
     _orders.set(id, order);
     // Decrement stock
@@ -662,7 +663,7 @@ export const commerceAIEngine = {
     } catch { /* use default */ }
 
     const insight: CommerceAIInsight = {
-      id: `insight_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      id: `insight_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`,
       creatorId,
       insightType: "pricing",
       title: "Pricing Optimization",

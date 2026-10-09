@@ -28,8 +28,7 @@ export interface EmailTemplate {
  */
 export async function sendEmail(template: EmailTemplate): Promise<boolean> {
   if (!SENDGRID_API_KEY) {
-    console.warn("[Email] SendGrid API key not configured");
-    return false;
+        return false;
   }
 
   try {
@@ -40,11 +39,9 @@ export async function sendEmail(template: EmailTemplate): Promise<boolean> {
       html: template.html,
       text: template.text || "",
     });
-    console.log(`[Email] Sent to ${template.to}: ${template.subject}`);
-    return true;
+        return true;
   } catch (error) {
-    console.error("[Email] Failed:", error);
-    return false;
+        return false;
   }
 }
 

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * COMMUNITY CORE ENGINE — Discord-Inspired Server Ecosystem
  *
@@ -377,7 +378,7 @@ export class CommunityServerService {
 
   private generateInviteCode(): string {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    return Array.from({ length: 8 }, () => chars[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * chars.length)]).join("");
   }
 }
 
@@ -1013,7 +1014,7 @@ export const communityCore = {
     return rolePermissions.assignRole(serverId, targetUserId, roleId);
   },
   generateInviteCode(serverId: string, userId: number, maxUses?: number, expiresInHours?: number) {
-    const code = `inv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const code = `inv_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     return Promise.resolve({ code, serverId, createdBy: userId, maxUses, expiresAt: expiresInHours ? new Date(Date.now() + expiresInHours * 3600000) : null });
   },
   getServerStats(serverId: string) {

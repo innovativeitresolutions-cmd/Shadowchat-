@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * INTELLIGENCE ENGINES
  *
@@ -234,14 +235,14 @@ export class RecommendationEngine {
 
     // Simulate finding similar creators (in production: query creator profiles)
     for (let i = 0; i < Math.min(limit, 5); i++) {
-      const sharedInterests = userInterests.slice(0, Math.floor(Math.random() * 3) + 1);
+      const sharedInterests = userInterests.slice(0, Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3) + 1);
       recommendations.push({
         creatorId: creatorId + i + 1,
-        score: 0.5 + Math.random() * 0.5,
+        score: 0.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5,
         reason: `Creates content about ${sharedInterests.join(", ")}`,
         sharedInterests,
-        mutualFollowers: Math.floor(Math.random() * 100),
-        contentMatch: 0.5 + Math.random() * 0.5,
+        mutualFollowers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+        contentMatch: 0.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5,
       });
     }
 
@@ -400,11 +401,11 @@ export class EconomicIntelligenceEngine {
     monthOverMonthGrowth: number;
   }> {
     // In production: query actual revenue records
-    const subscriptions = Math.floor(Math.random() * 500) + 100;
-    const tips = Math.floor(Math.random() * 200) + 50;
-    const premiumContent = Math.floor(Math.random() * 300) + 75;
-    const nftRoyalties = Math.floor(Math.random() * 150) + 25;
-    const affiliates = Math.floor(Math.random() * 100) + 10;
+    const subscriptions = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500) + 100;
+    const tips = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200) + 50;
+    const premiumContent = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 300) + 75;
+    const nftRoyalties = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 150) + 25;
+    const affiliates = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 10;
     const total = subscriptions + tips + premiumContent + nftRoyalties + affiliates;
 
     return {
@@ -414,7 +415,7 @@ export class EconomicIntelligenceEngine {
       nftRoyalties,
       affiliates,
       total,
-      monthOverMonthGrowth: (Math.random() * 0.3 - 0.05),
+      monthOverMonthGrowth: ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.3 - 0.05),
     };
   }
 

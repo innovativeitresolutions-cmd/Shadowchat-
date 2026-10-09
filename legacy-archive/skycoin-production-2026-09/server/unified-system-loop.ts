@@ -70,7 +70,7 @@ export const eventBus = {
     };
     _eventBus.push(event);
     // Process asynchronously
-    this._process(event).catch(err => console.error(`[EventBus] Error processing ${type}:`, err));
+    this._process(event).catch(err => console.error("System event processing failed", err));
     return event;
   },
 
@@ -86,8 +86,7 @@ export const eventBus = {
         await handler(event);
         event.propagatedTo.push(handler.name || "anonymous");
       } catch (err: any) {
-        console.error(`[EventBus] Handler error for ${event.type}:`, err.message);
-      }
+              }
     }
     event.processed = true;
   },

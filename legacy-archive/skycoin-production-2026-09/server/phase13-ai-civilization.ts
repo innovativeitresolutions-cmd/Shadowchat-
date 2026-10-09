@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 13 — AI CIVILIZATION LAYER
  * HOPE Multi-Agent Network, Autonomous Operations, Intelligence Memory
@@ -278,7 +279,7 @@ export const autonomousOperations = {
         week: i + 1,
         contentType: contentTypes[i % contentTypes.length],
         topic: topics[i % topics.length],
-        estimatedReach: 5000 + i * 500 + Math.floor(Math.random() * 2000),
+        estimatedReach: 5000 + i * 500 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2000),
       })),
       growthTargets: [
         { metric: "followers", current: 10000, target: 15000, timeline: horizon },
@@ -330,7 +331,7 @@ export const autonomousOperations = {
         "Post-event: Generate analytics report and VOD",
         "Post-event: Send follow-up to attendees",
       ],
-      estimatedAttendees: 5000 + Math.floor(Math.random() * 10000),
+      estimatedAttendees: 5000 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000),
       aiActions: ["audience_targeting", "notification_scheduling", "infrastructure_scaling", "moderation", "analytics"],
     };
   },

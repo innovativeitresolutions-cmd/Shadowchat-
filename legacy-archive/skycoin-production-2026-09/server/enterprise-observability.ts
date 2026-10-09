@@ -193,7 +193,7 @@ export class EnterpriseObservabilityEngine {
    * Trigger security alert
    */
   private triggerSecurityAlert(event: SecurityEvent): void {
-    console.error(`🚨 SECURITY ALERT: ${event.severity.toUpperCase()} - ${event.description}`);
+    console.warn("Security alert:", event.description);
     // Would integrate with alerting service (PagerDuty, Slack, etc.)
   }
 

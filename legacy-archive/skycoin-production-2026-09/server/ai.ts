@@ -81,8 +81,7 @@ Respond in JSON format:
       action: score > 0.85 ? "auto_removed" : flagged ? "flagged" : "approved",
     };
   } catch (error) {
-    console.error("[AI Moderation] Error:", error);
-    // Fallback to keyword-based moderation if LLM fails
+        // Fallback to keyword-based moderation if LLM fails
     return fallbackModeration(content);
   }
 }
@@ -174,8 +173,7 @@ Return JSON array: [{"index": <number>, "relevance": <0-1>, "engagement_predicti
       };
     });
   } catch (error) {
-    console.error("[AI Feed Ranking] Error:", error);
-    // Fallback: rank by engagement
+        // Fallback: rank by engagement
     return posts.map(post => ({
       postId: post.id,
       relevanceScore: Math.min(1, (post.likeCount + post.commentCount * 2) / 100),
@@ -231,8 +229,7 @@ export async function getRecommendations(
       confidence: r.confidence || 0.5,
     }));
   } catch (error) {
-    console.error("[AI Recommendations] Error:", error);
-    return [];
+        return [];
   }
 }
 
@@ -276,8 +273,7 @@ export async function analyzeSentiment(text: string): Promise<SentimentResult> {
       topics: Array.isArray(parsed.topics) ? parsed.topics : [],
     };
   } catch (error) {
-    console.error("[AI Sentiment] Error:", error);
-    return { sentiment: "neutral", score: 0, confidence: 0, topics: [] };
+        return { sentiment: "neutral", score: 0, confidence: 0, topics: [] };
   }
 }
 
@@ -323,7 +319,6 @@ export async function analyzeTradingSignal(
       riskLevel: parsed.risk_level || "medium",
     };
   } catch (error) {
-    console.error("[AI Trading] Error:", error);
-    return { action: "hold", confidence: 0, reasoning: "AI analysis unavailable", riskLevel: "high" };
+        return { action: "hold", confidence: 0, reasoning: "AI analysis unavailable", riskLevel: "high" };
   }
 }

@@ -50,8 +50,7 @@ export default function DatingMessages() {
         setSelectedMatch(data.matches[0]);
       }
     } catch (error) {
-      console.error('Failed to load matches:', error);
-    } finally {
+          } finally {
       setLoading(false);
     }
   };
@@ -62,8 +61,7 @@ export default function DatingMessages() {
       const data = await response.json();
       setMessages(data.messages || []);
     } catch (error) {
-      console.error('Failed to load messages:', error);
-    }
+          }
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -85,8 +83,7 @@ export default function DatingMessages() {
         loadMessages(selectedMatch.id);
       }
     } catch (error) {
-      console.error('Failed to send message:', error);
-    }
+          }
   };
 
   if (loading) {

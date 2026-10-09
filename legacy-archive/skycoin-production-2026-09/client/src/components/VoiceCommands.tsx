@@ -8,8 +8,7 @@ export function VoiceCommands() {
 
   useEffect(() => {
     if (!('webkitSpeechRecognition' in window)) {
-      console.log('Speech Recognition not supported');
-      return;
+            return;
     }
 
     const recognition = new (window as any).webkitSpeechRecognition();

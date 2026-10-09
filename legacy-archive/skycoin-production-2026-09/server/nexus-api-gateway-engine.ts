@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * @file nexus-api-gateway-engine.ts
  * @description Production TypeScript engine file for SKYCOIN4444 platform: NEXUS API Gateway Engine.
@@ -89,7 +90,7 @@ class RequestContext {
   public endpointConfig?: EndpointConfig;
 
   constructor() {
-    this.requestId = `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    this.requestId = `req-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 9)}`;
     this.timestamp = Date.now();
   }
 
@@ -301,8 +302,7 @@ class WebhookManager {
 
     try {
       // Simulate HTTP POST request
-      console.log(`Sending webhook to ${subscription.url} for event ${event}`);
-      // In a real scenario, use a library like axios or node-fetch
+            // In a real scenario, use a library like axios or node-fetch
       // const response = await fetch(subscription.url, {
       //   method: "POST",
       //   headers: {
@@ -314,11 +314,9 @@ class WebhookManager {
       //   body: JSON.stringify(payload),
       // });
       // if (!response.ok) {
-      //   console.error(`Webhook delivery failed for ${subscription.id}: ${response.statusText}`);
-      // }
+      //         // }
     } catch (error) {
-      console.error(`Error sending webhook for ${subscription.id}:`, error);
-    }
+          }
   }
 
   private generateSignature(timestamp: number, payload: object, secret: string): string {
@@ -357,7 +355,7 @@ class ApiKeyManager {
   }
 
   public async createApiKey(owner: string, permissions: string[], rateLimitOverride?: number, expiresAt?: number): Promise<ApiKey> {
-    const newKey = `sk-${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+    const newKey = `sk-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15)}`;
     const apiKey: ApiKey = {
       key: newKey,
       owner,
@@ -413,8 +411,7 @@ class UsageAnalytics {
     };
     this.usageRecords.push(record);
     // In a real application, send to a metrics system or database
-    console.log("Usage recorded:", record);
-  }
+      }
 
   public async getUsageSummary(apiKey?: string, endpoint?: string, periodMs?: number): Promise<UsageRecord[]> {
     let filteredRecords = this.usageRecords;
@@ -585,17 +582,14 @@ class NexusApiGatewayEngine {
   }
 
   public async start(): Promise<void> {
-    console.log(`NEXUS API Gateway starting on port ${this.config.port}...`);
-    // Simulate server startup
+        // Simulate server startup
     // In a real Node.js environment, this would involve setting up an Express or Fastify server
-    console.log("API Gateway started successfully.");
-  }
+      }
 
   public registerEndpoint(endpointConfig: EndpointConfig): void {
     const key = this.getEndpointKey(endpointConfig);
     if (this.endpoints.has(key)) {
-      console.warn(`Endpoint ${key} already registered. Overwriting.`);
-    }
+          }
     this.endpoints.set(key, endpointConfig);
     if (endpointConfig.rateLimit) {
       this.rateLimiter.setLimit(key, endpointConfig.rateLimit);
@@ -661,8 +655,7 @@ class NexusApiGatewayEngine {
         // if (!validate(transformedReqBody, endpointConfig.schema)) {
         //   return this.sendError(res, 400, "Request body validation failed.");
         // }
-        console.log("Request body validated against schema.");
-      }
+              }
 
       // 5. Circuit Breaker & Retry Logic for external calls (example)
       const externalServiceCircuitBreaker = this.circuitBreakers.get("external-service-A");
@@ -680,8 +673,7 @@ class NexusApiGatewayEngine {
       // 6. Response Transformation (simplified)
       if (endpointConfig.responseSchema) {
         // In a real scenario, transform/validate response
-        console.log("Response transformed/validated against schema.");
-      }
+              }
 
       // 7. Webhook Management (trigger events post-successful response)
       if (endpointConfig.webhookEvents && endpointConfig.webhookEvents.length > 0) {
@@ -695,8 +687,7 @@ class NexusApiGatewayEngine {
       await this.usageAnalytics.recordUsage(context.apiKey?.key || "anonymous", endpointKey, res.statusCode || 200, latency);
 
     } catch (error: any) {
-      console.error("API Gateway error:", error);
-      const latency = Date.now() - startTime;
+            const latency = Date.now() - startTime;
       await this.usageAnalytics.recordUsage(context.apiKey?.key || "anonymous", context.endpointConfig?.path || "unknown", res.statusCode || 500, latency);
       this.sendError(res, error.statusCode || 500, error.message || "Internal Server Error");
     }
@@ -735,7 +726,6 @@ class NexusApiGatewayEngine {
   }
 }
 
-// Mock Request and Response interfaces for demonstration purposes
 // In a real Node.js environment, these would be from Express.Request and Express.Response
 interface Request {
   url: string;

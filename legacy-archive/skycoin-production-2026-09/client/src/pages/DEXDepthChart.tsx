@@ -25,14 +25,14 @@ function generateDepthData(midPrice: number, spread = 0.02) {
 
   for (let i = 50; i >= 1; i--) {
     const price = midPrice * (1 - (i / 50) * spread * 3);
-    const size = Math.random() * 50000 + 5000 + (i < 10 ? 80000 : 0);
+    const size = (Math.random()) * 50000 + 5000 + (i < 10 ? 80000 : 0);
     cumBid += size;
     bids.push({ price: parseFloat(price.toFixed(4)), cumBid: parseFloat((cumBid / 1000).toFixed(2)), bid: parseFloat((size / 1000).toFixed(2)) });
   }
 
   for (let i = 1; i <= 50; i++) {
     const price = midPrice * (1 + (i / 50) * spread * 3);
-    const size = Math.random() * 50000 + 5000 + (i < 10 ? 80000 : 0);
+    const size = (Math.random()) * 50000 + 5000 + (i < 10 ? 80000 : 0);
     cumAsk += size;
     asks.push({ price: parseFloat(price.toFixed(4)), cumAsk: parseFloat((cumAsk / 1000).toFixed(2)), ask: parseFloat((size / 1000).toFixed(2)) });
   }
@@ -44,12 +44,12 @@ function generateOHLCV(basePrice: number, count = 60) {
   const data = [];
   let price = basePrice;
   for (let i = count; i >= 0; i--) {
-    const change = (Math.random() - 0.48) * price * 0.02;
+    const change = ((Math.random()) - 0.48) * price * 0.02;
     const open = price;
     price = Math.max(price + change, price * 0.8);
-    const high = Math.max(open, price) * (1 + Math.random() * 0.005);
-    const low = Math.min(open, price) * (1 - Math.random() * 0.005);
-    const volume = Math.random() * 500000 + 50000;
+    const high = Math.max(open, price) * (1 + (Math.random()) * 0.005);
+    const low = Math.min(open, price) * (1 - (Math.random()) * 0.005);
+    const volume = (Math.random()) * 500000 + 50000;
     data.push({
       time: new Date(Date.now() - i * 3600000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       open: parseFloat(open.toFixed(4)),

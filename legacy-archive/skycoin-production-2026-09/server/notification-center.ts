@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * NOTIFICATION CENTER ENGINE
  * Multi-channel notification delivery, templates, preferences,
@@ -364,7 +365,7 @@ export class NotificationCenter {
     channel: NotificationChannel,
     payload: NotificationPayload
   ): Promise<DeliveryResult> {
-    const notificationId = `NOTIF-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const notificationId = `NOTIF-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
 
     switch (channel) {
       case "in_app":

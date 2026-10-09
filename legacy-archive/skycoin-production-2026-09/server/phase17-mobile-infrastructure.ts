@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 17 — MOBILE DOMINATION
  * Push Notifications, Offline Caching, Media Compression,
@@ -455,7 +456,7 @@ export const offlineCacheEngine = {
 
 export const mediaCompressionEngine = {
   submitJob(params: Omit<MediaCompressionJob, "id" | "outputUrl" | "outputSizeKB" | "compressionRatio" | "status" | "processingTimeMs" | "createdAt" | "completedAt">): MediaCompressionJob {
-    const id = `comp_${params.userId}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const id = `comp_${params.userId}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 7)}`;
     const job: MediaCompressionJob = {
       ...params, id,
       status: "queued",
@@ -478,7 +479,7 @@ export const mediaCompressionEngine = {
     job.outputSizeKB = Math.round(job.inputSizeKB * ratio);
     job.compressionRatio = Math.round((1 - ratio) * 100);
     job.outputUrl = job.inputUrl.replace(/(\.[^.]+)$/, `_${job.targetQuality}$1`);
-    job.processingTimeMs = Date.now() - start + Math.floor(Math.random() * 100);
+    job.processingTimeMs = Date.now() - start + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100);
     job.status = "completed";
     job.completedAt = new Date();
     return job;

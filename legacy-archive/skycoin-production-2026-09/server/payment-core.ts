@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Payment Core Engine
  * Phase 5C — Sovereignty Build
@@ -318,7 +319,7 @@ class PayoutLedger {
       payout.batchId = batchId;
       payout.status = "paid";
       payout.processedDate = new Date();
-      payout.txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+      payout.txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
       totalPaid += payout.netPayout;
       processed++;
       this.completedPayouts.push(payout);
@@ -802,7 +803,7 @@ class PaymentAnalytics {
   recordTransaction(tx: Omit<PaymentTransaction, "id" | "createdAt">): PaymentTransaction {
     const transaction: PaymentTransaction = {
       ...tx,
-      id: `tx_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `tx_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       createdAt: new Date(),
     };
     this.transactions.push(transaction);

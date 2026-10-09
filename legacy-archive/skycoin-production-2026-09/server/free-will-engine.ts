@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYCOIN4444 Free Will Engine — Autonomous Economic AI Operating System
  *
@@ -579,7 +580,7 @@ Respond in JSON: { "action": "action_name", "reasoning": "why", "domain": "econo
   ): Promise<void> {
     const entry: AutonomousAction = {
       ...action,
-      id: `action-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      id: `action-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`,
       executedAt: new Date(),
     };
     this.actionLog.push(entry);

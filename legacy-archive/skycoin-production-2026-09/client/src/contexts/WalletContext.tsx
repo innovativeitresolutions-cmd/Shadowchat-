@@ -38,8 +38,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             await connectWallet(accounts[0]);
           }
         } catch (error) {
-          console.error("Error checking wallet connection:", error);
-        }
+                  }
       }
     };
     checkConnection();
@@ -84,8 +83,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         window.location.reload();
       });
     } catch (error) {
-      console.error("Error connecting wallet:", error);
-    }
+          }
   };
 
   const connect = async () => {
@@ -116,8 +114,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const receipt = await tx.wait();
       return receipt?.hash || null;
     } catch (error) {
-      console.error("Error sending transaction:", error);
-      return null;
+            return null;
     }
   };
 

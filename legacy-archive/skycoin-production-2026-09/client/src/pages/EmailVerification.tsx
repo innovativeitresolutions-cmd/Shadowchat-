@@ -30,8 +30,7 @@ export function EmailVerification() {
         setLoading(false);
         return;
       }
-      // Mock verification
-      setVerified(true);
+            setVerified(true);
       localStorage.setItem("email_verified", "true");
       toast.success("Email verified successfully! 🎉");
       setTimeout(() => setLocation("/"), 2000);

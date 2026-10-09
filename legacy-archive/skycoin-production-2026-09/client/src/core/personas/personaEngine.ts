@@ -196,14 +196,14 @@ function selectAction(persona: Persona, context: BehaviorContext, graph: Relatio
   const collaborators = graph.getCollaborators(persona.id);
 
   // Goal-driven action selection
-  if (persona.goals.includes("win_debates") && rivals.length > 0 && Math.random() > 0.6) return "debate";
-  if (persona.goals.includes("find_collaborators") && collaborators.length > 0 && Math.random() > 0.7) return "collaborate";
-  if (persona.goals.includes("grow_followers") && Math.random() > 0.5) return "post";
-  if (persona.goals.includes("build_reputation") && context.feedContext.length > 0 && Math.random() > 0.4) return "reply";
-  if (persona.goals.includes("earn_money") && Math.random() > 0.8) return "promote";
+  if (persona.goals.includes("win_debates") && rivals.length > 0 && (Math.random()) > 0.6) return "debate";
+  if (persona.goals.includes("find_collaborators") && collaborators.length > 0 && (Math.random()) > 0.7) return "collaborate";
+  if (persona.goals.includes("grow_followers") && (Math.random()) > 0.5) return "post";
+  if (persona.goals.includes("build_reputation") && context.feedContext.length > 0 && (Math.random()) > 0.4) return "reply";
+  if (persona.goals.includes("earn_money") && (Math.random()) > 0.8) return "promote";
 
   // Default: post or reply
-  return Math.random() > 0.5 ? "post" : "reply";
+  return (Math.random()) > 0.5 ? "post" : "reply";
 }
 
 function generateContent(
@@ -213,7 +213,7 @@ function generateContent(
   graph: RelationshipGraph
 ): string {
   const templates = BEHAVIOR_TEMPLATES[action] || BEHAVIOR_TEMPLATES.post;
-  const template = templates[Math.floor(Math.random() * templates.length)];
+  const template = templates[Math.floor((Math.random()) * templates.length)];
   const topic = context.trendingTopics[0] || persona.interests[0] || "crypto";
   const rivals = graph.getRivals(persona.id);
   const collaborators = graph.getCollaborators(persona.id);
@@ -345,7 +345,7 @@ export class PersonaEngine {
     };
 
     for (const persona of this.getAllPersonas()) {
-      if (Math.random() > 0.4) { // 60% chance each persona acts per tick
+      if ((Math.random()) > 0.4) { // 60% chance each persona acts per tick
         const output = generateBehaviorOutput(persona, context, this.graph);
         outputs.push(output);
         this.behaviorLog.push(output);

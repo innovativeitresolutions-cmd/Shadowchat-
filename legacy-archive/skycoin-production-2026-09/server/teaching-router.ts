@@ -17,8 +17,7 @@ export const teachingRouter = router({
     )
     .query(async ({ input }) => {
       try {
-        // Mock data - replace with DB query
-        const teachers = [
+                const teachers = [
           {
             id: "t1",
             name: "李明",
@@ -45,8 +44,7 @@ export const teachingRouter = router({
           offset: input.offset,
         };
       } catch (error) {
-        console.error("Error fetching teachers:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch teachers",
         });
@@ -58,8 +56,7 @@ export const teachingRouter = router({
     .input(z.object({ teacherId: z.string() }))
     .query(async ({ input }) => {
       try {
-        // Mock data - replace with DB query
-        return {
+                return {
           id: input.teacherId,
           name: "李明",
           language: "Chinese",
@@ -95,8 +92,7 @@ export const teachingRouter = router({
           },
         };
       } catch (error) {
-        console.error("Error fetching teacher profile:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch teacher profile",
         });
@@ -137,8 +133,7 @@ export const teachingRouter = router({
           createdAt: new Date(),
         };
 
-        // TODO: Save to database
-        // await db.createBooking(booking);
+                // await db.createBooking(booking);
 
         return {
           success: true,
@@ -147,8 +142,7 @@ export const teachingRouter = router({
           booking,
         };
       } catch (error) {
-        console.error("Error booking session:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to book session",
         });
@@ -186,8 +180,7 @@ export const teachingRouter = router({
           earnings: 0,
         };
 
-        // TODO: Save to database
-        // await db.createTeacherProfile(profile);
+                // await db.createTeacherProfile(profile);
 
         return {
           success: true,
@@ -195,8 +188,7 @@ export const teachingRouter = router({
           profile,
         };
       } catch (error) {
-        console.error("Error creating teacher profile:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create teacher profile",
         });
@@ -206,15 +198,13 @@ export const teachingRouter = router({
   // Get my teaching profile
   getMyProfile: protectedProcedure.query(async ({ ctx }) => {
     try {
-      // TODO: Fetch from database
-      return {
+            return {
         userId: ctx.user.id,
         isTeacher: false,
         profile: null,
       };
     } catch (error) {
-      console.error("Error fetching my profile:", error);
-      throw new TRPCError({
+            throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Failed to fetch profile",
       });
@@ -231,14 +221,12 @@ export const teachingRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
-        // Mock data - replace with DB query
-        return {
+                return {
           bookings: [],
           total: 0,
         };
       } catch (error) {
-        console.error("Error fetching bookings:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch bookings",
         });
@@ -254,16 +242,14 @@ export const teachingRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
-        // Mock data - replace with DB query
-        return {
+                return {
           totalEarnings: 0,
           thisMonth: 0,
           pending: 0,
           history: [],
         };
       } catch (error) {
-        console.error("Error fetching earnings:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch earnings",
         });
@@ -292,8 +278,7 @@ export const teachingRouter = router({
           createdAt: new Date(),
         };
 
-        // TODO: Save to database
-        // await db.createReview(review);
+                // await db.createReview(review);
 
         return {
           success: true,
@@ -301,8 +286,7 @@ export const teachingRouter = router({
           review,
         };
       } catch (error) {
-        console.error("Error leaving review:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to submit review",
         });
@@ -320,15 +304,13 @@ export const teachingRouter = router({
     )
     .query(async ({ input }) => {
       try {
-        // Mock data - replace with DB query
-        return {
+                return {
           reviews: [],
           total: 0,
           averageRating: 0,
         };
       } catch (error) {
-        console.error("Error fetching reviews:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch reviews",
         });
@@ -347,14 +329,12 @@ export const teachingRouter = router({
     )
     .query(async ({ input }) => {
       try {
-        // Mock data - replace with DB query
-        return {
+                return {
           results: [],
           total: 0,
         };
       } catch (error) {
-        console.error("Error searching teachers:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to search teachers",
         });

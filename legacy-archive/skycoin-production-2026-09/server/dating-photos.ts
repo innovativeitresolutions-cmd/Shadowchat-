@@ -53,8 +53,7 @@ export async function optimizePhoto(
 
     return optimized;
   } catch (error) {
-    console.error('[Photo Optimization] Error:', error);
-    throw new Error('Failed to optimize photo');
+        throw new Error('Failed to optimize photo');
   }
 }
 
@@ -89,8 +88,7 @@ export async function uploadProfilePhoto(
       size: optimized.length,
     };
   } catch (error) {
-    console.error('[Photo Upload] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -109,8 +107,7 @@ export async function createThumbnail(
 
     return thumbnail;
   } catch (error) {
-    console.error('[Thumbnail Creation] Error:', error);
-    throw new Error('Failed to create thumbnail');
+        throw new Error('Failed to create thumbnail');
   }
 }
 
@@ -146,8 +143,7 @@ export async function uploadProfilePhotoWithThumbnail(
       },
     };
   } catch (error) {
-    console.error('[Photo Upload with Thumbnail] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -155,10 +151,8 @@ export async function deleteProfilePhoto(photoKey: string): Promise<void> {
   try {
     // In production, you would call the storage delete API
     // For now, we just remove the reference from the database
-    console.log(`[Photo Deletion] Marked for deletion: ${photoKey}`);
-  } catch (error) {
-    console.error('[Photo Deletion] Error:', error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -198,8 +192,7 @@ export async function validatePhotoFile(file: Buffer): Promise<{
       dimensions: { width: metadata.width, height: metadata.height },
     };
   } catch (error) {
-    console.error('[Photo Validation] Error:', error);
-    return {
+        return {
       isValid: false,
       error: 'Failed to validate image',
     };
@@ -219,9 +212,7 @@ export async function reorderProfilePhotos(
       })
       .where(eq(datingProfiles.userId, userId));
 
-    console.log(`[Photo Reorder] Updated photo order for user ${userId}`);
-  } catch (error) {
-    console.error('[Photo Reorder] Error:', error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }

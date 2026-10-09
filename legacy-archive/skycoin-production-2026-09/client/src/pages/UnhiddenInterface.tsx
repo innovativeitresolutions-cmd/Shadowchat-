@@ -62,10 +62,10 @@ export default function UnhiddenInterface() {
       "Voice nav command processed",
     ];
     const interval = setInterval(() => {
-      const msg = events[Math.floor(Math.random() * events.length)];
+      const msg = events[Math.floor((Math.random()) * events.length)];
       setLogs(prev => [...prev.slice(-49), {
         ts: new Date().toISOString(),
-        type: Math.random() > 0.9 ? "warn" : "info",
+        type: (Math.random()) > 0.9 ? "warn" : "info",
         msg,
       }]);
     }, 3000);

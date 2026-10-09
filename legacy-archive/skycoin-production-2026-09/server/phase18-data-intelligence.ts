@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 18 — DATA DOMINATION
  * Intelligence Layer, Prediction Layer
@@ -533,7 +534,7 @@ export const predictionLayer = {
     const viralProb = Math.min(0.99, Math.max(0.01,
       0.4 * Math.min(1, initialEngagement / 1000) +
       0.3 * Math.min(1, creatorFollowers / 100000) +
-      0.3 * Math.random()
+      0.3 * (crypto.getRandomValues(new Uint8Array(1))[0] / 256)
     ));
     const prediction: ViralPrediction = {
       contentId,
@@ -541,7 +542,7 @@ export const predictionLayer = {
       viralProbability: Math.round(viralProb * 10000) / 10000,
       predictedReach: Math.floor(creatorFollowers * viralProb * 10),
       predictedEngagement: Math.floor(initialEngagement * viralProb * 5),
-      peakTime: new Date(Date.now() + Math.floor(Math.random() * 48) * 3600000),
+      peakTime: new Date(Date.now() + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 48) * 3600000),
       spreadVelocity: viralProb * 100,
       topAmplifiers: [],
       confidenceScore: 0.72,
@@ -616,7 +617,7 @@ export const predictionLayer = {
     const prediction: FraudPrediction = {
       entityId, entityType,
       fraudProbability: Math.round(fraudProb * 10000) / 10000,
-      fraudType: fraudTypes[Math.floor(Math.random() * fraudTypes.length)],
+      fraudType: fraudTypes[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * fraudTypes.length)],
       riskScore,
       signals,
       recommendedAction: action,

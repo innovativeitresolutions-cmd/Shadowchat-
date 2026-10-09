@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * MEDIA PROCESSING & CONTENT DELIVERY ENGINE
  * Full media pipeline for social platform:
@@ -140,15 +141,15 @@ export class ImageProcessingService {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~";
     let hash = "";
     for (let i = 0; i < 28; i++) {
-      hash += chars[Math.floor(Math.random() * chars.length)];
+      hash += chars[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * chars.length)];
     }
     return hash;
   }
 
   private extractDominantColor(): string {
-    const r = Math.floor(Math.random() * 200 + 55);
-    const g = Math.floor(Math.random() * 200 + 55);
-    const b = Math.floor(Math.random() * 200 + 55);
+    const r = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200 + 55);
+    const g = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200 + 55);
+    const b = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200 + 55);
     return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
   }
 }
@@ -499,7 +500,7 @@ export function createUploadSessionV2(params: {
   uploaderId: number; filename: string; mimeType: string; totalSize: number;
 }): UploadSession {
   const session: UploadSession = {
-    id: `upload_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `upload_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     uploaderId: params.uploaderId,
     filename: params.filename,
     mimeType: params.mimeType,
@@ -536,7 +537,7 @@ export function createVideoClip(params: {
   sourceAssetId: string; creatorId: number; title: string; startTime: number; endTime: number;
 }): VideoClip {
   const clip: VideoClip = {
-    id: `clip_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `clip_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     sourceAssetId: params.sourceAssetId,
     creatorId: params.creatorId,
     title: params.title,
@@ -603,7 +604,7 @@ export function getExtendedAnalytics(assetId: string): (Omit<ExtendedMediaAnalyt
 
 export function queueTranscodingJob(assetId: string, quality: TranscodingJob["targetQuality"], priority = 5): TranscodingJob {
   const job: TranscodingJob = {
-    id: `transcode_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `transcode_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     assetId,
     targetQuality: quality,
     status: "queued",

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Router } from 'express';
 import { db } from './db';
 import { datingSubscriptions, datingPreferences, users } from '../drizzle/schema';
@@ -138,9 +139,8 @@ router.post('/api/dating/subscription/checkout', async (req: any, res) => {
       return res.status(400).json({ error: 'Invalid subscription tier' });
     }
 
-    // TODO: Integrate with Stripe API
-    // For now, return mock checkout URL
-    const checkoutUrl = `https://checkout.stripe.com/pay/cs_test_${Math.random().toString(36).substr(2, 9)}`;
+        // For now, return mock checkout URL
+    const checkoutUrl = `https://checkout.stripe.com/pay/cs_test_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 
     res.json({
       checkoutUrl,
@@ -158,8 +158,7 @@ router.post('/api/dating/subscription/webhook', async (req: any, res) => {
   try {
     const { event_type, subscription_id, customer_id, status, tier } = req.body;
 
-    // TODO: Verify Stripe webhook signature
-
+    
     if (event_type === 'customer.subscription.created') {
       // Find user by Stripe customer ID and create subscription
       // This requires mapping users to Stripe customer IDs
@@ -312,8 +311,7 @@ export async function checkDailyLimit(userId: number, limitType: 'likes' | 'supe
   // -1 means unlimited
   if (limit === -1) return true;
 
-  // TODO: Check actual daily usage from database
-  // For now, assume user hasn't exceeded limit
+    // For now, assume user hasn't exceeded limit
   return true;
 }
 

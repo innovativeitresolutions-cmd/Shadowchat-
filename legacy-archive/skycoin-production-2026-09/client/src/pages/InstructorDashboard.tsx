@@ -49,7 +49,6 @@ interface CourseStats {
   activeStudents: number;
 }
 
-// Mock data
 const MOCK_COURSES: Course[] = [
   {
     id: "blockchain-101",

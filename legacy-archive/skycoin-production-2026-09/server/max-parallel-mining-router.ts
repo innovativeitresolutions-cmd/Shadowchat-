@@ -12,8 +12,7 @@ export const maxParallelMiningRouter = router({
    * Start max parallel mining
    */
   startMining: protectedProcedure.mutation(async ({ ctx }) => {
-    console.log(`[Mining] Start request from ${ctx.user.id}`);
-
+    
     try {
       await maxParallelMiningEngine.startMining();
 
@@ -31,8 +30,7 @@ export const maxParallelMiningRouter = router({
    * Stop mining
    */
   stopMining: protectedProcedure.mutation(async ({ ctx }) => {
-    console.log(`[Mining] Stop request from ${ctx.user.id}`);
-
+    
     maxParallelMiningEngine.stopMining();
 
     return {
@@ -85,8 +83,7 @@ export const maxParallelMiningRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log(`[Mining] Add collaborator request from ${ctx.user.id}`);
-
+      
       maxParallelMiningEngine.addCollaborator({
         id: input.id,
         name: input.name,

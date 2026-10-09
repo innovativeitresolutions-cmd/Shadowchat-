@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * CORE FACADES
  *
@@ -106,8 +107,8 @@ class CommunityCoreFacade {
     iconUrl?: string;
     bannerUrl?: string;
   }): Promise<ServerWithMeta> {
-    const serverId = `srv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    const inviteCode = Math.random().toString(36).slice(2, 10).toUpperCase();
+    const serverId = `srv_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
+    const inviteCode = (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 10).toUpperCase();
 
     // Create default channels
     const generalChannel: ChannelRecord = {
@@ -306,7 +307,7 @@ class CommunityCoreFacade {
   }
 
   async generateInviteCode(serverId: string, creatorId: number, maxUses?: number, expiresInHours?: number): Promise<InviteRecord> {
-    const code = Math.random().toString(36).slice(2, 10).toUpperCase();
+    const code = crypto.randomBytes(9).toString('base64url').toUpperCase();
     const invite: InviteRecord = {
       code,
       serverId,
@@ -518,8 +519,7 @@ class StreamingCoreFacade {
     return streamBattles.challengeCreator({
       challengerId: creatorId,
       challengerStreamId: sessionId,
-      challengedId: creatorId + 1, // Placeholder
-      durationSeconds: durationMinutes * 60,
+      challengedId: creatorId + 1,       durationSeconds: durationMinutes * 60,
     });
   }
 

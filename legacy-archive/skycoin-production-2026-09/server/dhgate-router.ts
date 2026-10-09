@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "./_core/trpc";
 import { getDb } from "./db";
@@ -165,7 +166,7 @@ export const dhgateRouter = router({
       const totalAmount = unitPrice * input.quantity;
       const adminEarnings = parseFloat((totalAmount * ADMIN_FEE_PERCENT / 100).toFixed(2));
       const supplierPayout = parseFloat((totalAmount - adminEarnings).toFixed(2));
-      const orderId = `DHG-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+      const orderId = `DHG-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6).toUpperCase()}`;
 
       await db.insert(dhgateOrders).values({
         id: orderId,

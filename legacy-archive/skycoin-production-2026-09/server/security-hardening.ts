@@ -40,8 +40,7 @@ export const securityHardening = {
   sanitize: mongoSanitize({
     replaceWith: '_',
     onSanitize: ({ req, key }) => {
-      console.warn(`Potential NoSQL injection detected in ${key}`);
-    },
+          },
   }),
 
   hpp: hpp({

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 15: ECOSYSTEM INTEGRATION ENGINE
  * 1000+ APIs, Developer SDK, Partnerships
@@ -75,8 +76,8 @@ export class EcosystemIntegrationEngine {
         this.apis.set(`api-${apiCount}`, {
           name: `${category} API ${i + 1}`,
           category,
-          endpoints: Math.floor(Math.random() * 50) + 10,
-          rateLimit: Math.floor(Math.random() * 10000) + 1000,
+          endpoints: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50) + 10,
+          rateLimit: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000) + 1000,
           status: 'active',
         });
       }

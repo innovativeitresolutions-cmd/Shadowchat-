@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { z } from 'zod';
 import { publicProcedure, protectedProcedure, router } from './_core/trpc';
 
@@ -6,7 +7,7 @@ export const paymentIntegration = {
   // Initialize payment session
   async createPaymentSession(userId: string, amount: number, currency: string = 'USD') {
     return {
-      sessionId: `session_${Math.random().toString(36).substring(7)}`,
+      sessionId: `session_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7)}`,
       userId,
       amount,
       currency,
@@ -21,7 +22,7 @@ export const paymentIntegration = {
   async processStripePayment(sessionId: string, token: string) {
     return {
       success: true,
-      transactionId: `txn_stripe_${Math.random().toString(36).substring(7)}`,
+      transactionId: `txn_stripe_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7)}`,
       sessionId,
       method: 'stripe',
       status: 'completed',
@@ -34,7 +35,7 @@ export const paymentIntegration = {
   async processCryptoPayment(sessionId: string, walletAddress: string, cryptoType: string) {
     return {
       success: true,
-      transactionId: `txn_crypto_${Math.random().toString(36).substring(7)}`,
+      transactionId: `txn_crypto_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7)}`,
       sessionId,
       method: cryptoType,
       walletAddress,
@@ -42,7 +43,7 @@ export const paymentIntegration = {
       confirmations: 0,
       requiredConfirmations: cryptoType === 'BTC' ? 6 : 12,
       timestamp: new Date(),
-      blockchainUrl: `https://etherscan.io/tx/0x${Math.random().toString(16).substring(2)}`,
+      blockchainUrl: `https://etherscan.io/tx/0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).substring(2)}`,
     };
   },
 
@@ -120,7 +121,7 @@ export const paymentIntegration = {
   async refundPayment(transactionId: string, reason: string) {
     return {
       success: true,
-      refundId: `ref_${Math.random().toString(36).substring(7)}`,
+      refundId: `ref_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7)}`,
       transactionId,
       reason,
       amount: 99.99,

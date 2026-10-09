@@ -67,8 +67,7 @@ export class LivingLoopEngine {
     };
 
     // In production, save to database
-    console.log('Feedback submitted:', feedback);
-
+    
     // Trigger auto-analysis
     await this.analyzeAndUpdate(featureId);
 
@@ -175,8 +174,7 @@ export class LivingLoopEngine {
       });
     }
 
-    console.log('Auto-updates triggered:', updates);
-    return updates;
+        return updates;
   }
 
   /**

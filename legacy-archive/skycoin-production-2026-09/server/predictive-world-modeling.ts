@@ -131,13 +131,13 @@ export class PredictiveWorldModelingEngine {
 
     for (let day = 1; day <= days; day++) {
       // Simulate proposal creation
-      const newProposals = Math.floor(Math.random() * 3);
+      const newProposals = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3);
       currentState.governanceMetrics.activeProposals += newProposals;
 
       // Simulate participation
       currentState.governanceMetrics.participationRate = Math.min(
         1,
-        currentState.governanceMetrics.participationRate + Math.random() * 0.05
+        currentState.governanceMetrics.participationRate + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.05
       );
 
       // Simulate consensus
@@ -175,15 +175,15 @@ export class PredictiveWorldModelingEngine {
 
     for (let day = 1; day <= days; day++) {
       // Simulate DAU growth
-      const dauGrowth = Math.random() * 0.1 - 0.02; // -2% to +10%
+      const dauGrowth = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.1 - 0.02; // -2% to +10%
       currentState.userMetrics.dau = Math.floor(currentState.userMetrics.dau * (1 + dauGrowth));
 
       // Simulate MAU growth
-      const mauGrowth = Math.random() * 0.08 - 0.01; // -1% to +8%
+      const mauGrowth = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.08 - 0.01; // -1% to +8%
       currentState.userMetrics.mau = Math.floor(currentState.userMetrics.mau * (1 + mauGrowth));
 
       // Simulate retention
-      currentState.userMetrics.retention7d = Math.max(0.3, currentState.userMetrics.retention7d + (Math.random() - 0.5) * 0.05);
+      currentState.userMetrics.retention7d = Math.max(0.3, currentState.userMetrics.retention7d + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.05);
 
       // Simulate churn
       currentState.userMetrics.churn = 1 - currentState.userMetrics.retention7d;
@@ -218,13 +218,13 @@ export class PredictiveWorldModelingEngine {
       id: scenarioId,
       name,
       description,
-      probability: Math.random() * 0.5 + 0.25, // 25-75%
-      impact: Math.random(), // 0-1
+      probability: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5 + 0.25, // 25-75%
+      impact: (crypto.getRandomValues(new Uint8Array(1))[0] / 256), // 0-1
       mitigation: this.generateMitigation(description),
       predictions: {
-        price_change: (Math.random() - 0.5) * 0.4,
-        user_growth: (Math.random() - 0.5) * 0.2,
-        governance_health: Math.random() * 0.3 + 0.5,
+        price_change: ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.4,
+        user_growth: ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.2,
+        governance_health: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.3 + 0.5,
       },
     };
 
@@ -277,7 +277,7 @@ export class PredictiveWorldModelingEngine {
    */
   private simulatePriceMovement(state: WorldState): number {
     const volatility = state.marketMetrics.volatility;
-    const trend = (Math.random() - 0.5) * volatility;
+    const trend = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * volatility;
     return trend;
   }
 
@@ -293,10 +293,10 @@ export class PredictiveWorldModelingEngine {
    */
   private simulateUserMetrics(metrics: WorldState['userMetrics'], day: number): WorldState['userMetrics'] {
     return {
-      dau: Math.floor(metrics.dau * (1 + (Math.random() - 0.5) * 0.1)),
-      mau: Math.floor(metrics.mau * (1 + (Math.random() - 0.5) * 0.08)),
-      retention7d: Math.max(0.3, metrics.retention7d + (Math.random() - 0.5) * 0.05),
-      churn: Math.min(0.7, metrics.churn + (Math.random() - 0.5) * 0.03),
+      dau: Math.floor(metrics.dau * (1 + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.1)),
+      mau: Math.floor(metrics.mau * (1 + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.08)),
+      retention7d: Math.max(0.3, metrics.retention7d + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.05),
+      churn: Math.min(0.7, metrics.churn + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.03),
     };
   }
 
@@ -305,9 +305,9 @@ export class PredictiveWorldModelingEngine {
    */
   private simulateGovernance(metrics: WorldState['governanceMetrics']): WorldState['governanceMetrics'] {
     return {
-      activeProposals: Math.max(0, metrics.activeProposals + Math.floor((Math.random() - 0.5) * 4)),
-      participationRate: Math.min(1, Math.max(0, metrics.participationRate + (Math.random() - 0.5) * 0.1)),
-      consensusHealth: Math.min(1, Math.max(0, metrics.consensusHealth + (Math.random() - 0.5) * 0.1)),
+      activeProposals: Math.max(0, metrics.activeProposals + Math.floor(((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 4)),
+      participationRate: Math.min(1, Math.max(0, metrics.participationRate + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.1)),
+      consensusHealth: Math.min(1, Math.max(0, metrics.consensusHealth + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.1)),
     };
   }
 
@@ -316,9 +316,9 @@ export class PredictiveWorldModelingEngine {
    */
   private simulateMarketMetrics(metrics: WorldState['marketMetrics']): WorldState['marketMetrics'] {
     return {
-      volume24h: metrics.volume24h * (1 + (Math.random() - 0.5) * 0.3),
-      volatility: Math.max(0.05, Math.min(0.5, metrics.volatility + (Math.random() - 0.5) * 0.05)),
-      dominance: Math.max(0.01, Math.min(0.5, metrics.dominance + (Math.random() - 0.5) * 0.02)),
+      volume24h: metrics.volume24h * (1 + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.3),
+      volatility: Math.max(0.05, Math.min(0.5, metrics.volatility + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.05)),
+      dominance: Math.max(0.01, Math.min(0.5, metrics.dominance + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.02)),
     };
   }
 

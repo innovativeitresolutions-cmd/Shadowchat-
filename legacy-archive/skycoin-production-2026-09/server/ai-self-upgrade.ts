@@ -43,16 +43,14 @@ class AISelfUpgradeSystem {
     }, 6 * 60 * 60 * 1000);
 
     this.upgradeIntervals.set("main", interval);
-    console.log("[AI Self-Upgrade] Started continuous self-upgrade cycle");
-  }
+      }
 
   /**
    * Execute a self-upgrade cycle
    */
   private async executeSelfUpgradeCycle(): Promise<void> {
     try {
-      console.log("[AI Self-Upgrade] Analyzing platform for improvements...");
-
+      
       // Generate upgrade proposals
       const proposals = await this.generateUpgradeProposals();
 
@@ -73,12 +71,8 @@ class AISelfUpgradeSystem {
       // Update metrics
       await this.updateMetrics();
 
-      console.log(
-        `[AI Self-Upgrade] Completed cycle: ${proposals.length} proposals evaluated`
-      );
-    } catch (error) {
-      console.error("[AI Self-Upgrade] Error in upgrade cycle:", error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -139,8 +133,7 @@ class AISelfUpgradeSystem {
       }
       return [];
     } catch (error) {
-      console.error("[AI Self-Upgrade] Proposal generation error:", error);
-      return [];
+            return [];
     }
   }
 
@@ -166,18 +159,15 @@ class AISelfUpgradeSystem {
    */
   private async deployUpgrade(proposal: UpgradeProposal): Promise<void> {
     try {
-      console.log(`[AI Self-Upgrade] Deploying upgrade: ${proposal.description}`);
-
+      
       // Simulate deployment
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Update metrics based on upgrade
       this.applyUpgradeMetrics(proposal);
 
-      console.log(`[AI Self-Upgrade] Successfully deployed: ${proposal.id}`);
-    } catch (error) {
-      console.error("[AI Self-Upgrade] Deployment error:", error);
-      proposal.status = "rolled_back";
+          } catch (error) {
+            proposal.status = "rolled_back";
     }
   }
 
@@ -240,8 +230,7 @@ class AISelfUpgradeSystem {
       clearInterval(interval);
       this.upgradeIntervals.delete("main");
     }
-    console.log("[AI Self-Upgrade] Stopped self-upgrade cycle");
-  }
+      }
 
   /**
    * Get platform health report

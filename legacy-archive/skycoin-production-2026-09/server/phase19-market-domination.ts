@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 19 — MARKET DOMINATION
  * Public APIs, SDKs, External Integrations
@@ -227,7 +228,7 @@ export const publicAPIManager = {
   createAPIKey(params: Omit<PublicAPIKey, "id" | "key" | "secret" | "requestCount" | "isActive" | "createdAt">): PublicAPIKey {
     const id = `apik_${params.ownerId}_${Date.now()}`;
     const key = `sky_${Buffer.from(`${id}_${Date.now()}`).toString("base64").replace(/[^a-zA-Z0-9]/g, "").slice(0, 32)}`;
-    const secret = `sks_${Buffer.from(`${id}_secret_${Math.random()}`).toString("base64").replace(/[^a-zA-Z0-9]/g, "").slice(0, 48)}`;
+    const secret = `sks_${Buffer.from(`${id}_secret_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256)}`).toString("base64").replace(/[^a-zA-Z0-9]/g, "").slice(0, 48)}`;
     const apiKey: PublicAPIKey = {
       ...params, id, key, secret,
       requestCount: 0,
@@ -481,7 +482,7 @@ export const externalIntegrationEngine = {
     if (!job) return null;
     job.status = "running";
     job.startedAt = new Date();
-    job.itemsTotal = Math.floor(Math.random() * 50) + 10;
+    job.itemsTotal = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50) + 10;
     job.itemsProcessed = job.itemsTotal;
     job.status = "completed";
     job.completedAt = new Date();
@@ -508,7 +509,7 @@ export const externalIntegrationEngine = {
     if (!job) return null;
     job.status = "running";
     job.startedAt = new Date();
-    job.itemsTotal = Math.floor(Math.random() * 30) + 5;
+    job.itemsTotal = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 30) + 5;
     job.itemsProcessed = job.itemsTotal;
     job.status = "completed";
     job.completedAt = new Date();
@@ -573,7 +574,7 @@ export const externalIntegrationEngine = {
     const job = _openSeaSyncJobs.get(jobId);
     if (!job) return null;
     job.status = "completed";
-    job.itemsProcessed = Math.floor(Math.random() * 20) + 1;
+    job.itemsProcessed = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20) + 1;
     job.result = { platform: "opensea", nftsSynced: job.itemsProcessed };
     return job;
   },

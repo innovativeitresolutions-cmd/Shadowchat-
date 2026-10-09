@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { db } from './db';
 
 /**
@@ -170,7 +171,7 @@ export class AuditReportGenerator {
     auditorId: string,
     duration: number
   ): AuditReport {
-    const reportId = `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const reportId = `audit-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
 
     const report: AuditReport = {
       id: reportId,

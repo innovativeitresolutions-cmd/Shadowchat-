@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { z } from "zod";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import {
@@ -40,15 +41,15 @@ function buildMockContent(count = 20): ContentItem[] {
     creatorId: `creator-${(i % 5) + 1}`,
     categories: [categories[i % categories.length], categories[(i + 2) % categories.length]],
     tags: [`tag${i}`, `tag${i + 1}`],
-    engagementScore: Math.floor(Math.random() * 100),
-    recencyScore: Math.floor(Math.random() * 100),
-    qualityScore: Math.floor(Math.random() * 100),
-    createdAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-    views: Math.floor(Math.random() * 100000),
-    likes: Math.floor(Math.random() * 5000),
-    comments: Math.floor(Math.random() * 500),
-    shares: Math.floor(Math.random() * 200),
-    watchTime: Math.floor(Math.random() * 600),
+    engagementScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+    recencyScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+    qualityScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
+    createdAt: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 7 * 24 * 60 * 60 * 1000),
+    views: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
+    likes: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5000),
+    comments: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500),
+    shares: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 200),
+    watchTime: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 600),
   }));
 }
 

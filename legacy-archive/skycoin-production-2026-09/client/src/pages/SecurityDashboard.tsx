@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Shield, AlertTriangle, CheckCircle, Lock, Eye, Activity, Zap, Globe, Server, RefreshCw, Clock } from "lucide-react";
 
-// MOCK_EVENTS removed — data comes from trpc.admin.systemLogs
 
 export default function SecurityDashboard() {
   const { user } = useAuth();

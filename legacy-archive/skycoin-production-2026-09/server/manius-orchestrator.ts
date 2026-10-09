@@ -88,8 +88,7 @@ export class ManiusOrchestrator {
     if (this.cycleInterval) return;
     void this.runCycle(); // immediate first run
     this.cycleInterval = setInterval(() => void this.runCycle(), this.CYCLE_MS);
-    console.log("[ManiusOrchestrator] CEO brain started — 60s cycle");
-  }
+      }
 
   stop(): void {
     if (this.cycleInterval) {

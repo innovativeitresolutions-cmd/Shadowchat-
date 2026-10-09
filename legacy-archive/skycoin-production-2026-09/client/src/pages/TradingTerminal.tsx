@@ -170,7 +170,7 @@ const TradingTerminal: React.FC = () => {
                   <span className={i % 2 === 0 ? 'text-purple-400' : 'text-red-400'}>
                     {selectedAsset.price}
                   </span>
-                  <span className="text-center text-slate-300">{(Math.random() * 1000).toFixed(2)}</span>
+                  <span className="text-center text-slate-300">{((Math.random()) * 1000).toFixed(2)}</span>
                   <span className="text-right text-slate-500">12:0{i}:45</span>
                 </div>
               ))}

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 25 — SEARCH DOMINANCE ENGINE
  * Universal Search, Semantic Search, AI Intent Search, Trending, Predictive
@@ -704,7 +705,7 @@ export const universalSearch = {
     const trending = trendingSearchEngine.getTrending(entityTypes?.[0], undefined, 5).map(t => t.query);
 
     // Log query
-    const queryId = `q_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const queryId = `q_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const executionTimeMs = Date.now() - start;
     _searchQueries.set(queryId, {
       id: queryId,

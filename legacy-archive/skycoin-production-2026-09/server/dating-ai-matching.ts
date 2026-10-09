@@ -119,8 +119,7 @@ Consider:
       matchType: result.matchType || 'fair',
     };
   } catch (error) {
-    console.error('Error calculating compatibility:', error);
-    return {
+        return {
       userId: profile2.userId,
       score: 50,
       reasons: ['Error calculating compatibility'],
@@ -250,8 +249,7 @@ export async function getRecommendedMatches(
     // Sort by compatibility score (descending)
     return compatibilityScores.sort((a, b) => b.score - a.score);
   } catch (error) {
-    console.error('Error getting recommended matches:', error);
-    return [];
+        return [];
   }
 }
 
@@ -302,8 +300,7 @@ Respond with a JSON array of strings.
 
     return Array.isArray(suggestions) ? suggestions : [];
   } catch (error) {
-    console.error('Error analyzing profile:', error);
-    return [];
+        return [];
   }
 }
 
@@ -370,8 +367,7 @@ Respond with a JSON array of 5 strings.
 
     return Array.isArray(starters) ? starters : [];
   } catch (error) {
-    console.error('Error generating conversation starters:', error);
-    return [];
+        return [];
   }
 }
 

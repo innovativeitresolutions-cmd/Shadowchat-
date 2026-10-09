@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * NFT Ownership Engine
  * Phase 5B — Sovereignty Build
@@ -425,8 +426,7 @@ class NFTRarityEngine {
 
     return {
       score: totalScore,
-      tier: this.getTier(1, 1), // placeholder — needs collection context
-      traitScores,
+      tier: this.getTier(1, 1),       traitScores,
     };
   }
 }
@@ -474,7 +474,7 @@ class NFTMintingService {
     this.tokenCounters.set(collectionId, tokenId);
 
     const ipfsMetadataHash = await ipfsPinning.pinMetadata(metadata);
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
 
     const nft: NFT = {
       id: `nft_${collectionId}_${tokenId}`,
@@ -763,7 +763,7 @@ class NFTSettlementService {
     nft.isListed = true;
     nft.listingPrice = price;
     nft.listingCurrency = currency;
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     this.transactions.push({
       id: `tx_${Date.now()}`,
       nftId,
@@ -774,7 +774,7 @@ class NFTSettlementService {
       price,
       currency,
       txHash,
-      blockNumber: Math.floor(Math.random() * 1000000) + 18000000,
+      blockNumber: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000) + 18000000,
       timestamp: new Date(),
     });
     return { success: true, txHash };
@@ -796,7 +796,7 @@ class NFTSettlementService {
     const platformFee = salePrice * this.PLATFORM_FEE_PERCENT / 10000n;
     const royaltyPaid = royaltyEngine.recordRoyaltyPayment(nft.collectionId, salePrice);
     const sellerReceived = salePrice - platformFee - royaltyPaid;
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     const previousOwner = nft.ownerId;
     const previousAddress = nft.ownerAddress;
     nft.ownerId = buyerId;
@@ -821,7 +821,7 @@ class NFTSettlementService {
       royaltyPaid,
       platformFee,
       txHash,
-      blockNumber: Math.floor(Math.random() * 1000000) + 18000000,
+      blockNumber: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000) + 18000000,
       timestamp: new Date(),
     });
     return { success: true, txHash, platformFee, royaltyPaid, sellerReceived };
@@ -830,7 +830,7 @@ class NFTSettlementService {
   async transferNFT(nftId: string, fromUserId: number, toAddress: string, toUserId: number): Promise<{ success: boolean; txHash: string }> {
     const nft = nftMinting.getNFT(nftId);
     if (!nft || nft.ownerId !== fromUserId) return { success: false, txHash: "" };
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     nft.ownerId = toUserId;
     nft.ownerAddress = toAddress;
     nft.isListed = false;
@@ -844,7 +844,7 @@ class NFTSettlementService {
       fromAddress: nft.ownerAddress,
       toAddress,
       txHash,
-      blockNumber: Math.floor(Math.random() * 1000000) + 18000000,
+      blockNumber: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000) + 18000000,
       timestamp: new Date(),
     });
     return { success: true, txHash };
@@ -855,7 +855,7 @@ class NFTSettlementService {
     if (!nft || nft.ownerId !== ownerId) return { success: false, txHash: "" };
     nft.isBurned = true;
     nft.isListed = false;
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     this.transactions.push({
       id: `tx_${Date.now()}`,
       nftId,
@@ -864,7 +864,7 @@ class NFTSettlementService {
       fromAddress: nft.ownerAddress,
       toAddress: "0x000000000000000000000000000000000000dead",
       txHash,
-      blockNumber: Math.floor(Math.random() * 1000000) + 18000000,
+      blockNumber: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000) + 18000000,
       timestamp: new Date(),
     });
     return { success: true, txHash };

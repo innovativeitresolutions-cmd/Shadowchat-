@@ -38,8 +38,7 @@ export function TranslationLayer({
   const [copied, setCopied] = useState(false);
   const [confidence, setConfidence] = useState(0);
 
-  // Mock translation function - replace with actual API call
-  const performTranslation = useCallback(async () => {
+    const performTranslation = useCallback(async () => {
     if (!sourceText.trim()) return;
 
     setIsTranslating(true);
@@ -47,8 +46,7 @@ export function TranslationLayer({
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Mock translation logic
-      const mockTranslations: Record<string, Record<string, string>> = {
+            const mockTranslations: Record<string, Record<string, string>> = {
         "Chinese|English": {
           "你好": "Hello",
           "谢谢": "Thank you",
@@ -75,15 +73,14 @@ export function TranslationLayer({
         `[${sourceLanguage} → ${targetLanguage}] ${sourceText}`;
 
       setTranslatedText(translated);
-      setConfidence(0.92 + Math.random() * 0.08);
+      setConfidence(0.92 + (Math.random()) * 0.08);
       setShowTranslation(true);
 
       if (onTranslate) {
         onTranslate(translated);
       }
     } catch (error) {
-      console.error("Translation error:", error);
-      toast.error("Translation failed");
+            toast.error("Translation failed");
     } finally {
       setIsTranslating(false);
     }

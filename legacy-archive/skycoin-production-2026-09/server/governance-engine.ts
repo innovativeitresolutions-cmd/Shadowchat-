@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * GOVERNANCE & DAO ENGINE
  * Full decentralized governance system:
@@ -489,7 +490,7 @@ export function getTreasuryState(): DAOTreasury {
 
 export function depositToTreasury(amount: number, description: string, authorizedBy?: number): TreasuryTransaction {
   const tx: TreasuryTransaction = {
-    id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `tx_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     type: "deposit",
     amount,
     currency: daoTreasury.currency,
@@ -508,7 +509,7 @@ export function allocateFromTreasury(amount: number, description: string, author
   const available = daoTreasury.totalFunds - daoTreasury.allocatedFunds;
   if (amount > available) return { success: false, error: `Insufficient treasury funds. Available: ${available}` };
   const tx: TreasuryTransaction = {
-    id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `tx_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     type: "grant",
     amount,
     currency: daoTreasury.currency,
@@ -540,7 +541,7 @@ export function createGovernanceGrant(params: {
   proposalId: string; recipientId: number; amount: number; purpose: string; milestones?: Partial<GrantMilestone>[];
 }): GovernanceGrant {
   const grant: GovernanceGrant = {
-    id: `grant_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `grant_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     proposalId: params.proposalId,
     recipientId: params.recipientId,
     amount: params.amount,

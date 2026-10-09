@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 5 Adapters
  * Thin facade layer that normalizes the Phase 5 engine APIs to the clean
@@ -61,7 +62,7 @@ export const stakingContract = {
     const baseApy = 8;
     const lockBonus = Math.min(lockDays / 365 * 20, 20);
     const apy = baseApy + lockBonus;
-    const id = `stake_${Date.now()}_${userId}_${Math.random().toString(36).slice(2, 7)}`;
+    const id = `stake_${Date.now()}_${userId}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 7)}`;
     stakingPositions.set(id, { userId, address, amount, lockDays, apy, startDate: new Date(), id, pendingRewards: 0 });
     sky444Token.burn(address, amount);
     return { success: true, stakeId: id, apy };
@@ -166,7 +167,7 @@ export const farmingContract = {
     if (bal < amount) return { success: false, error: "Insufficient balance" };
     sky444Token.burn(address, amount);
     pool.totalDeposited += amount;
-    const id = `farm_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `farm_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _farmingPositions.set(id, { id, poolId, address, amount, depositedAt: new Date() });
     return { success: true, positionId: id };
   },
@@ -222,7 +223,7 @@ const _vestingSchedules = new Map<string, VestingSchedule>();
 
 export const vestingEngine = {
   createSchedule(address: string, amount: number, vestingMonths: number, cliffMonths: number, category: string): { success: boolean; scheduleId?: string } {
-    const id = `vest_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `vest_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _vestingSchedules.set(id, { id, address, totalAmount: amount, vestingMonths, cliffMonths, category, createdAt: new Date(), released: 0 });
     return { success: true, scheduleId: id };
   },
@@ -300,7 +301,7 @@ const _mintedNFTs = new Map<string, MintedNFT>();
 export const nftMinting = {
   mint(creatorId: number, collectionId: string, metadata: { name: string; description: string; image: string; attributes?: unknown[] }, recipient: string): { success: boolean; tokenId?: string; metadataUri?: string; error?: string } {
     if (!metadata.name || !metadata.image) return { success: false, error: "Invalid metadata: name and image are required" };
-    const tokenId = `nft_${collectionId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const tokenId = `nft_${collectionId}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const metadataUri = `ipfs://Qm${Buffer.from(tokenId).toString("base64").slice(0, 44)}`;
     _mintedNFTs.set(tokenId, { tokenId, collectionId, owner: recipient, metadata, metadataUri, mintedAt: new Date() });
     return { success: true, tokenId, metadataUri };
@@ -336,7 +337,7 @@ const _drops = new Map<string, Drop>();
 
 export const creatorDrops = {
   createDrop(creatorId: number, data: { name: string; description: string; totalSupply: number; price: number; currency: string; startTime: Date; endTime: Date; creatorAddress: string }): { success: boolean; dropId?: string } {
-    const id = `drop_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `drop_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _drops.set(id, { id, creatorId, ...data, minted: 0 });
     return { success: true, dropId: id };
   },
@@ -371,11 +372,11 @@ const _rarityScores = new Map<string, number>();
 export const rarityEngine = {
   getScore(tokenId: string, collectionId: string): { score: number; rank: number; tier: string } {
     if (!_rarityScores.has(tokenId)) {
-      _rarityScores.set(tokenId, Math.floor(Math.random() * 100));
+      _rarityScores.set(tokenId, Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100));
     }
     const score = _rarityScores.get(tokenId)!;
     const tier = score >= 90 ? "Legendary" : score >= 75 ? "Epic" : score >= 50 ? "Rare" : score >= 25 ? "Uncommon" : "Common";
-    return { score, rank: Math.floor(Math.random() * 1000) + 1, tier };
+    return { score, rank: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000) + 1, tier };
   },
   getRankings(collectionId: string): { tokenId: string; score: number; rank: number }[] {
     const nfts = nftRegistry.getByCollection(collectionId);
@@ -480,7 +481,7 @@ const _payoutHistory = new Map<number, Array<{ id: string; userId: number; amoun
 export const payoutLedger = {
   createPayout(userId: number, amount: number, currency: string, method: string, destination: string, description: string): { success: boolean; payoutId?: string; status?: string; error?: string } {
     if (amount < 1) return { success: false, error: "Amount below minimum threshold of $1" };
-    const id = `payout_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const id = `payout_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
     const record = { id, userId, amount, currency, method, destination, description, status: "pending", createdAt: new Date() };
     const history = _payoutHistory.get(userId) ?? [];
     history.push(record);
@@ -507,7 +508,7 @@ const _escrowContracts = new Map<string, { id: string; buyerId: number; sellerId
 
 export const escrowEngine = {
   create(buyerId: number, sellerId: number, amount: number, currency: string, description: string, timeoutHours = 72): { success: boolean; escrowId?: string; status?: string; error?: string } {
-    const id = `escrow_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `escrow_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _escrowContracts.set(id, {
       id, buyerId, sellerId, amount, currency, status: "pending",
       milestones: [{ id: `ms_0`, description, amount, status: "pending" }],
@@ -565,7 +566,7 @@ const _subscriptions = new Map<string, SubRecord>();
 
 export const subscriptionEngine = {
   subscribe(subscriberId: number, creatorId: number, planId: string, paymentMethod: string): { success: boolean; subscriptionId?: string; status?: string; error?: string } {
-    const id = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `sub_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _subscriptions.set(id, { id, subscriberId, creatorId, planId, paymentMethod, status: "active", createdAt: new Date() });
     return { success: true, subscriptionId: id, status: "active" };
   },
@@ -754,7 +755,7 @@ const _campaigns = new Map<string, AdCampaign>();
 export const campaignManager = {
   create(advertiserId: number, data: { name: string; budget: number; currency?: string; targeting?: unknown; startDate?: Date; endDate?: Date; bidPerImpression?: number }): { success: boolean; campaignId?: string; error?: string } {
     if (!data.budget || data.budget <= 0) return { success: false, error: "Budget must be greater than zero" };
-    const id = `camp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `camp_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _campaigns.set(id, ({  id, advertiserId, ...data, bidPerImpression: (data as any).bidPerImpression ?? 0.5, status: "active", impressions: 0, clicks: 0, spent: 0, createdAt: new Date()  } as any));
     return { success: true, campaignId: id };
   },
@@ -805,7 +806,7 @@ export const impressionTracker = {
     const key = `${adId}_${campaignId}_${userId}_${placement}`;
     const lastSeen = _impressionCooldowns.get(key);
     if (lastSeen && Date.now() - lastSeen < 30000) return { success: true, deduplicated: true };
-    const id = `imp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `imp_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     _impressions.push({ id, adId, campaignId, userId, placement, ip, timestamp: new Date() });
     _impressionCooldowns.set(key, Date.now());
     return { success: true, impressionId: id };
@@ -833,7 +834,7 @@ export const sponsorshipEngine = {
 
 export const adFraudDetector = {
   analyze(impressionId: string): { fraudScore: number; signals: string[]; action: string } {
-    return { fraudScore: Math.floor(Math.random() * 20), signals: [], action: "allow" };
+    return { fraudScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20), signals: [], action: "allow" };
   },
   checkIPPattern(ip: string): { suspicious: boolean; impressionCount: number; reason?: string } {
     const count = _impressions.filter(i => i.ip === ip).length;
@@ -924,7 +925,7 @@ export const mobileWalletManager = {
 export const deepLinkManager = {
   generate(path: string, params?: Record<string, string>): { url: string; shortUrl: string } {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    return { url: `shadowchat://app${path}${query}`, shortUrl: `https://sc.link/${Math.random().toString(36).slice(2, 8)}` };
+    return { url: `shadowchat://app${path}${query}`, shortUrl: `https://sc.link/${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}` };
   },
   resolve(url: string): { type: string; id?: string; params?: Record<string, string> } {
     const match = url.match(/^shadowchat:\/\/(post|user|community|stream|nft)\/([^?]+)/);
@@ -994,8 +995,8 @@ const _webhooks = new Map<string, WebhookRegistration>();
 
 export const webhookSystem = {
   register(userId: number, url: string, events: string[], secret?: string): { success: boolean; webhookId?: string; secret?: string } {
-    const id = `wh_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-    const webhookSecret = secret ?? `whsec_${Math.random().toString(36).slice(2, 34)}`;
+    const id = `wh_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
+    const webhookSecret = secret ?? `whsec_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 34)}`;
     _webhooks.set(id, { id, userId, url, events, secret: webhookSecret, active: true });
     return { success: true, webhookId: id, secret: webhookSecret };
   },
@@ -1172,7 +1173,7 @@ const _deadLetterItems: { id: string; job: Job; error: string; addedAt: Date }[]
 
 export const jobQueue = {
   enqueue(type: string, data: unknown, options?: { priority?: Job["priority"]; delay?: number }): { success: boolean; jobId?: string; priority?: string } {
-    const id = `job_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `job_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const priority = options?.priority ?? "normal";
     const scheduledAt = options?.delay ? new Date(Date.now() + options.delay) : undefined;
     _jobs.push({ id, type, data, priority, status: "pending", scheduledAt, createdAt: new Date() });
@@ -1296,7 +1297,7 @@ export const backupSystem = {
   getBackupHistory(): typeof _backupJobs { return _backupJobs; },
   verify(backupId: string): { valid: boolean; size?: number; checksum?: string } {
     const job = _backupJobs.find(j => j.id === backupId);
-    return { valid: !!job, size: job ? Math.floor(Math.random() * 1_000_000) + 100_000 : 0, checksum: `sha256_${backupId}` };
+    return { valid: !!job, size: job ? Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1_000_000) + 100_000 : 0, checksum: `sha256_${backupId}` };
   },
 };
 
@@ -1343,7 +1344,7 @@ export const featureFlags = {
       const hash = (userId * 2654435761) % 100;
       return hash < flag.rolloutPercentage;
     }
-    return Math.random() * 100 < flag.rolloutPercentage;
+    return (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 < flag.rolloutPercentage;
   },
   getAll(): Record<string, { enabled: boolean; rolloutPercentage: number }> {
     return Object.fromEntries(Array.from(_flags.entries()));

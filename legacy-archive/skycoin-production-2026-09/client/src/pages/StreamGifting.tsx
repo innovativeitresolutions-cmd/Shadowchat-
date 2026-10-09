@@ -57,15 +57,15 @@ export default function StreamGifting() {
   // Gift sending handled locally with balance deduction
 
   const triggerAnimation = useCallback((gift: typeof GIFTS[0], sender: string) => {
-    const id = `${Date.now()}-${Math.random()}`;
+    const id = `${Date.now()}-${(Math.random())}`;
     const anim: GiftAnimation = {
       id,
       emoji: gift.emoji,
       name: gift.name,
       sender,
       amount: gift.cost * quantity,
-      x: 10 + Math.random() * 80,
-      y: 20 + Math.random() * 60,
+      x: 10 + (Math.random()) * 80,
+      y: 20 + (Math.random()) * 60,
       color: gift.color,
     };
     setAnimations(prev => [...prev, anim]);
@@ -92,8 +92,8 @@ export default function StreamGifting() {
   // Simulate incoming gifts
   useEffect(() => {
     const interval = setInterval(() => {
-      const randomGift = GIFTS[Math.floor(Math.random() * GIFTS.length)];
-      const randomSender = ["CryptoKing", "SkyWhale", "NeonByte", "QuantumX", "VoidHunter"][Math.floor(Math.random() * 5)];
+      const randomGift = GIFTS[Math.floor((Math.random()) * GIFTS.length)];
+      const randomSender = ["CryptoKing", "SkyWhale", "NeonByte", "QuantumX", "VoidHunter"][Math.floor((Math.random()) * 5)];
       triggerAnimation(randomGift, randomSender);
     }, 4000);
     return () => clearInterval(interval);

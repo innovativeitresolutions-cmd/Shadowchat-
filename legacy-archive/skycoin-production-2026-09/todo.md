@@ -1,5 +1,67 @@
 # Skycoin4444 Ecosystem Migration - WebDev Project
 
+## Phase 1: Address Critical CodeQL Vulnerabilities
+- [x] Fix Uncontrolled command line (Critical) in `server/backup-system.ts`
+- [ ] Fix Use of a broken or weak cryptographic algorithm (High) in `server/growth-engine.ts`
+- [ ] Fix Use of externally-controlled format string (High) in `server/backup-system.ts`
+- [ ] Fix Use of password hash with insufficient computational effort (High) in `server/auth-service.ts`
+- [ ] Fix Insecure randomness (High) across multiple files (e.g., `client/.../pages/HopeAI.tsx`, `server/shield-security-engine.ts`)
+- [ ] Fix Missing rate limiting (High) in `server/index.ts`, `server/backup-system.ts`
+- [ ] Fix Incomplete URL scheme check (High) in `server/security.ts`, `server/security-middleware.ts`
+- [ ] Fix DOM text reinterpreted as HTML (High) in `client/.../pages/DatingProfileSetup.tsx`, `client/.../pages/CreateReel.tsx`
+- [ ] Fix Insecure configuration of Helmet security middleware (High) in `server/_core/index.ts`
+- [ ] Fix Bad HTML filtering regexp (High) in `server/security.ts`, `server/security-core.ts`
+- [ ] Fix Incomplete string escaping or encoding (High) in `server/prism-performance-engine...`
+- [ ] Fix Double escaping or unescaping (High) in `shared/validation.ts`
+- [ ] Fix Incomplete multi-character sanitization (High) in `shared/validation.ts`, `server/security.ts`
+- [ ] Fix Vite Vulnerable to Arbitrary File Read via Vite Dev Server WebSocket (High)
+- [ ] Fix Vite: `server.fs.deny` bypassed with queries (High)
+- [ ] Fix Rollup 4 has Arbitrary File Write via Path Traversal (High)
+- [ ] Fix Axios is Vulnerable to Denial of Service via __proto__ Key in mergeConfig (High)
+- [ ] Fix When Vitest UI server is listening, arbitrary file can be read and executed (Critical)
+- [ ] Fix lodash vulnerable to Code Injection via `_.template` imports key names (High)
+- [ ] Fix pnpm v10+ Bypass "Dependency lifecycle scripts execution disabled by default" (High)
+- [ ] Fix fast-xml-parser has an entity encoding bypass via regex injection in DOCTYPE entity names (Critical)
+- [ ] Fix axios Vulnerable to Full Man-in-the-Middle via Prototype Pollution Gadget in `config.proxy` (High)
+- [ ] Fix pnpm: Transitive dependency alias path traversal allows project path override via symlink replacement (High)
+- [ ] Fix form-data: CRLF injection in form-data via unescaped multipart field names and filenames (High)
+- [ ] Fix Race Condition in node-tar Path Reservations via Unicode Ligature Collisions on macOS APFS (High)
+- [ ] Fix pnpm: Project env lockfile can short-circuit package-manager resolution and execute lockfile-selected pnpm bytes (High)
+- [ ] Fix Axios: Proxy-Authorization Credential Leak to Origin Server Across HTTP-to-HTTPS Redirect in Axios Node.js HTTP Adapter (High)
+- [ ] Fix tRPC has possible prototype pollution in `experimental_nextAppDirCaller` (High)
+- [ ] Fix node-tar Vulnerable to Arbitrary File Creation/Overwrite via Hardlink Path Traversal (High)
+- [ ] Fix tar has Hardlink Path Traversal via Drive-Relative Linkpath (High)
+- [ ] Fix vite: `server.fs.deny` bypass on Windows alternate paths (High)
+- [ ] Fix node-tar is Vulnerable to Arbitrary File Overwrite and Symlink Poisoning via Insufficient Path Sanitization (High)
+- [ ] Fix node-tar Symlink Path Traversal via Drive-Relative Linkpath (High)
+- [ ] Fix pnpm vulnerable to Command Injection via environment variable substitution (High)
+- [ ] Fix Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions (Moderate)
+- [ ] Fix Replacement of a substring with itself (Medium) in `client/.../pages/ImpactMap.tsx`
+- [ ] Fix Workflow does not contain permissions (Medium) in `.github/workflows/ci-cd-pipeline.yml`, `.github/workflows/deploy.yml`
+
+## Phase 2: Stabilize Build Process
+- [ ] Ensure project builds successfully without TypeScript errors
+- [ ] Temporarily disable strict TypeScript checks if necessary for initial deployment
+
+## Phase 3: Configure GitHub Pages Correctly
+- [ ] Verify `vite.config.ts` is set up for relative paths
+- [ ] Ensure GitHub Actions workflow is correctly deploying the build output
+
+## Phase 4: Implement Cyberpunk 1980s Aesthetic
+- [ ] Apply neon, glitch, and retro-digital styling to the UI
+- [ ] Integrate appropriate fonts and color schemes
+
+## Phase 5: Ensure Working Navigation
+- [ ] Build and link all 13 service categories
+- [ ] Verify all navigation links are functional and lead to correct pages
+
+## Phase 6: Deploy and Verify Live
+- [ ] Push all changes to GitHub
+- [ ] Confirm the full site renders correctly on GitHub Pages
+
+## Phase 7: Final Delivery
+- [ ] Deliver live viewing URL and deployment report
+
 ## Migration Status
 
 ### Phase 1: File Migration ✓

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * forge-data-pipeline-engine.ts
  * SKYCOIN4444 Platform - FORGE Data Pipeline Engine
@@ -584,13 +585,12 @@ export class ForgeDataPipelineEngine {
   }
 
   private generateUniqueId(): string {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15) + (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(2, 15);
   }
 
   private log(level: 'INFO' | 'WARN' | 'ERROR' | 'DEBUG', message: string): void {
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] [${level}] ${message}`);
-  }
+      }
 
   public registerDataSource(config: DataSourceConfig): void {
     if (this.dataSources.has(config.id)) { this.log('WARN', `Data source with ID ${config.id} already registered. Updating configuration.`); }

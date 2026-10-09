@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYCOIN4444 Event Bus — Enterprise Backbone
  *
@@ -74,7 +75,7 @@ class PlatformEventBus extends EventEmitter {
       userId,
       payload,
       timestamp: Date.now(),
-      traceId: `${type}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      traceId: `${type}-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`,
     };
     super.emit(type, event);
     super.emit("*", event);

@@ -8,8 +8,7 @@ import { MessageSquare, TrendingUp, Users, Zap, AlertCircle, CheckCircle } from 
 export default function FeedbackHub() {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Mock feedback data
-  const feedbackData = [
+    const feedbackData = [
     { id: 1, category: 'feature', sentiment: 'positive', text: 'Love the new gamification system!', author: 'User123', date: '2 hours ago', votes: 45 },
     { id: 2, category: 'bug', sentiment: 'negative', text: 'Spin wheel not loading on mobile', author: 'User456', date: '4 hours ago', votes: 23 },
     { id: 3, category: 'feature', sentiment: 'positive', text: 'Battle Pass progression feels rewarding', author: 'User789', date: '6 hours ago', votes: 67 },

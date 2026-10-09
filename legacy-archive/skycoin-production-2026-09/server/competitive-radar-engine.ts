@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Competitive Intelligence Radar Engine
  * Always-on market sensing system
@@ -122,7 +123,7 @@ export class CompetitiveRadarEngine {
           featureName: f.name,
           hasFeature: f.has,
           maturityLevel: f.maturity,
-          userSentiment: Math.random() * 2 - 1,
+          userSentiment: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2 - 1,
         })),
         pricing: {
           tiers: comp.pricing.tiers.map((t) => ({

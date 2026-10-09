@@ -61,8 +61,7 @@ export default function DatingMatches() {
       const data = await response.json();
       setMatches(data.matches || []);
     } catch (error) {
-      console.error('Failed to load matches:', error);
-    } finally {
+          } finally {
       setLoading(false);
     }
   };
@@ -74,8 +73,7 @@ export default function DatingMatches() {
       const data = await response.json();
       setMessages(data.messages || []);
     } catch (error) {
-      console.error('Failed to load messages:', error);
-    } finally {
+          } finally {
       setMessageLoading(false);
     }
   };
@@ -108,8 +106,7 @@ export default function DatingMatches() {
         }),
       });
     } catch (error) {
-      console.error('Failed to send message:', error);
-    }
+          }
   };
 
   if (loading) {

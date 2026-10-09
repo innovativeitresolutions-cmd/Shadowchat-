@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from './server/_core/llm';
 
 interface DeFiProtocol {
@@ -92,7 +93,7 @@ Optimize yield farming strategy for maximum returns with acceptable risk.`;
 
     return {
       anomalies: response.choices[0].message.content.split('\n').filter(a => a.trim()),
-      severity: Math.random()
+      severity: (crypto.getRandomValues(new Uint8Array(1))[0] / 256)
     };
   }
 
@@ -107,7 +108,7 @@ Optimize yield farming strategy for maximum returns with acceptable risk.`;
 
     return {
       analysis: response.choices[0].message.content,
-      liquidityScore: Math.random(),
+      liquidityScore: (crypto.getRandomValues(new Uint8Array(1))[0] / 256),
       slippageEstimate: 0.02
     };
   }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYCOIN4444 — ICO ULTIMATE ECONOMICS ENGINE
  * ─────────────────────────────────────────────
@@ -471,7 +472,7 @@ export const icoEconomicsRouter = router({
     await ensureICOTables();
     const db = await getDb();
     if (!db) return { code: "" };
-    const code = `SKY${ctx.user.id}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+    const code = `SKY${ctx.user.id}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6).toUpperCase()}`;
     await db.execute(
       `INSERT IGNORE INTO ico_referrals (referrer_id, referred_user_id, referral_code, created_at) VALUES (${ctx.user.id}, 0, '${code}', ${Date.now()})`
     );

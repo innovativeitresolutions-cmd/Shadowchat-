@@ -133,15 +133,13 @@ export async function generateInsightWithLLM(
   data: Record<string, any>
 ): Promise<LLMResponse | null> {
   if (!LLMConfig.apiKey) {
-    console.warn('LLM_API_KEY not configured, skipping insight generation');
-    return null;
+        return null;
   }
 
   try {
     const prompt = insightPrompts[engine as keyof typeof insightPrompts];
     if (!prompt) {
-      console.warn(`No prompt template for engine: ${engine}`);
-      return null;
+            return null;
     }
 
     const fullPrompt = prompt(data);
@@ -158,8 +156,7 @@ export async function generateInsightWithLLM(
 
     return response;
   } catch (error) {
-    console.error(`Error generating insight for ${engine}:`, error);
-    return null;
+        return null;
   }
 }
 
@@ -201,15 +198,13 @@ async function callOpenAI(prompt: string): Promise<LLMResponse | null> {
     // Parse JSON from response
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.warn('Could not parse JSON from LLM response');
-      return null;
+            return null;
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
     return LLMResponseSchema.parse(parsed);
   } catch (error) {
-    console.error('OpenAI API error:', error);
-    return null;
+        return null;
   }
 }
 
@@ -247,15 +242,13 @@ async function callClaude(prompt: string): Promise<LLMResponse | null> {
     // Parse JSON from response
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.warn('Could not parse JSON from Claude response');
-      return null;
+            return null;
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
     return LLMResponseSchema.parse(parsed);
   } catch (error) {
-    console.error('Claude API error:', error);
-    return null;
+        return null;
   }
 }
 
@@ -284,8 +277,7 @@ async function callCustomLLM(prompt: string): Promise<LLMResponse | null> {
     const data = await response.json();
     return LLMResponseSchema.parse(data);
   } catch (error) {
-    console.error('Custom LLM API error:', error);
-    return null;
+        return null;
   }
 }
 
@@ -342,8 +334,7 @@ Keep the summary concise and actionable.
 
     return response?.insight || null;
   } catch (error) {
-    console.error('Error generating ecosystem summary:', error);
-    return null;
+        return null;
   }
 }
 

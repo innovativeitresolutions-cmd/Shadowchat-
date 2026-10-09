@@ -9,13 +9,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/">
-              <a className="flex items-center gap-2 font-bold text-lg mb-4 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                  SK
-                </div>
-                <span>SKY4444</span>
-              </a>
+            <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-4 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                SK
+              </div>
+              <span>SKY4444</span>
             </Link>
             <p className="text-sm text-slate-400 mb-4">
               The Strategic Digital Ecosystem Where Every Action Matters
@@ -43,12 +41,12 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">💰 Finance</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/trading"><a className="hover:text-pink-400 transition-colors">Trading</a></Link></li>
-              <li><Link href="/portfolio"><a className="hover:text-pink-400 transition-colors">Portfolio</a></Link></li>
-              <li><Link href="/wallet"><a className="hover:text-pink-400 transition-colors">Wallet</a></Link></li>
-              <li><Link href="/mining"><a className="hover:text-pink-400 transition-colors">Mining</a></Link></li>
-              <li><Link href="/staking"><a className="hover:text-pink-400 transition-colors">Staking</a></Link></li>
-              <li><Link href="/yield-farming"><a className="hover:text-pink-400 transition-colors">Yield Farming</a></Link></li>
+              <li><Link href="/trading" className="hover:text-pink-400 transition-colors">Trading</Link></li>
+              <li><Link href="/portfolio" className="hover:text-pink-400 transition-colors">Portfolio</Link></li>
+              <li><Link href="/wallet" className="hover:text-pink-400 transition-colors">Wallet</Link></li>
+              <li><Link href="/mining" className="hover:text-pink-400 transition-colors">Mining</Link></li>
+              <li><Link href="/staking" className="hover:text-pink-400 transition-colors">Staking</Link></li>
+              <li><Link href="/yield-farming" className="hover:text-pink-400 transition-colors">Yield Farming</Link></li>
             </ul>
           </div>
 
@@ -56,12 +54,12 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">👥 Community</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/feed"><a className="hover:text-pink-400 transition-colors">Social Feed</a></Link></li>
-              <li><Link href="/profiles"><a className="hover:text-pink-400 transition-colors">Profiles</a></Link></li>
-              <li><Link href="/communities"><a className="hover:text-pink-400 transition-colors">Communities</a></Link></li>
-              <li><Link href="/messages"><a className="hover:text-pink-400 transition-colors">Messaging</a></Link></li>
-              <li><Link href="/followers"><a className="hover:text-pink-400 transition-colors">Followers</a></Link></li>
-              <li><Link href="/creator-economy"><a className="hover:text-pink-400 transition-colors">Creator Economy</a></Link></li>
+              <li><Link href="/feed" className="hover:text-pink-400 transition-colors">Social Feed</Link></li>
+              <li><Link href="/profiles" className="hover:text-pink-400 transition-colors">Profiles</Link></li>
+              <li><Link href="/communities" className="hover:text-pink-400 transition-colors">Communities</Link></li>
+              <li><Link href="/messages" className="hover:text-pink-400 transition-colors">Messaging</Link></li>
+              <li><Link href="/followers" className="hover:text-pink-400 transition-colors">Followers</Link></li>
+              <li><Link href="/creator-economy" className="hover:text-pink-400 transition-colors">Creator Economy</Link></li>
             </ul>
           </div>
 
@@ -69,12 +67,12 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">🛍️ Products</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/marketplace"><a className="hover:text-pink-400 transition-colors">Marketplace</a></Link></li>
-              <li><Link href="/games"><a className="hover:text-pink-400 transition-colors">Gaming</a></Link></li>
-              <li><Link href="/courses"><a className="hover:text-pink-400 transition-colors">Learning</a></Link></li>
-              <li><Link href="/ai-tools"><a className="hover:text-pink-400 transition-colors">AI Tools</a></Link></li>
-              <li><Link href="/api-docs"><a className="hover:text-pink-400 transition-colors">API</a></Link></li>
-              <li><Link href="/analytics-dashboard"><a className="hover:text-pink-400 transition-colors">Analytics</a></Link></li>
+              <li><Link href="/marketplace" className="hover:text-pink-400 transition-colors">Marketplace</Link></li>
+              <li><Link href="/games" className="hover:text-pink-400 transition-colors">Gaming</Link></li>
+              <li><Link href="/courses" className="hover:text-pink-400 transition-colors">Learning</Link></li>
+              <li><Link href="/ai-tools" className="hover:text-pink-400 transition-colors">AI Tools</Link></li>
+              <li><Link href="/api-docs" className="hover:text-pink-400 transition-colors">API</Link></li>
+              <li><Link href="/analytics-dashboard" className="hover:text-pink-400 transition-colors">Analytics</Link></li>
             </ul>
           </div>
 
@@ -82,12 +80,12 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">⚙️ Support</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/help"><a className="hover:text-pink-400 transition-colors">Help Center</a></Link></li>
-              <li><Link href="/docs"><a className="hover:text-pink-400 transition-colors">Documentation</a></Link></li>
-              <li><Link href="/contact"><a className="hover:text-pink-400 transition-colors">Contact Us</a></Link></li>
-              <li><Link href="/privacy"><a className="hover:text-pink-400 transition-colors">Privacy</a></Link></li>
-              <li><Link href="/terms"><a className="hover:text-pink-400 transition-colors">Terms</a></Link></li>
-              <li><Link href="/security"><a className="hover:text-pink-400 transition-colors">Security</a></Link></li>
+              <li><Link href="/help" className="hover:text-pink-400 transition-colors">Help Center</Link></li>
+              <li><Link href="/docs" className="hover:text-pink-400 transition-colors">Documentation</Link></li>
+              <li><Link href="/contact" className="hover:text-pink-400 transition-colors">Contact Us</Link></li>
+              <li><Link href="/privacy" className="hover:text-pink-400 transition-colors">Privacy</Link></li>
+              <li><Link href="/terms" className="hover:text-pink-400 transition-colors">Terms</Link></li>
+              <li><Link href="/security" className="hover:text-pink-400 transition-colors">Security</Link></li>
             </ul>
           </div>
         </div>

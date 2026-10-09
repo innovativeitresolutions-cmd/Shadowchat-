@@ -276,7 +276,7 @@ export class AnomalyDetectionEngine {
    * Trigger alert
    */
   private triggerAlert(anomaly: Anomaly): void {
-    console.warn(`🚨 ANOMALY ALERT: ${anomaly.severity.toUpperCase()} - ${anomaly.description}`);
+    console.warn("Anomaly detected:", anomaly.description);
     // Would integrate with alerting service
   }
 

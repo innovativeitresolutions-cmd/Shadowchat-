@@ -67,19 +67,16 @@ export class RealtimeWebSocketServer {
         const message = JSON.parse(data.toString()) as WebSocketMessage;
         this.handleMessage(clientId, ws, message);
       } catch (error) {
-        console.error('[WebSocket] Message parse error:', error);
-        ws.send(JSON.stringify({ error: 'Invalid message format' }));
+                ws.send(JSON.stringify({ error: 'Invalid message format' }));
       }
     });
 
     ws.on('close', () => {
       this.clients.delete(clientId);
-      console.log(`[WebSocket] Client ${clientId} disconnected`);
-    });
+          });
 
     ws.on('error', (error) => {
-      console.error(`[WebSocket] Client ${clientId} error:`, error);
-    });
+          });
 
     // Send welcome message
     ws.send(
@@ -146,8 +143,7 @@ export class RealtimeWebSocketServer {
       });
     }
 
-    console.log(`[WebSocket] Client ${clientId} subscribed to ${channel}`);
-  }
+      }
 
   /**
    * Unsubscribe from a channel
@@ -160,8 +156,7 @@ export class RealtimeWebSocketServer {
       channelClients.delete(clientId);
     }
 
-    console.log(`[WebSocket] Client ${clientId} unsubscribed from ${channel}`);
-  }
+      }
 
   /**
    * Broadcast message to channel subscribers
@@ -233,9 +228,9 @@ export class RealtimeWebSocketServer {
         channel: 'market:SKY444',
         data: {
           token: 'SKY444',
-          price: 125.43 + Math.random() * 10,
-          volume24h: 1250000 + Math.random() * 500000,
-          change24h: -2.5 + Math.random() * 5,
+          price: 125.43 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10,
+          volume24h: 1250000 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500000,
+          change24h: -2.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 5,
           timestamp: Date.now(),
         },
         timestamp: Date.now(),

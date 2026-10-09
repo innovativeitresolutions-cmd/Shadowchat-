@@ -16,7 +16,7 @@ import { healthRouter, healthMonitor } from "../health-monitor";
 import { miningRouter as autonomousMiningRouter } from "../autonomous-mining";
 import miningRouter from "../mining-router";
 import walletApiRouter from "../wallet-api";
-import { registerMiningHeartbeats } from "../mining-heartbeat";
+import { cacheStats, getSlowQueryLog } from "../query-cache";
 
 
 
@@ -62,15 +62,12 @@ async function startServer() {
   app.use("/api/mining", walletApiRouter);
   app.use("/api", autonomousMiningRouter);
 
-  // Register mining heartbeat tasks
-  registerMiningHeartbeats().catch(err => console.error('[Mining] Failed to register heartbeats:', err));
-
   // Start advanced mining engine on server startup
   try {
     const { advancedMiningEngine } = await import('../advanced-mining-engine');
-    console.log('[Mining] Advanced mining engine initialized');
+    console.log('[Mining] Advanced mining engine loaded');
   } catch (err) {
-    console.warn('[Mining] Failed to initialize advanced mining engine:', err);
+    console.error('[Mining] Failed to load advanced mining engine:', err);
   }
   app.use(compression({ level: 6, threshold: 1024 }) as any);
   app.use(isDev ? morgan("dev") : morgan("combined", { skip: (req) => req.path === "/api/health" }));
@@ -89,7 +86,6 @@ async function startServer() {
   });
 
   app.get("/api/cache-stats", (_req: Request, res: Response) => {
-    const { cacheStats, getSlowQueryLog } = require("../query-cache");
     res.json({ cache: cacheStats(), slowQueries: getSlowQueryLog().slice(-20) });
   });
 
@@ -106,15 +102,14 @@ async function startServer() {
       const Stripe = (await import("stripe")).default;
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
       const event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-      if (event.id.startsWith("evt_test_")) { console.log("[Webhook] Test event detected"); res.json({ verified: true }); return; }
-      console.log(`[Stripe Webhook] ${event.type} — ${event.id}`);
-      if (event.type === "checkout.session.completed") {
+      if (event.id.startsWith("evt_test_")) {  res.json({ verified: true }); return; }
+            if (event.type === "checkout.session.completed") {
         const session = event.data.object as any;
         const { handleCheckoutSessionCompleted } = await import("../stripe-skycoin");
         await handleCheckoutSessionCompleted(session);
       }
       res.json({ received: true });
-    } catch (err: any) { console.error("[Stripe Webhook] Error:", err.message); res.status(400).json({ error: err.message }); }
+    } catch (err: any) {  res.status(400).json({ error: err.message }); }
   });
 
   app.use(express.json({ limit: "10mb" }));
@@ -132,7 +127,7 @@ async function startServer() {
       const { runAutonomousSprint } = await import("../sprint-engine");
       const result = await runAutonomousSprint();
       res.json({ success: true, sprintNumber: result.sprintNumber, totalLinesAdded: result.totalLinesAdded, languagesUsed: result.languagesUsed });
-    } catch (err) { console.error("[Sprint Scheduled] Error:", err); res.status(500).json({ error: String(err) }); }
+    } catch (err) {  res.status(500).json({ error: String(err) }); }
   });
 
   // ─── SSE: AI Code Generation Streaming ──────────────────────────────────────
@@ -211,13 +206,17 @@ async function startServer() {
   app.use("/api/trpc", apiLimiter, createExpressMiddleware({
     router: appRouter,
     createContext,
-    onError: ({ error, path }) => { if (error.code !== "UNAUTHORIZED" && error.code !== "NOT_FOUND") console.error(`[tRPC Error] ${path}:`, error.message); },
+    onError: ({ error, path }) => {
+      if (error.code !== "UNAUTHORIZED" && error.code !== "NOT_FOUND") {
+        console.error(`[tRPC] Error on ${path}:`, error);
+      }
+    },
   }));
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = status < 500 ? err.message : "Internal server error";
-    if (status >= 500) console.error("[Server Error]", err);
+    if (status >= 500) console.error('[Error]', message);
     if (!res.headersSent) res.status(status).json({ error: message });
   });
 
@@ -229,42 +228,38 @@ async function startServer() {
   if (isDev) { await setupVite(app, server); } else { serveStatic(app); }
 
   const shutdown = (signal: string) => {
-    console.log(`[Server] ${signal} — graceful shutdown`);
-    server.close(() => { console.log("[Server] Closed"); process.exit(0); });
-    setTimeout(() => { console.error("[Server] Forced shutdown"); process.exit(1); }, 10_000);
+        server.close(() => {  process.exit(0); });
+    setTimeout(() => {  process.exit(1); }, 10_000);
   };
   process.on("SIGTERM", () => shutdown("SIGTERM"));
   process.on("SIGINT", () => shutdown("SIGINT"));
-  process.on("unhandledRejection", (reason) => console.error("[Server] Unhandled Rejection:", reason));
-  process.on("uncaughtException", (err) => { console.error("[Server] Uncaught Exception:", err); process.exit(1); });
+  process.on("unhandledRejection", (reason) => {
+    console.error('[Unhandled Rejection]', reason);
+  });
+  process.on("uncaughtException", (err) => {
+    console.error('[Uncaught Exception]', err);
+    process.exit(1);
+  });
 
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);
   if (port !== preferredPort) console.log(`[Server] Port ${preferredPort} busy, using ${port}`);
   server.listen(port, () => {
-    console.log(`[Server] Running on http://localhost:${port}/ (${process.env.NODE_ENV || "production"})`);
+    console.log(`[Server] Listening on port ${port}`);
     // Boot autonomous engines (non-blocking)
     void (async () => {
       try {
         const { freeWillEngine } = await import("../free-will-engine.js");
         await freeWillEngine.start();
-        console.log("[FreeWill] Engine started");
-      } catch (e) { console.warn("[FreeWill] Engine start failed:", e); }
+              } catch (e) {  }
       try {
         // EmergentEconomyEngine is event-driven, no explicit start needed
         await import("../emergent-economy-engine.js");
-        console.log("[EmergentEconomy] Engine loaded");
-      } catch (e) { console.warn("[EmergentEconomy] Engine load failed:", e); }
-      try {
-        // Start autonomous mining system
-        const { autonomousMining } = await import("../autonomous-mining");
-        await autonomousMining.startMining();
-        console.log("[Mining] Autonomous mining started");
-      } catch (e) { console.warn("[Mining] Autonomous mining start failed:", e); }
+              } catch (e) {  }
     })();
   });
 }
 
-startServer().catch(err => { console.error("[Server] Fatal startup error:", err); process.exit(1); });
+startServer().catch(err => {  process.exit(1); });
 
 export default startServer;

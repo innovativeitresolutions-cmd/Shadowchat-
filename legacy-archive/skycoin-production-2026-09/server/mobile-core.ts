@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Mobile Core Engine
  * Phase 5F — Sovereignty Build
@@ -226,7 +227,7 @@ class PushNotificationService {
       if (this.isInQuietHours(sub.preferences)) continue;
 
       const notification: PushNotification = {
-        id: `notif_${Date.now()}_${userId}_${Math.random().toString(36).slice(2)}`,
+        id: `notif_${Date.now()}_${userId}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
         userId,
         category,
         title,
@@ -570,7 +571,7 @@ class MobileWalletManager {
 
   generateWalletConnectUri(userId: number, chainId = 1): { uri: string; sessionId: string; qrCode: string } {
     const sessionId = `mwallet_${Date.now()}_${userId}`;
-    const wcUri = `wc:${sessionId}@2?relay-protocol=irn&symKey=${Math.random().toString(36).slice(2)}`;
+    const wcUri = `wc:${sessionId}@2?relay-protocol=irn&symKey=${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
     const qrCode = `data:image/svg+xml;base64,${Buffer.from(`<svg>QR:${wcUri}</svg>`).toString("base64")}`;
     return { uri: wcUri, sessionId, qrCode };
   }
@@ -642,7 +643,7 @@ class DeepLinkManager {
   private links = new Map<string, DeepLink>();
 
   create(path: string, params: Record<string, string> = {}): DeepLink {
-    const id = `dl_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const id = `dl_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
     const queryString = new URLSearchParams(params).toString();
     const fullPath = queryString ? `${path}?${queryString}` : path;
     const link: DeepLink = {
@@ -698,7 +699,7 @@ class MobileAnalyticsService {
     sessionId?: string
   ): void {
     this.events.push({
-      id: `mevt_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `mevt_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       userId,
       sessionId: sessionId || `sess_${Date.now()}`,
       eventType,

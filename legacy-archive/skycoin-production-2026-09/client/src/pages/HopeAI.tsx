@@ -83,7 +83,7 @@ export default function HopeAI() {
   });
 
   // Persistent session ID per browser session
-  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+  const [sessionId] = useState(() => `session_${Date.now()}_${(Math.random()).toString(36).slice(2)}`);
 
   // Load chat history from DB on mount
   const { data: savedHistory } = trpc.hopeAI.getChatHistory.useQuery(

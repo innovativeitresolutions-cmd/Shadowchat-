@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKYCOIN4444 Governance Engine v2 — Hybrid AI Governance
  *
@@ -99,7 +100,7 @@ Generate a governance proposal to address this situation. Respond in JSON:
         return null;
       }
 
-      const proposalId = `ai-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const proposalId = `ai-${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
       await db.insert(governanceProposals).values({
         id: proposalId,
         title: `[AI] ${parsed.title}`,

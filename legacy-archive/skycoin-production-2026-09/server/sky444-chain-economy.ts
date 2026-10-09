@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKY444 Chain Economy Engine
  * Phase 5A — Sovereignty Build
@@ -430,7 +431,7 @@ class TreasuryContractService {
     if (tx.approvedBy.length >= tx.requiredApprovals) {
       tx.status = "executed";
       tx.executedAt = new Date();
-      tx.txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+      tx.txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
       if (tx.type === "withdrawal" || tx.type === "reward") {
         this.balance -= tx.amount;
       } else if (tx.type === "deposit") {
@@ -482,7 +483,7 @@ class BurnContractService {
   };
 
   executeBurn(amount: bigint, reason: string): { txHash: string; totalBurned: bigint; deflationRate: number } {
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     this.totalBurned += amount;
     this.burnEvents.push({ amount, reason, txHash, timestamp: new Date() });
     const totalSupply = BigInt("4444444444000000000000000000");
@@ -956,7 +957,7 @@ class LaunchpadService {
     if (amount < project.minContribution) return { success: false, allocation: 0, txHash: "", error: "Below minimum contribution" };
     if (amount > project.maxContribution) return { success: false, allocation: 0, txHash: "", error: "Above maximum contribution" };
     if (project.raisedAmount + amount > project.hardCap) return { success: false, allocation: 0, txHash: "", error: "Hard cap reached" };
-    const txHash = `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`;
+    const txHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`;
     const allocations = this.allocations.get(projectId) || [];
     allocations.push({ userId, amount, txHash, timestamp: new Date() });
     this.allocations.set(projectId, allocations);

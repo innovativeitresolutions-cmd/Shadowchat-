@@ -32,8 +32,7 @@ export default function SignUp() {
       const codeSnippet = `// Signup validation for ${formData.email}\nif (!email.includes('@')) return false;`;
       setAiCodeFeed(prev => [...prev, codeSnippet]);
     } catch (error) {
-      console.error("AI code generation failed:", error);
-    }
+          }
     setLoading(false);
   };
 
@@ -45,8 +44,7 @@ export default function SignUp() {
       await new Promise(resolve => setTimeout(resolve, 500));
       window.location.href = "/dashboard";
     } catch (error) {
-      console.error("Signup failed:", error);
-    }
+          }
     setLoading(false);
   };
 
@@ -146,8 +144,7 @@ export default function SignUp() {
                   className="mt-2 text-xs bg-purple-600 hover:bg-purple-600"
                   onClick={() => {
                     // Auto-implement if smart enough
-                    console.log("Implementing AI code:", code);
-                  }}
+                                      }}
                 >
                   Implement
                 </Button>

@@ -49,7 +49,7 @@ export default function MatchChat() {
         "Wow, I hadn't thought about it that way!",
         "You seem really knowledgeable about this 😊",
       ];
-      const reply = { id: Date.now() + 1, sender: "them" as const, text: replies[Math.floor(Math.random() * replies.length)], time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
+      const reply = { id: Date.now() + 1, sender: "them" as const, text: replies[Math.floor((Math.random()) * replies.length)], time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
       setMessages(prev => [...prev, reply]);
     }, 1500);
   };

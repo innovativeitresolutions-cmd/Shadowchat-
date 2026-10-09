@@ -33,8 +33,7 @@ class AICodeImprover {
    * Analyze codebase for issues
    */
   async analyzeCodebase(): Promise<CodeIssue[]> {
-    console.log('[AI Coder] Starting codebase analysis...');
-
+    
     try {
       // Run TypeScript compiler
       const { stdout: tsOutput } = await execAsync('pnpm tsc --noEmit 2>&1 || true');
@@ -76,11 +75,9 @@ class AICodeImprover {
         // ESLint might not be configured
       }
 
-      console.log(`[AI Coder] Found ${issues.length} issues`);
-      return issues;
+            return issues;
     } catch (error) {
-      console.error('[AI Coder] Analysis failed:', error);
-      return [];
+            return [];
     }
   }
 
@@ -88,8 +85,7 @@ class AICodeImprover {
    * Suggest improvements using LLM
    */
   async suggestImprovements(): Promise<string[]> {
-    console.log('[AI Coder] Analyzing code for improvements...');
-
+    
     try {
       // Get list of TypeScript files
       const { stdout: files } = await execAsync('find . -name "*.ts" -not -path "./node_modules/*" | head -20');
@@ -123,8 +119,7 @@ class AICodeImprover {
 
       return improvements;
     } catch (error) {
-      console.error('[AI Coder] Suggestion generation failed:', error);
-      return [];
+            return [];
     }
   }
 
@@ -132,8 +127,7 @@ class AICodeImprover {
    * Auto-fix common issues
    */
   async autoFixIssues(): Promise<number> {
-    console.log('[AI Coder] Auto-fixing issues...');
-
+    
     let fixedCount = 0;
 
     try {
@@ -148,11 +142,9 @@ class AICodeImprover {
       await execAsync('pnpm eslint . --fix 2>&1 || true');
       fixedCount++;
 
-      console.log(`[AI Coder] Auto-fixed ${fixedCount} categories`);
-      return fixedCount;
+            return fixedCount;
     } catch (error) {
-      console.error('[AI Coder] Auto-fix failed:', error);
-      return fixedCount;
+            return fixedCount;
     }
   }
 
@@ -160,8 +152,7 @@ class AICodeImprover {
    * Generate performance optimizations
    */
   async optimizePerformance(): Promise<ImprovalLog> {
-    console.log('[AI Coder] Generating performance optimizations...');
-
+    
     const log: ImprovalLog = {
       timestamp: Date.now(),
       type: 'optimization',
@@ -211,8 +202,7 @@ class AICodeImprover {
    * Generate test coverage improvements
    */
   async improveTestCoverage(): Promise<ImprovalLog> {
-    console.log('[AI Coder] Analyzing test coverage...');
-
+    
     const log: ImprovalLog = {
       timestamp: Date.now(),
       type: 'feature',
@@ -256,8 +246,7 @@ class AICodeImprover {
    * Refactor code for maintainability
    */
   async refactorCode(): Promise<ImprovalLog> {
-    console.log('[AI Coder] Analyzing code for refactoring opportunities...');
-
+    
     const log: ImprovalLog = {
       timestamp: Date.now(),
       type: 'refactor',
@@ -304,22 +293,19 @@ class AICodeImprover {
    * Run full improvement cycle
    */
   async runFullCycle(): Promise<ImprovalLog[]> {
-    console.log('[AI Coder] Starting full improvement cycle...');
-
+    
     const logs: ImprovalLog[] = [];
 
     try {
       // 1. Analyze issues
       const issues = await this.analyzeCodebase();
-      console.log(`[AI Coder] Found ${issues.length} issues`);
-
+      
       // 2. Auto-fix common issues
       await this.autoFixIssues();
 
       // 3. Generate suggestions
       const suggestions = await this.suggestImprovements();
-      console.log(`[AI Coder] Generated ${suggestions.length} suggestions`);
-
+      
       // 4. Performance optimization
       logs.push(await this.optimizePerformance());
 
@@ -339,8 +325,7 @@ class AICodeImprover {
       this.improvementLogs.push(...logs);
       return logs;
     } catch (error) {
-      console.error('[AI Coder] Full cycle failed:', error);
-      await notifyOwner({
+            await notifyOwner({
         title: 'AI Code Improvement Cycle Failed',
         content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
       });

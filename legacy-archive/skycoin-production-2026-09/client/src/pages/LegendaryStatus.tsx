@@ -98,7 +98,7 @@ export default function LegendaryStatus() {
                   className="w-full h-full object-cover object-top"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
-                    (e.target as HTMLImageElement).parentElement!.innerHTML =
+                    (e.target as HTMLImageElement).parentElement!.textContent =
                       '<div class="w-full h-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-5xl font-black text-black">S</div>';
                   }}
                 />

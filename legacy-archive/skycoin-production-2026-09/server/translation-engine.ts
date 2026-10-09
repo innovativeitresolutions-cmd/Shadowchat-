@@ -63,8 +63,7 @@ export async function detectLanguage(text: string): Promise<string> {
     const detected = (typeof content === "string" ? content : "").trim().toLowerCase() || "en";
     return Object.keys(LANGUAGE_CODES).includes(detected) ? detected : "en";
   } catch (error) {
-    console.error("[Translation] Language detection error:", error);
-    return "en";
+        return "en";
   }
 }
 
@@ -118,8 +117,7 @@ Maintain tone, style, and meaning. Respond with ONLY the translated text, no exp
       timestamp: new Date(),
     };
   } catch (error) {
-    console.error("[Translation] Translation error:", error);
-    // Fallback: return original text
+        // Fallback: return original text
     return {
       original: text,
       translated: text,

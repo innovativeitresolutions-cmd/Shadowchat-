@@ -62,14 +62,12 @@ export async function processDatingSubscriptionPayment(
         content: `You now have access to ${tier} dating features!`,
       });
 
-      console.log(`[Dating Payment] ${tier} subscription activated for user ${userId}`);
-      return { success: true, subscriptionId: paymentResult.transactionId };
+            return { success: true, subscriptionId: paymentResult.transactionId };
     }
 
     return { success: false, error: 'Payment failed' };
   } catch (error) {
-    console.error('[Dating Payment Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -105,11 +103,9 @@ export async function generateAIMatchingInsights(
       },
     });
 
-    console.log(`[Dating AI] Generated insights for match ${matchId}`);
-    return insights;
+        return insights;
   } catch (error) {
-    console.error('[Dating AI Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -129,8 +125,7 @@ export async function generateConversationStarters(
 
     return starters;
   } catch (error) {
-    console.error('[Dating Conversation Starters] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -174,10 +169,8 @@ export async function notifyDatingEvent(
       metadata: { fromUserId, ...metadata },
     });
 
-    console.log(`[Dating Notification] ${eventType} event notified to user ${userId}`);
-  } catch (error) {
-    console.error('[Dating Notification Integration] Error:', error);
-    throw error;
+      } catch (error) {
+        throw error;
   }
 }
 
@@ -205,11 +198,9 @@ export async function shareDatingProfile(userId: number, matchId: number) {
       visibility: 'followers',
     });
 
-    console.log(`[Dating Social] Profile shared, post created: ${post.id}`);
-    return post;
+        return post;
   } catch (error) {
-    console.error('[Dating Social Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -224,11 +215,9 @@ export async function publishDatingStory(userId: number, storyContent: string) {
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
     });
 
-    console.log(`[Dating Story] Story published: ${post.id}`);
-    return post;
+        return post;
   } catch (error) {
-    console.error('[Dating Story Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -257,11 +246,9 @@ export async function initiateDatingVideoStream(
       message: 'Starting video date...',
     });
 
-    console.log(`[Dating Stream] Stream initiated: ${stream.id}`);
-    return stream;
+        return stream;
   } catch (error) {
-    console.error('[Dating Streaming Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -291,13 +278,11 @@ export async function verifyDatingProfile(userId: number) {
         content: 'Your dating profile has been verified!',
       });
 
-      console.log(`[Dating Security] Profile verified for user ${userId}`);
-    }
+          }
 
     return verification;
   } catch (error) {
-    console.error('[Dating Security Integration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -314,11 +299,9 @@ export async function flagSuspiciousActivity(
       context: 'dating',
     });
 
-    console.log(`[Dating Security] Suspicious activity reported: ${report.id}`);
-    return report;
+        return report;
   } catch (error) {
-    console.error('[Dating Security Report] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -349,11 +332,9 @@ export async function orchestrateDatingMatch(
       ],
     });
 
-    console.log(`[Dating Orchestration] Match orchestrated: ${orchestration.id}`);
-    return orchestration;
+        return orchestration;
   } catch (error) {
-    console.error('[Dating Orchestration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -381,11 +362,9 @@ export async function orchestrateDatingMessage(
       ],
     });
 
-    console.log(`[Dating Message Orchestration] Message processed: ${orchestration.id}`);
-    return orchestration;
+        return orchestration;
   } catch (error) {
-    console.error('[Dating Message Orchestration] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -406,10 +385,8 @@ export async function trackDatingMetrics(
       timestamp: new Date(),
     });
 
-    console.log(`[Dating Metrics] Event tracked: ${context.action}`);
-  } catch (error) {
-    console.error('[Dating Metrics] Error:', error);
-  }
+      } catch (error) {
+      }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -427,6 +404,5 @@ export async function checkDatingIntegrationHealth() {
     orchestration: await multiAgentOrchestrator.healthCheck?.(),
   };
 
-  console.log('[Dating Integration Health]', health);
-  return health;
+    return health;
 }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from "./server/_core/llm";
 
 /**
@@ -42,8 +43,7 @@ class AITradingBot {
       this.startTradingCycle(config.userId);
     }
 
-    console.log(`[AI Trading] Initialized trading for user ${config.userId}`);
-  }
+      }
 
   /**
    * Start continuous trading cycle
@@ -82,10 +82,8 @@ class AITradingBot {
         this.totalProfit.set(userId, currentProfit + trade.profit);
       }
 
-      console.log(`[AI Trading] Executed ${signals.length} trades for user ${userId}`);
-    } catch (error) {
-      console.error(`[AI Trading] Error in trading cycle for ${userId}:`, error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -147,8 +145,7 @@ class AITradingBot {
       }
       return [];
     } catch (error) {
-      console.error("[AI Trading] Signal generation error:", error);
-      return [];
+            return [];
     }
   }
 
@@ -159,8 +156,8 @@ class AITradingBot {
     config: TradeConfig,
     signal: { pair: string; type: string; amount: number; confidence: number }
   ): Promise<TradeExecution> {
-    const price = Math.random() * 50000 + 20000;
-    const profit = (Math.random() - 0.4) * signal.amount * price * 0.02;
+    const price = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50000 + 20000;
+    const profit = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.4) * signal.amount * price * 0.02;
 
     return {
       timestamp: Date.now(),
@@ -214,8 +211,7 @@ class AITradingBot {
       clearInterval(interval);
       this.tradeIntervals.delete(userId);
     }
-    console.log(`[AI Trading] Stopped trading for user ${userId}`);
-  }
+      }
 
   /**
    * Get trading statistics

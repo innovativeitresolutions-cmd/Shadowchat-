@@ -34,22 +34,19 @@ export const miningHeartbeatConfig: HeartbeatConfig = {
  * Execute mining heartbeat task
  */
 export async function executeMiningHeartbeat(): Promise<any> {
-  console.log('[Heartbeat] Mining heartbeat task started');
-
+  
   try {
     // Check if mining is running
     const status = autonomousMining.getStatus();
 
     if (!status.isRunning) {
-      console.log('[Heartbeat] Starting autonomous mining...');
-      await autonomousMining.startMining();
+            await autonomousMining.startMining();
     }
 
     // Get current statistics
     const stats = autonomousMining.getStatistics();
 
-    console.log('[Heartbeat] Mining statistics:', stats);
-
+    
     // Send hourly report
     await notifyOwner({
       title: 'Hourly Mining Report',
@@ -71,8 +68,7 @@ Uptime: ${Math.floor(stats.uptime / 3600000)} hours
       message: 'Mining heartbeat executed successfully',
     };
   } catch (error) {
-    console.error('[Heartbeat] Mining heartbeat failed:', error);
-
+    
     await notifyOwner({
       title: 'Mining Heartbeat Failed',
       content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -100,8 +96,7 @@ export const miningHealthCheckConfig: HeartbeatConfig = {
  * Execute health check
  */
 export async function executeMiningHealthCheck(): Promise<any> {
-  console.log('[Heartbeat] Mining health check started');
-
+  
   try {
     const status = autonomousMining.getStatus();
     const stats = autonomousMining.getStatistics();
@@ -110,8 +105,7 @@ export async function executeMiningHealthCheck(): Promise<any> {
     const isHealthy = status.isRunning && status.activeMiners > 0;
 
     if (!isHealthy) {
-      console.warn('[Heartbeat] Mining system is not healthy');
-
+      
       await notifyOwner({
         title: 'Mining Health Alert',
         content: `Mining system is not healthy. Status: ${JSON.stringify(status)}`,
@@ -125,8 +119,7 @@ export async function executeMiningHealthCheck(): Promise<any> {
       stats,
     };
   } catch (error) {
-    console.error('[Heartbeat] Health check failed:', error);
-
+    
     await notifyOwner({
       title: 'Mining Health Check Failed',
       content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -154,8 +147,7 @@ export const rewardDistributionConfig: HeartbeatConfig = {
  * Execute reward distribution check
  */
 export async function executeRewardDistribution(): Promise<any> {
-  console.log('[Heartbeat] Reward distribution check started');
-
+  
   try {
     const stats = autonomousMining.getStatistics();
     const sessions = autonomousMining.getSessions(100);
@@ -165,8 +157,7 @@ export async function executeRewardDistribution(): Promise<any> {
       return sum + (session.coinsGenerated - session.rewardsSent);
     }, 0);
 
-    console.log(`[Heartbeat] Pending rewards: ${pendingRewards} coins`);
-
+    
     if (pendingRewards > 0) {
       await notifyOwner({
         title: 'Pending Rewards Detected',
@@ -181,8 +172,7 @@ export async function executeRewardDistribution(): Promise<any> {
       sessions: sessions.length,
     };
   } catch (error) {
-    console.error('[Heartbeat] Reward distribution check failed:', error);
-
+    
     await notifyOwner({
       title: 'Reward Distribution Check Failed',
       content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -210,8 +200,7 @@ export const optimizationConfig: HeartbeatConfig = {
  * Execute optimization
  */
 export async function executeMiningOptimization(): Promise<any> {
-  console.log('[Heartbeat] Mining optimization started');
-
+  
   try {
     const stats = autonomousMining.getStatistics();
     const sessions = autonomousMining.getSessions(50);
@@ -220,18 +209,14 @@ export async function executeMiningOptimization(): Promise<any> {
     const avgCoinsPerSession = stats.averageCoinsPerSession;
     const totalRewards = stats.totalRewardsSent;
 
-    console.log(`[Heartbeat] Optimization analysis:
-- Average coins per session: ${avgCoinsPerSession.toFixed(2)}
-- Total rewards sent: ${totalRewards}
-- Active miners: ${stats.activeMiners}
-    `);
+    // Report the measured session statistics below.
 
     await notifyOwner({
       title: 'Daily Mining Optimization Report',
       content: `
 Performance Analysis:
 - Average coins/session: ${avgCoinsPerSession.toFixed(2)}
-- Total rewards sent: ${totalRewards}
+// Total rewards sent: ${totalRewards}
 - Total sessions: ${stats.totalSessions}
 - Optimization recommendations: Increase pool count, adjust difficulty settings, optimize GPU allocation
       `,
@@ -243,8 +228,7 @@ Performance Analysis:
       recommendation: 'Increase pool count for better performance',
     };
   } catch (error) {
-    console.error('[Heartbeat] Optimization failed:', error);
-
+    
     await notifyOwner({
       title: 'Mining Optimization Failed',
       content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -259,8 +243,7 @@ Performance Analysis:
  * This should be called during server initialization
  */
 export async function registerMiningHeartbeats(): Promise<void> {
-  console.log('[Mining] Registering heartbeat tasks...');
-
+  
   // In production, these would be registered with Manus Heartbeat service
   // For now, we'll set up local intervals as fallback
 
@@ -269,8 +252,7 @@ export async function registerMiningHeartbeats(): Promise<void> {
     try {
       await executeMiningHeartbeat();
     } catch (error) {
-      console.error('[Heartbeat] Mining heartbeat error:', error);
-    }
+          }
   }, 3600000); // 1 hour
 
   // Health check every 30 minutes
@@ -278,8 +260,7 @@ export async function registerMiningHeartbeats(): Promise<void> {
     try {
       await executeMiningHealthCheck();
     } catch (error) {
-      console.error('[Heartbeat] Health check error:', error);
-    }
+          }
   }, 1800000); // 30 minutes
 
   // Reward distribution every 6 hours
@@ -287,8 +268,7 @@ export async function registerMiningHeartbeats(): Promise<void> {
     try {
       await executeRewardDistribution();
     } catch (error) {
-      console.error('[Heartbeat] Reward distribution error:', error);
-    }
+          }
   }, 21600000); // 6 hours
 
   // Optimization daily at 2 AM UTC
@@ -304,21 +284,18 @@ export async function registerMiningHeartbeats(): Promise<void> {
     try {
       await executeMiningOptimization();
     } catch (error) {
-      console.error('[Heartbeat] Optimization error:', error);
-    }
+          }
 
     // Then repeat daily
     setInterval(async () => {
       try {
         await executeMiningOptimization();
       } catch (error) {
-        console.error('[Heartbeat] Optimization error:', error);
-      }
+              }
     }, 86400000); // 24 hours
   }, delay);
 
-  console.log('[Mining] Heartbeat tasks registered successfully');
-}
+  }
 
 export default {
   miningHeartbeatConfig,

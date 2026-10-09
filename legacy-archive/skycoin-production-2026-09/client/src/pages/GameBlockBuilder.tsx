@@ -45,7 +45,7 @@ export default function GameBlockBuilder() {
   }, [gameState, currentBlock, direction, speed]);
 
   const generateBlock = useCallback((width: number): Block => {
-    const idx = Math.floor(Math.random() * BLOCK_COLORS.length);
+    const idx = Math.floor((Math.random()) * BLOCK_COLORS.length);
     return { id: Date.now(), color: BLOCK_COLORS[idx], label: BLOCK_LABELS[idx], width };
   }, []);
 

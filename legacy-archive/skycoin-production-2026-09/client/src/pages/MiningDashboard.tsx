@@ -135,7 +135,7 @@ export default function MiningDashboard() {
 
     // Real-time USD value update
     const usdInterval = setInterval(() => {
-      setUsdValue((prev) => prev + Math.random() * 50);
+      setUsdValue((prev) => prev + (Math.random()) * 50);
     }, 5000);
 
     return () => {

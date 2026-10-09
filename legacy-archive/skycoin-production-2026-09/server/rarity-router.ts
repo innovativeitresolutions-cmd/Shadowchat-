@@ -1,10 +1,11 @@
+import crypto from 'crypto';
 import { publicProcedure, router } from "./_core/trpc";
 
 export const rarityRouter = router({
   calculateRarity: publicProcedure.query(async () => {
     const uniqueFeatures = 444; // 444 upgrades
     const integrationDepth = 50; // 50 systems integrated
-    const userCount = Math.floor(Math.random() * 50000 + 1000);
+    const userCount = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50000 + 1000);
     
     const rarityScore = (uniqueFeatures * integrationDepth * userCount) / 1000;
     
@@ -16,7 +17,7 @@ export const rarityRouter = router({
         integrationDepth,
         userCount,
       },
-      percentile: Math.floor(Math.random() * 100 + 50), // Top 50%
+      percentile: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 + 50), // Top 50%
       trend: "+15% this week",
       timestamp: new Date().toISOString(),
     };
@@ -27,7 +28,7 @@ export const rarityRouter = router({
     for (let i = 30; i >= 0; i--) {
       trend.push({
         day: i,
-        score: Math.floor(Math.random() * 1000 + 5000),
+        score: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000 + 5000),
         timestamp: Date.now() - i * 86400000,
       });
     }

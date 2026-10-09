@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * NSFW Creator Platform Engine
  * Age verification, content gating, subscription tiers, PPV, payouts
@@ -114,7 +115,7 @@ export async function verifyAge(
   }
 
   const expiresAt = Date.now() + AGE_GATE_SESSION_HOURS * 60 * 60 * 1000;
-  const sessionToken = `age_${userId}_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const sessionToken = `age_${userId}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
 
   return { verified, method, expiresAt, sessionToken };
 }

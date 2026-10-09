@@ -51,14 +51,14 @@ export default function App() {
       <WalletWidget
         tokens={['SKY444', 'ETH']}
         showChart={true}
-        onSend={(tx) => console.log('Sent:', tx)}
+        onSend={(tx) => }
       />
 
       {/* Hope AI chat */}
       <AIChat
         persona="hope"
         placeholder="Ask me anything..."
-        onMessage={(msg) => console.log(msg)}
+        onMessage={(msg) => }
       />
     </ShadowChatProvider>
   );
@@ -85,7 +85,6 @@ X-ShadowChat-Signature: sha256=...
 }
 
 // Verify signature
-import crypto from 'crypto';
 const sig = crypto
   .createHmac('sha256', process.env.WEBHOOK_SECRET)
   .update(rawBody)

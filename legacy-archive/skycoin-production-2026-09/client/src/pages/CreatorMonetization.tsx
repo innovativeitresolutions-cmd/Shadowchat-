@@ -12,9 +12,9 @@ import { Link } from "wouter";
 
 const REVENUE_DATA = Array.from({length:12},(_,i)=>({
   month:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][i],
-  subscriptions: Math.floor(Math.random()*500+200),
-  tips: Math.floor(Math.random()*300+100),
-  content: Math.floor(Math.random()*200+50),
+  subscriptions: Math.floor((Math.random())*500+200),
+  tips: Math.floor((Math.random())*300+100),
+  content: Math.floor((Math.random())*200+50),
 }));
 
 const MONETIZATION_FEATURES = [

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { z } from 'zod';
 import { publicProcedure, router } from './_core/trpc';
 
@@ -97,7 +98,7 @@ export const realAIEngine = {
       `I've processed your feedback. Key metrics: 1,247 total feedback items, 28% positive sentiment, 15% improvement requests. Your input ranks in top 10% for actionability. Shall I route this to the product team?`,
       `Feedback analysis complete. Sentiment: Positive. Urgency: Medium. Related feedback from 342 users. Recommended action: Add to Q3 roadmap. Confidence: 94%.`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Roadmap-related responses
@@ -107,7 +108,7 @@ export const realAIEngine = {
       `Roadmap analysis: 12 high-priority items, 18 medium-priority, 8 low-priority. Your suggestion aligns with 3 existing initiatives. Confidence in success: 87%. Timeline: 6-8 weeks. Would you like detailed implementation plan?`,
       `I've cross-referenced your roadmap question with competitive landscape. Market gap identified: ${['real-time collaboration', 'offline mode', 'API extensibility'].join(', ')}. Recommendation: Prioritize based on customer demand signals.`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Market-related responses
@@ -117,7 +118,7 @@ export const realAIEngine = {
       `Competitive intelligence: 24 competitors tracked. Market share: 12.3%. Trend: Growing. Your question about "${message.substring(0, 35)}..." suggests market opportunity worth $2.4M. Recommendation: Launch targeted campaign.`,
       `Market sentiment: 73% positive. Volume: 15.2K mentions. Trending topics: ${['AI integration', 'mobile-first', 'sustainability'].join(', ')}. Your product aligns with 2/3 trends. Competitive advantage: 78%.`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Trading-related responses
@@ -127,7 +128,7 @@ export const realAIEngine = {
       `Portfolio optimization: Based on "${message.substring(0, 40)}...", I suggest rebalancing. Current allocation: 40% crypto, 35% stocks, 25% stables. Recommended: 45% crypto, 30% stocks, 25% stables. Expected return: +12% annually.`,
       `Trade execution ready. Signal strength: 8.6/10. Entry point: $4.44. Target: $5.67. Stop-loss: $3.89. Risk/reward: 1:2.8. Confidence: 89%. Execute? (Requires 2FA confirmation)`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Help-related responses
@@ -135,9 +136,9 @@ export const realAIEngine = {
     const responses = [
       `Help available for: ${['Getting started', 'Account setup', 'Trading basics', 'Security', 'Troubleshooting'].join(', ')}. Your question about "${message.substring(0, 35)}..." matches "Trading basics". Here's a step-by-step guide...`,
       `I found 12 relevant help articles. Top match: "How to maximize trading returns" (98% relevance). Video tutorial available (4:32). Community discussions: 342 responses. Would you like me to summarize?`,
-      `Support ticket created. Category: Technical. Priority: High. Estimated response: 15 minutes. Ticket ID: #SKY-${Math.random().toString(36).substring(7).toUpperCase()}. I'll monitor and escalate if needed.`,
+      `Support ticket created. Category: Technical. Priority: High. Estimated response: 15 minutes. Ticket ID: #SKY-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substring(7).toUpperCase()}. I'll monitor and escalate if needed.`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Analytics-related responses
@@ -147,7 +148,7 @@ export const realAIEngine = {
       `Data analysis: 2.3M events processed. Trends: ${['mobile growth', 'international expansion', 'creator economy'].join(', ')}. Your metric "${message.substring(0, 30)}..." is trending +23% week-over-week. Forecast: Continued growth.`,
       `Real-time analytics: Active users: 3,421. Revenue: $12,847 (today). Growth rate: +4.2% daily. Your question triggers 5 automated reports. Download? (CSV, JSON, PDF available)`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // General responses
@@ -157,7 +158,7 @@ export const realAIEngine = {
       `Analyzing your input with AI context engine. Confidence: 92%. Related to: ${['HOPE AI', 'Feedback Hub', 'Competitive Radar'].join(', ')}. Recommendation: ${['Explore related features', 'Connect with team', 'View documentation'].join(', ')}. Need more details?`,
       `Processing request through SKYCOIN4444 ecosystem. Your question "${message.substring(0, 35)}..." matches 7 system modules. Highest relevance: Strategic Engine Analysis. Generating comprehensive response...`,
     ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return responses[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * responses.length)];
   },
 
   // Clear conversation history
@@ -191,8 +192,8 @@ export const aiRouter = router({
         success: true,
         response,
         timestamp: new Date(),
-        confidence: Math.random() * 0.15 + 0.85, // 85-100% confidence
-        processingTime: Math.floor(Math.random() * 500) + 200, // 200-700ms
+        confidence: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.15 + 0.85, // 85-100% confidence
+        processingTime: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500) + 200, // 200-700ms
       };
     }),
 

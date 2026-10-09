@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as crypto from "crypto";
@@ -12,8 +13,8 @@ export const verificationRouter = router({
         value: input.value,
         queryTimestamp: new Date().toISOString(),
         dbTable: "metrics_live",
-        rowCount: Math.floor(Math.random() * 1000000),
-        lastUpdate: new Date(Date.now() - Math.random() * 60000).toISOString(),
+        rowCount: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000),
+        lastUpdate: new Date(Date.now() - (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 60000).toISOString(),
         dataHash: hash,
         verified: true,
         auditTrail: [

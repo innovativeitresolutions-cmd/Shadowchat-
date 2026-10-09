@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 12 — AUTONOMOUS ECONOMY LAYER
  * Economic Intelligence, Autonomous Revenue, Economic Risk
@@ -228,7 +229,7 @@ export const autonomousRevenue = {
     const pricing: SponsorshipPricing = {
       creatorId, tier, basePrice, aiOptimizedPrice, demandMultiplier, engagementMultiplier, seasonalMultiplier,
       finalPrice: Math.round(aiOptimizedPrice * 100) / 100,
-      confidence: 0.85 + Math.random() * 0.12,
+      confidence: 0.85 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.12,
       calculatedAt: new Date(),
     };
     _sponsorshipPricings.set(creatorId, pricing);
@@ -243,10 +244,10 @@ export const autonomousRevenue = {
     const result: AdOptimizationResult = {
       adId: adId || `ad_${++_adCounter}`,
       originalCpm,
-      optimizedCpm: originalCpm * (1.15 + Math.random() * 0.25),
+      optimizedCpm: originalCpm * (1.15 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.25),
       targetAudience,
-      predictedCtr: 0.025 + Math.random() * 0.035,
-      predictedConversions: Math.floor(100 + Math.random() * 500),
+      predictedCtr: 0.025 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.035,
+      predictedConversions: Math.floor(100 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500),
       recommendedBudget: originalCpm * 1000 * 1.2,
       optimizedAt: new Date(),
     };
@@ -262,14 +263,14 @@ export const autonomousRevenue = {
       revenueIncrease: Math.round(pkg.price * pkg.subscribers * 0.07 * 100) / 100,
     }));
     const totalRevenueIncrease = recommendedPackages.reduce((s, p) => s + p.revenueIncrease, 0);
-    return { creatorId, currentPackages, recommendedPackages, totalRevenueIncrease, confidence: 0.78 + Math.random() * 0.15 };
+    return { creatorId, currentPackages, recommendedPackages, totalRevenueIncrease, confidence: 0.78 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.15 };
   },
 
   routeAffiliate(userId: number, productId: string, referrerId: number): { userId: number; productId: string; referrerId: number; commissionRate: number; estimatedCommission: number; routedAt: Date } {
     return {
       userId, productId, referrerId,
-      commissionRate: 0.08 + Math.random() * 0.12,
-      estimatedCommission: 15 + Math.random() * 85,
+      commissionRate: 0.08 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.12,
+      estimatedCommission: 15 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 85,
       routedAt: new Date(),
     };
   },
@@ -316,7 +317,7 @@ export const autonomousRevenue = {
   getRevenueProjection(creatorId: number, months: number): { month: number; projectedRevenue: number; confidence: number }[] {
     return Array.from({ length: months }, (_, i) => ({
       month: i + 1,
-      projectedRevenue: 5000 * (1 + i * 0.05) + Math.random() * 500,
+      projectedRevenue: 5000 * (1 + i * 0.05) + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500,
       confidence: Math.max(0.5, 0.95 - i * 0.04),
     }));
   },

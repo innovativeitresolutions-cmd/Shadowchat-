@@ -73,13 +73,13 @@ export default function WhaleMonitor() {
     intervalRef.current = setInterval(() => {
       const newTx: Tx = {
         id: `sim-${Date.now()}`,
-        type: types[Math.floor(Math.random() * 4)],
-        token: tokens[Math.floor(Math.random() * 5)],
-        amount: `${(Math.random() * 900000 + 100000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
-        usd: `$${(Math.random() * 500000 + 50000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
-        wallet: `0x${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`,
+        type: types[Math.floor((Math.random()) * 4)],
+        token: tokens[Math.floor((Math.random()) * 5)],
+        amount: `${((Math.random()) * 900000 + 100000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+        usd: `$${((Math.random()) * 500000 + 50000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+        wallet: `0x${(Math.random()).toString(16).slice(2, 6)}...${(Math.random()).toString(16).slice(2, 6)}`,
         time: "just now",
-        impact: ["low", "medium", "high"][Math.floor(Math.random() * 3)] as Tx["impact"],
+        impact: ["low", "medium", "high"][Math.floor((Math.random()) * 3)] as Tx["impact"],
       };
       setLiveTxs(prev => [newTx, ...prev.slice(0, 29)]);
     }, 5000);

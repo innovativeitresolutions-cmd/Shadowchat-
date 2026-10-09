@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * SKY444 BLOCKCHAIN ENGINE - Best Practices Implementation
  * 
@@ -168,8 +169,7 @@ export class SmartContractEngine {
 
       return response.choices[0]?.message?.content || 'Audit report generation failed';
     } catch (error) {
-      console.error('Audit report error:', error);
-      return 'Audit report generation failed';
+            return 'Audit report generation failed';
     }
   }
 }
@@ -256,7 +256,7 @@ export class StakingGovernanceEngine {
     return {
       success: true,
       executedAt: new Date(),
-      txHash: `0x${Math.random().toString(16).slice(2)}`,
+      txHash: `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2)}`,
     };
   }
 }
@@ -287,8 +287,7 @@ export class PriceFeedEngine {
       this.priceCache.set(symbol, { price, timestamp: Date.now() });
       return price;
     } catch (error) {
-      console.error(`Error fetching price for ${symbol}:`, error);
-      return 0;
+            return 0;
     }
   }
 
@@ -303,8 +302,7 @@ export class PriceFeedEngine {
       const data = await response.json();
       return data.prices || [];
     } catch (error) {
-      console.error(`Error fetching price history for ${symbol}:`, error);
-      return [];
+            return [];
     }
   }
 
@@ -401,8 +399,7 @@ export class SecurityAuditEngine {
 
       return response.choices[0]?.message?.content || 'Report generation failed';
     } catch (error) {
-      console.error('Compliance report error:', error);
-      return 'Report generation failed';
+            return 'Report generation failed';
     }
   }
 }

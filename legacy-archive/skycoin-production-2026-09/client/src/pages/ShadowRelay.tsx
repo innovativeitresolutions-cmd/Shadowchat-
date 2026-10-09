@@ -37,7 +37,7 @@ export default function ShadowRelay() {
   const removeFromChain = (id: string) => setChain(prev => prev.filter(n => n.id !== id));
 
   const buildRandomChain = () => {
-    const shuffled = [...RELAY_NODES].sort(() => Math.random() - 0.5).slice(0, hops);
+    const shuffled = [...RELAY_NODES].sort(() => (Math.random()) - 0.5).slice(0, hops);
     setChain(shuffled);
     toast.success(`${hops}-hop relay chain built`);
   };

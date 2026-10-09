@@ -33,8 +33,7 @@ export function Signin() {
         return;
       }
 
-      // Mock signin - in production, call API
-      const token = btoa(`${formData.email}:${formData.password}`);
+            const token = btoa(`${formData.email}:${formData.password}`);
       localStorage.setItem("auth_token", token);
       localStorage.setItem("user_email", formData.email);
       localStorage.setItem("user_name", formData.email.split("@")[0]);

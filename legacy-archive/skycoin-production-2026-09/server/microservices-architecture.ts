@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Skycoin4444 Microservices Architecture
  * 
@@ -390,7 +391,7 @@ export class LoadBalancer {
   }
 
   private random(instances: ServiceInstance[]): ServiceInstance {
-    return instances[Math.floor(Math.random() * instances.length)];
+    return instances[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * instances.length)];
   }
 
   private leastConnections(instances: ServiceInstance[]): ServiceInstance {
@@ -412,18 +413,18 @@ export interface TraceContext {
 
 export class DistributedTracer {
   static generateTraceId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`;
   }
 
   static generateSpanId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return (crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9);
   }
 
   static createContext(): TraceContext {
     return {
       traceId: this.generateTraceId(),
       spanId: this.generateSpanId(),
-      sampled: Math.random() < 0.1, // 10% sampling
+      sampled: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) < 0.1, // 10% sampling
     };
   }
 

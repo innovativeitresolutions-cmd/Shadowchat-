@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * CIPHER DeFi Engine v2.0
  * Production-grade decentralized finance engine for SKYCOIN4444
@@ -360,13 +361,13 @@ export class PriceFeedEngine {
     const interval = (days * 86400000) / 100;
 
     for (let i = 0; i < 100; i++) {
-      const change = (Math.random() - 0.48) * 0.03;
+      const change = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.48) * 0.03;
       price = price * (1 + change);
       price = Math.max(price, token.price * 0.1);
       points.push({
         time: now - (100 - i) * interval,
         price: parseFloat(price.toFixed(6)),
-        volume: Math.random() * (token.volume24h || 1000000) * 0.1,
+        volume: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * (token.volume24h || 1000000) * 0.1,
       });
     }
     return points;
@@ -461,13 +462,13 @@ export class SwapEngine {
       priceImpact: bestRoute.priceImpact,
       gasEstimate: bestRoute.gasEstimate,
       validUntil: Date.now() + 30000,
-      quoteId: `quote_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      quoteId: `quote_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
     };
   }
 
   async executeSwap(quoteId: string, userAddress: string, deadline: number): Promise<{ txHash: string; status: "pending" | "confirmed" | "failed"; amountOut: string }> {
     // Simulate swap execution
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { txHash, status: "pending", amountOut: "0" };
   }
 
@@ -533,7 +534,7 @@ export class LiquidityPoolEngine {
     const totalSupply = pool.totalLiquidity;
     const lpTokens = this.calculateLPTokens(amount0, amount1, totalSupply, reserve0, reserve1);
     const sharePercent = (lpTokens / (totalSupply + lpTokens)) * 100;
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { lpTokens, sharePercent, txHash };
   }
 
@@ -543,7 +544,7 @@ export class LiquidityPoolEngine {
     const share = lpTokens / pool.totalLiquidity;
     const amount0 = share * Number(pool.reserve0) / 1e18;
     const amount1 = share * Number(pool.reserve1) / 1e18;
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { amount0, amount1, txHash };
   }
 
@@ -581,17 +582,17 @@ export class YieldFarmingEngine {
     const dailyRate = farm.apy / 365 / 100;
     const estimatedDailyReward = amount * dailyRate;
     const positionId = `pos_${Date.now()}_${userId}`;
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { positionId, txHash, estimatedDailyReward };
   }
 
   async unstake(positionId: string, userId: number): Promise<{ amount: number; rewards: number; txHash: string }> {
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { amount: 0, rewards: 0, txHash };
   }
 
   async claimRewards(positionId: string, userId: number): Promise<{ rewards: number; txHash: string }> {
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { rewards: 0, txHash };
   }
 
@@ -641,7 +642,7 @@ export class LendingEngine {
   async supply(marketId: string, amount: number, userId: number): Promise<{ txHash: string; aTokens: number; supplyAPY: number }> {
     const market = await this.getMarketById(marketId);
     if (!market) throw new Error("Market not found");
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { txHash, aTokens: amount, supplyAPY: market.supplyAPY };
   }
 
@@ -651,12 +652,12 @@ export class LendingEngine {
     if (!market || !collateral) throw new Error("Market not found");
     const healthFactor = 1.5;
     const liquidationPrice = 0;
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { txHash, healthFactor, liquidationPrice };
   }
 
   async repay(positionId: string, amount: number, userId: number): Promise<{ txHash: string; remainingDebt: number }> {
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     return { txHash, remainingDebt: 0 };
   }
 
@@ -706,7 +707,7 @@ export class ArbitrageEngine {
       const basePrice = await this.priceFeed.getPrice(token.symbol);
       for (let i = 0; i < exchanges.length; i++) {
         for (let j = i + 1; j < exchanges.length; j++) {
-          const spread = (Math.random() - 0.5) * 0.02;
+          const spread = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.02;
           const buyPrice = basePrice * (1 - Math.abs(spread) / 2);
           const sellPrice = basePrice * (1 + Math.abs(spread) / 2);
           const profitBps = Math.abs(spread) * 10000;
@@ -737,7 +738,7 @@ export class ArbitrageEngine {
   }
 
   async executeArbitrage(opportunityId: string, capital: number, userId: number): Promise<{ txHash: string; profit: number; status: string }> {
-    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
+    const txHash = `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`;
     const profit = capital * 0.005; // 0.5% profit
     return { txHash, profit, status: "executed" };
   }
@@ -760,7 +761,7 @@ export class PortfolioEngine {
     const prices = await this.priceFeed.getPrices(SUPPORTED_TOKENS.map(t => t.symbol));
 
     const positions: PortfolioPosition[] = SUPPORTED_TOKENS.slice(0, 4).map(token => {
-      const balance = BigInt(Math.floor(Math.random() * 10000 * 10 ** token.decimals));
+      const balance = BigInt(Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000 * 10 ** token.decimals));
       const price = prices[token.symbol] || 0;
       const valueUSD = Number(balance) / 10 ** token.decimals * price;
       return {
@@ -803,7 +804,7 @@ export class PortfolioEngine {
     let value = 15000;
     const now = Date.now();
     for (let i = days; i >= 0; i--) {
-      const change = (Math.random() - 0.47) * 0.03;
+      const change = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.47) * 0.03;
       value = value * (1 + change);
       points.push({ date: now - i * 86400000, value: parseFloat(value.toFixed(2)), pnl: value - 15000 });
     }
@@ -845,13 +846,13 @@ export class DexAggregator {
 
     const protocols = ["SkyDEX", "Uniswap V3", "Curve", "Balancer", "1inch"];
     const quotes = protocols.map(protocol => {
-      const variation = (Math.random() - 0.5) * 0.01;
+      const variation = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.01;
       const amountOut = baseAmountOut * (1 + variation) * 0.997;
       return {
         protocol,
         amountOut: amountOut.toFixed(6),
-        priceImpact: Math.random() * 0.5,
-        gas: 120000 + Math.floor(Math.random() * 100000),
+        priceImpact: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5,
+        gas: 120000 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
         fee: 30,
         route: [tokenIn, tokenOut],
       };
@@ -934,7 +935,7 @@ export class FlashLoanEngine {
   async getAvailableLiquidity(): Promise<Array<{ token: Token; available: bigint; fee: number; feeRate: number }>> {
     return SUPPORTED_TOKENS.slice(0, 5).map(token => ({
       token,
-      available: BigInt(Math.floor(Math.random() * 10000000 * 10 ** token.decimals)),
+      available: BigInt(Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000000 * 10 ** token.decimals)),
       fee: 9,
       feeRate: 0.0009,
     }));
@@ -952,8 +953,8 @@ export class FlashLoanEngine {
       feeRate: 0.0009,
       borrower: `user_${userId}`,
       protocol: "SkyLend",
-      txHash: `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`,
-      blockNumber: 19000000 + Math.floor(Math.random() * 100000),
+      txHash: `0x${Array.from({ length: 64 }, () => Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 16).toString(16)).join("")}`,
+      blockNumber: 19000000 + Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000),
       timestamp: Date.now(),
       success: true,
     };
@@ -1011,7 +1012,7 @@ export class CipherDeFiEngine {
   }
 
   async getGasTracker(): Promise<{ slow: number; standard: number; fast: number; instant: number; baseFee: number }> {
-    const baseFee = 15 + Math.random() * 10;
+    const baseFee = 15 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10;
     return {
       slow: Math.floor(baseFee * 1.1),
       standard: Math.floor(baseFee * 1.2),

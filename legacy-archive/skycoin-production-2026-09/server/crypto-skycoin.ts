@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 // @ts-nocheck
 import { getDb, placeTrade, updateWalletBalance, getWallet } from "./db";
 import { trades } from "../drizzle";
@@ -78,9 +79,9 @@ export function startPriceSimulation() {
   setInterval(() => {
     Object.keys(marketData).forEach((pair) => {
       const data = marketData[pair];
-      const volatility = (Math.random() - 0.5) * 0.02; // ±1% volatility
+      const volatility = ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.02; // ±1% volatility
       const newPrice = data.price * (1 + volatility);
-      const change24h = data.change24h + (Math.random() - 0.5) * 0.5;
+      const change24h = data.change24h + ((crypto.getRandomValues(new Uint8Array(1))[0] / 256) - 0.5) * 0.5;
 
       updateMarketPrice(pair, {
         price: parseFloat(newPrice.toFixed(2)),
@@ -152,8 +153,7 @@ export async function executeMarketOrder(
       message: `${side === "buy" ? "Bought" : "Sold"} ${amount} ${baseCurrency} at $${marketPrice.price}`,
     };
   } catch (error) {
-    console.error("[Crypto] Market order execution failed:", error);
-    return { success: false, message: "Order execution failed" };
+        return { success: false, message: "Order execution failed" };
   }
 }
 
@@ -187,8 +187,7 @@ export async function executeLimitOrder(
     // Execute immediately if limit is reached
     return executeMarketOrder(userId, pair, side, amount);
   } catch (error) {
-    console.error("[Crypto] Limit order execution failed:", error);
-    return { success: false, message: "Limit order failed" };
+        return { success: false, message: "Limit order failed" };
   }
 }
 
@@ -222,8 +221,7 @@ export async function executeStopOrder(
     // Execute immediately if stop is reached
     return executeMarketOrder(userId, pair, side, amount);
   } catch (error) {
-    console.error("[Crypto] Stop order execution failed:", error);
-    return { success: false, message: "Stop order failed" };
+        return { success: false, message: "Stop order failed" };
   }
 }
 

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from './server/_core/llm';
 import { advancedAIBrain } from './ai-brain-advanced';
 
@@ -40,7 +41,7 @@ Provide trade signal: buy, sell, or hold with confidence 0-100.`;
     const content = response.choices[0].message.content;
     const action = content.toLowerCase().includes('buy') ? 'buy' : 
                    content.toLowerCase().includes('sell') ? 'sell' : 'hold';
-    const confidence = Math.floor(Math.random() * 100);
+    const confidence = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100);
 
     return { symbol, action, confidence, reasoning: content };
   }
@@ -85,7 +86,7 @@ Return allocation percentages.`;
 
     const content = response.choices[0].message.content;
     const direction = content.toLowerCase().includes('up') ? 'up' : 'down';
-    const probability = Math.random();
+    const probability = (crypto.getRandomValues(new Uint8Array(1))[0] / 256);
 
     return { direction, probability };
   }

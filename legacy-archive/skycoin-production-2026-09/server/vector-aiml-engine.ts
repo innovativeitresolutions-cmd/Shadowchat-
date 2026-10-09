@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { invokeLLM } from "./_core/llm";
 
 /**
@@ -210,7 +211,7 @@ export class VectorAIMLEngine {
 
     // In a real scenario, invokeLLM would return the actual embedding.
     // For this simulation, we generate a random vector.
-    const embedding: VectorEmbedding = Array.from({ length: dimensions }, () => Math.random() * 2 - 1);
+    const embedding: VectorEmbedding = Array.from({ length: dimensions }, () => (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 2 - 1);
     return embedding;
   }
 
@@ -429,7 +430,7 @@ export class VectorAIMLEngine {
     const centroids: VectorEmbedding[] = [];
     // Initialize centroids randomly from data points
     for (let i = 0; i < k; i++) {
-      centroids.push(dataPoints[Math.floor(Math.random() * dataPoints.length)]);
+      centroids.push(dataPoints[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * dataPoints.length)]);
     }
 
     const assignments: ClusterResult[] = [];
@@ -526,7 +527,7 @@ export class VectorAIMLEngine {
     let centroids: VectorEmbedding[] = [];
     // Initialize centroids randomly from data points
     for (let i = 0; i < k; i++) {
-      centroids.push(dataPoints[Math.floor(Math.random() * dataPoints.length)]);
+      centroids.push(dataPoints[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * dataPoints.length)]);
     }
 
     let assignments: ClusterResult[] = [];
@@ -567,7 +568,7 @@ export class VectorAIMLEngine {
           newCentroids.push(newCentroid);
         } else {
           // If a cluster becomes empty, re-initialize its centroid randomly
-          newCentroids.push(dataPoints[Math.floor(Math.random() * dataPoints.length)]);
+          newCentroids.push(dataPoints[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * dataPoints.length)]);
           changed = true;
         }
       }
@@ -626,8 +627,7 @@ export class VectorAIMLEngine {
       const results: ClassificationResult[] = JSON.parse(llmResponse);
       return results.filter(r => typeof r.label === 'string' && typeof r.probability === 'number' && r.probability >= 0 && r.probability <= 1);
     } catch (e) {
-      console.error("Failed to parse multi-label classification response from LLM:", e);
-      // Fallback to a single classification if parsing fails
+            // Fallback to a single classification if parsing fails
       const singleResult = await this.performClassification(dataPoint, possibleLabels);
       return [singleResult];
     }
@@ -673,8 +673,7 @@ export class VectorAIMLEngine {
 
     if (dataPoints.length < numberOfSegments) {
       // Not enough distinct users for the requested number of segments
-      console.warn("Not enough distinct users for the requested number of segments. Reducing segments.");
-      numberOfSegments = dataPoints.length > 0 ? dataPoints.length : 1;
+            numberOfSegments = dataPoints.length > 0 ? dataPoints.length : 1;
     }
 
     const clusteringResults = await this.performAdvancedClustering(dataPoints, numberOfSegments);

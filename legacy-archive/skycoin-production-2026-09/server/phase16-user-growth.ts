@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 16 — USER GROWTH DOMINATION
  * Referral Engine, Viral Growth Systems, Network Expansion
@@ -371,7 +372,7 @@ export const viralGrowthEngine = {
 
   // Engagement Quests
   createQuest(params: Omit<EngagementQuest, "id" | "completions" | "createdAt">): EngagementQuest {
-    const id = `quest_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const id = `quest_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 7)}`;
     const quest: EngagementQuest = {
       ...params, id,
       completions: 0,
@@ -511,9 +512,9 @@ export const networkExpansionEngine = {
         communityId: `comm_${interest}_${idx}`,
         name: `${interest.charAt(0).toUpperCase() + interest.slice(1)} Community`,
         matchScore: Math.max(0.3, 0.9 - idx * 0.1),
-        sharedInterests: userInterests.filter(() => Math.random() > 0.5),
-        mutualMembers: Math.floor(Math.random() * 50),
-        growthRate: Math.random() * 0.3,
+        sharedInterests: userInterests.filter(() => (crypto.getRandomValues(new Uint8Array(1))[0] / 256) > 0.5),
+        mutualMembers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50),
+        growthRate: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.3,
       }));
     return {
       userId,
@@ -589,12 +590,12 @@ export const networkExpansionEngine = {
       topGrowingCategories: categories.slice(0, 5).map((cat, i) => ({
         category: cat,
         growthRate: Math.max(0.05, 0.45 - i * 0.07),
-        newCreators: Math.floor(Math.random() * 500) + 100,
+        newCreators: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 500) + 100,
       })),
       topGrowingRegions: regions.slice(0, 4).map((reg, i) => ({
         region: reg,
         growthRate: Math.max(0.05, 0.35 - i * 0.06),
-        newUsers: Math.floor(Math.random() * 10000) + 1000,
+        newUsers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000) + 1000,
       })),
       viralContent: [],
       emergingCreators: [],

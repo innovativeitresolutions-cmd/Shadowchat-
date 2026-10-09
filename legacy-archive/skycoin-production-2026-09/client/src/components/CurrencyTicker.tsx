@@ -53,9 +53,9 @@ export default function CurrencyTicker() {
     const interval = setInterval(() => {
       setCurrencies(prev => prev.map(currency => ({
         ...currency,
-        rate: currency.rate * (1 + (Math.random() - 0.5) * 0.001),
-        change: (Math.random() - 0.5) * 0.1,
-        changePercent: (Math.random() - 0.5) * 2,
+        rate: currency.rate * (1 + ((Math.random()) - 0.5) * 0.001),
+        change: ((Math.random()) - 0.5) * 0.1,
+        changePercent: ((Math.random()) - 0.5) * 2,
       })));
     }, 5000);
 

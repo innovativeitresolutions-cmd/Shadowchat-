@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 26 — KNOWLEDGE GRAPH ENGINE
  * Trust Graph, Influence Graph, Transaction Graph, Content Graph, Virality Graph
@@ -394,7 +395,7 @@ export const influenceGraphEngine = {
 
 export const transactionGraphEngine = {
   recordFlow(params: Omit<TransactionFlow, "id">): TransactionFlow {
-    const id = `txflow_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `txflow_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const flow: TransactionFlow = { ...params, id };
     _transactionFlows.set(id, flow);
 

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -56,7 +57,7 @@ export const voiceAccessibilityRouter = router({
     threads: Array.from({ length: 20 }, (_, i) => ({
       id: `thread-${i}`,
       title: `Question ${i}`,
-      replies: Math.floor(Math.random() * 100),
+      replies: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100),
     })),
   })),
 

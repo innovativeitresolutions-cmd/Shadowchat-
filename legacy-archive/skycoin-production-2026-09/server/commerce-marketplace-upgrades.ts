@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
@@ -57,9 +58,9 @@ export const commerceMarketplaceRouter = router({
   // Multi-token support
   getTokens: publicProcedure.query(async () => ({
     tokens: [
-      { symbol: "SKY444", balance: Math.random() * 1000 },
-      { symbol: "ETH", balance: Math.random() * 10 },
-      { symbol: "USDC", balance: Math.random() * 100000 },
+      { symbol: "SKY444", balance: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000 },
+      { symbol: "ETH", balance: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10 },
+      { symbol: "USDC", balance: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100000 },
     ],
   })),
 
@@ -67,8 +68,8 @@ export const commerceMarketplaceRouter = router({
   getLiquidityPools: publicProcedure.query(async () => ({
     pools: Array.from({ length: 10 }, (_, i) => ({
       id: `pool-${i}`,
-      tvl: Math.random() * 1000000,
-      apy: 20 + Math.random() * 80,
+      tvl: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000000,
+      apy: 20 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 80,
     })),
   })),
 

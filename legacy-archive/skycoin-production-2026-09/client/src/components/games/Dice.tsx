@@ -15,11 +15,11 @@ export default function Dice({ onEnd }: { onEnd: (score: number, result: string)
     setRolling(true); setMsg("");
     let ticks = 0;
     const iv = setInterval(() => {
-      setDice([Math.floor(Math.random()*6), Math.floor(Math.random()*6)]);
+      setDice([Math.floor((Math.random())*6), Math.floor((Math.random())*6)]);
       ticks++;
       if (ticks > 12) {
         clearInterval(iv);
-        const a = Math.floor(Math.random()*6), b = Math.floor(Math.random()*6);
+        const a = Math.floor((Math.random())*6), b = Math.floor((Math.random())*6);
         setDice([a, b]);
         const sum = a + b + 2;
         const isHigh = sum >= 7;

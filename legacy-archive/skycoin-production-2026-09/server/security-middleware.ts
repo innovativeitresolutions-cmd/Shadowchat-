@@ -25,7 +25,6 @@ class SecurityMonitor {
 
     if (attempt.count >= this.MAX_FAILED_ATTEMPTS) {
       this.suspiciousIPs.add(ip);
-      console.warn(`[Security] IP ${ip} flagged for suspicious activity (${attempt.count} failed attempts)`);
     }
   }
 
@@ -142,8 +141,7 @@ export const createSecurityMiddleware = () => {
   const ipBlockingMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || 'unknown';
     if (securityMonitor.isIPBlocked(ip)) {
-      console.warn(`[Security] Blocked request from IP ${ip}`);
-      res.status(403).json({ error: 'Access denied. Your IP has been temporarily blocked due to suspicious activity.' });
+            res.status(403).json({ error: 'Access denied. Your IP has been temporarily blocked due to suspicious activity.' });
       return;
     }
     next();
@@ -171,9 +169,7 @@ export const createSecurityMiddleware = () => {
     if (req.body) {
       req.body = sanitizeValue(req.body);
     }
-    if (req.query) {
-      req.query = sanitizeValue(req.query);
-    }
+    // Express 5 exposes req.query through a getter; replacing it throws.
     next();
   };
 

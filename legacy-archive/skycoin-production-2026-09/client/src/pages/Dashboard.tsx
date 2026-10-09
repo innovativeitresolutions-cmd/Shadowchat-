@@ -38,7 +38,7 @@ const generateSparkline = (base: number, volatility: number, points = 20) => {
   const data = [];
   let price = base;
   for (let i = 0; i < points; i++) {
-    price = price * (1 + (Math.random() - 0.48) * volatility);
+    price = price * (1 + ((Math.random()) - 0.48) * volatility);
     data.push(price);
   }
   return data;
@@ -90,7 +90,7 @@ const PLATFORM_STATS = [
 export default function Dashboard() {
   const { user, loading: isLoading } = useAuth();
   const [activityIdx, setActivityIdx] = useState(0);
-  const [onlineCount] = useState(() => Math.floor(Math.random() * 5000) + 12000);
+  const [onlineCount] = useState(() => Math.floor((Math.random()) * 5000) + 12000);
 
   useEffect(() => {
     const t = setInterval(() => setActivityIdx(i => (i + 1) % LIVE_ACTIVITIES.length), 4000);

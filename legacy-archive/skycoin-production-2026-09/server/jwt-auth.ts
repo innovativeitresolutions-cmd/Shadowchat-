@@ -60,8 +60,7 @@ export class JWTAuthService {
       const verified = await jwt.jwtVerify(token, this.secret);
       return verified.payload as JWTPayload;
     } catch (error) {
-      console.error('[JWT] Token verification failed:', error);
-      return null;
+            return null;
     }
   }
 
@@ -79,8 +78,7 @@ export class JWTAuthService {
 
       return this.generateTokenPair(user.id, user.email, user.role as any);
     } catch (error) {
-      console.error('[JWT] Refresh token verification failed:', error);
-      return null;
+            return null;
     }
   }
 

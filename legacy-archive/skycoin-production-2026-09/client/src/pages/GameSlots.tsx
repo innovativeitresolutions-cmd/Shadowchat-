@@ -12,7 +12,7 @@ const SYMBOL_VALUES: Record<string, number> = {
 const REELS = 5;
 const ROWS = 3;
 
-function getRandomSymbol() { return SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]; }
+function getRandomSymbol() { return SYMBOLS[Math.floor((Math.random()) * SYMBOLS.length)]; }
 
 function initGrid() {
   return Array.from({ length: ROWS }, () => Array.from({ length: REELS }, getRandomSymbol));

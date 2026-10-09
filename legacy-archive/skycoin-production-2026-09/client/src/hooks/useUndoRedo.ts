@@ -44,8 +44,7 @@ export function useUndoRedo(maxHistorySize = 50) {
       }
       setCurrentIndex(prev => prev - 1);
     } catch (error) {
-      console.error('Undo failed:', error);
-    } finally {
+          } finally {
       setIsUndoing(false);
     }
   }, [currentIndex, history]);
@@ -62,8 +61,7 @@ export function useUndoRedo(maxHistorySize = 50) {
       }
       setCurrentIndex(prev => prev + 1);
     } catch (error) {
-      console.error('Redo failed:', error);
-    } finally {
+          } finally {
       setIsUndoing(false);
     }
   }, [currentIndex, history]);

@@ -78,7 +78,6 @@ export class MiningPoolConnector extends EventEmitter {
 
       socket.on('connect', () => {
         connection.connected = true;
-        console.log(`[Mining] Connected to ${config.name} (${config.coin})`);
         
         // Subscribe to mining work
         this.sendStratumCommand(socket, {
@@ -95,7 +94,7 @@ export class MiningPoolConnector extends EventEmitter {
       });
 
       socket.on('error', (error) => {
-        console.error(`[Mining] Pool connection error (${config.name}):`, error.message);
+        console.error('Mining pool connection error:', error.message);
         connection.connected = false;
         this.emit('pool-error', { pool: config.name, error: error.message });
         reject(error);
@@ -103,8 +102,7 @@ export class MiningPoolConnector extends EventEmitter {
 
       socket.on('close', () => {
         connection.connected = false;
-        console.log(`[Mining] Disconnected from ${config.name}`);
-        this.emit('pool-disconnected', { pool: config.name });
+                this.emit('pool-disconnected', { pool: config.name });
         
         // Attempt reconnection after 30 seconds
         setTimeout(() => this.connectToPool(config), 30000);
@@ -143,7 +141,6 @@ export class MiningPoolConnector extends EventEmitter {
         } else if (message.method === 'mining.set_difficulty') {
           // Difficulty adjustment
           connection.stats.difficulty = message.params[0];
-          console.log(`[Mining] Difficulty updated: ${connection.stats.difficulty} (${config.coin})`);
         } else if (message.result !== null && message.result !== undefined) {
           // Response to our command
           if (message.id === 1) {
@@ -160,14 +157,12 @@ export class MiningPoolConnector extends EventEmitter {
             // Authorization response
             connection.authenticated = message.result === true;
             if (connection.authenticated) {
-              console.log(`[Mining] Authenticated to ${config.name}`);
-              this.emit('pool-authenticated', { pool: config.name });
+                            this.emit('pool-authenticated', { pool: config.name });
             }
           } else if (message.id && message.id > 2) {
             // Share submission response
             if (message.result === true) {
               connection.stats.shares.accepted++;
-              console.log(`[Mining] Share accepted (${config.coin})`);
               this.emit('share-accepted', {
                 pool: config.name,
                 coin: config.coin,
@@ -175,7 +170,6 @@ export class MiningPoolConnector extends EventEmitter {
               });
             } else {
               connection.stats.shares.rejected++;
-              console.log(`[Mining] Share rejected: ${message.error?.[1]} (${config.coin})`);
             }
           }
         }
@@ -198,8 +192,7 @@ export class MiningPoolConnector extends EventEmitter {
   async submitShare(poolName: string, shareData: any): Promise<boolean> {
     const connection = this.connections.get(poolName);
     if (!connection || !connection.authenticated) {
-      console.error(`[Mining] Cannot submit share - not authenticated to ${poolName}`);
-      return false;
+            return false;
     }
 
     const shareId = Date.now();
@@ -297,8 +290,7 @@ export class MiningPoolConnector extends EventEmitter {
         const recommendation = await this.getAIRecommendation(profitability);
         this.emit('ai-recommendation', recommendation);
       } catch (error) {
-        console.error('[Mining] AI optimizer error:', error);
-      }
+              }
     }, 60000); // Run every minute
   }
 
@@ -326,8 +318,7 @@ export class MiningPoolConnector extends EventEmitter {
         profitability,
       };
     } catch (error) {
-      console.error('[Mining] Failed to get AI recommendation:', error);
-      return null;
+            return null;
     }
   }
 
@@ -337,8 +328,7 @@ export class MiningPoolConnector extends EventEmitter {
   async disconnectAll(): Promise<void> {
     for (const [name, connection] of this.connections) {
       connection.socket.destroy();
-      console.log(`[Mining] Disconnected from ${name}`);
-    }
+          }
     this.connections.clear();
   }
 }

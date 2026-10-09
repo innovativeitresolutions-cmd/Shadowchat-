@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Distribution Engine
  * Phase 5G — Sovereignty Build
@@ -439,7 +440,7 @@ class WebhookSystem {
       userId,
       url,
       events,
-      secret: `whsec_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`,
+      secret: `whsec_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       isActive: true,
       failureCount: 0,
       createdAt: new Date(),

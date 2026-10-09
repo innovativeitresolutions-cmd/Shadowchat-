@@ -9,14 +9,12 @@ export const languageExchangeRouter = router({
   getFavorites: protectedProcedure
     .query(async ({ ctx }) => {
       try {
-        // Mock favorites for demo
-        return [
+                return [
           { partnerId: "p1", savedAt: new Date() },
           { partnerId: "p3", savedAt: new Date() },
         ];
       } catch (error) {
-        console.error("[Language Exchange] Get favorites error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch favorites",
         });
@@ -30,8 +28,7 @@ export const languageExchangeRouter = router({
       try {
         return { success: true, message: "Partner added to favorites" };
       } catch (error) {
-        console.error("[Language Exchange] Save favorite error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to save favorite",
         });
@@ -45,8 +42,7 @@ export const languageExchangeRouter = router({
       try {
         return { success: true, message: "Partner removed from favorites" };
       } catch (error) {
-        console.error("[Language Exchange] Remove favorite error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to remove favorite",
         });
@@ -209,8 +205,7 @@ export const languageExchangeRouter = router({
 
         return partners;
       } catch (error) {
-        console.error("[Language Exchange] Get partners error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch language partners",
         });
@@ -239,8 +234,7 @@ export const languageExchangeRouter = router({
           message: "Session request sent! Waiting for partner response...",
         };
       } catch (error) {
-        console.error("[Language Exchange] Request session error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to request session",
         });
@@ -252,8 +246,7 @@ export const languageExchangeRouter = router({
     .input(z.object({ language: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
-        // Mock data — in production, query from DB
-        return {
+                return {
           language: input.language,
           level: "B1",
           score: 65,
@@ -265,8 +258,7 @@ export const languageExchangeRouter = router({
           progressToNextLevel: 45,
         };
       } catch (error) {
-        console.error("[Language Exchange] Get proficiency error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch proficiency data",
         });
@@ -294,8 +286,7 @@ export const languageExchangeRouter = router({
           message: `Great session! You earned ${Math.floor(input.durationMinutes * 2.5)} XP and ${Math.floor(input.durationMinutes * 0.1)} SKY444`,
         };
       } catch (error) {
-        console.error("[Language Exchange] Log session error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to log session",
         });
@@ -318,8 +309,7 @@ export const languageExchangeRouter = router({
         nextMilestone: { sessions: 50, xp: 15000, reward: "Gold Badge" },
       };
     } catch (error) {
-      console.error("[Language Exchange] Get stats error:", error);
-      throw new TRPCError({
+            throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Failed to fetch stats",
       });
@@ -331,8 +321,7 @@ export const languageExchangeRouter = router({
     .input(z.object({ language: z.string(), limit: z.number().default(10) }))
     .query(async ({ ctx, input }) => {
       try {
-        // Mock bounties
-        const bounties = [
+                const bounties = [
           {
             id: "b1",
             title: "Translate blog post about AI",
@@ -370,8 +359,7 @@ export const languageExchangeRouter = router({
 
         return bounties;
       } catch (error) {
-        console.error("[Language Exchange] Get bounties error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch bounties",
         });
@@ -397,8 +385,7 @@ export const languageExchangeRouter = router({
           message: "Translation submitted for review! You'll earn rewards once approved.",
         };
       } catch (error) {
-        console.error("[Language Exchange] Complete bounty error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to submit translation",
         });
@@ -446,8 +433,7 @@ export const languageExchangeRouter = router({
           },
         ];
       } catch (error) {
-        console.error("[Language Exchange] Get teaching opportunities error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to fetch teaching opportunities",
         });
@@ -465,8 +451,7 @@ export const languageExchangeRouter = router({
           message: "Teaching session scheduled! Student will be notified.",
         };
       } catch (error) {
-        console.error("[Language Exchange] Accept teaching error:", error);
-        throw new TRPCError({
+                throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to accept teaching session",
         });

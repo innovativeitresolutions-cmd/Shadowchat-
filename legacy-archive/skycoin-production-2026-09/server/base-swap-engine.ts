@@ -1,4 +1,3 @@
-import { notifyOwner } from './_core/notification';
 
 /**
  * Base App Swap Engine - Handles all coin-to-ETH swaps
@@ -36,8 +35,7 @@ class BaseSwapEngine {
   private priceCache: Map<string, { price: number; timestamp: number }> = new Map();
 
   constructor() {
-    console.log('[BaseSwap] Swap engine initialized');
-    this.startPriceUpdates();
+        this.startPriceUpdates();
   }
 
   /**
@@ -45,6 +43,9 @@ class BaseSwapEngine {
    */
   async getSwapQuote(inputCoin: string, outputCoin: string, inputAmount: number): Promise<SwapQuote> {
     try {
+      if (!Number.isFinite(inputAmount) || inputAmount <= 0) {
+        throw new Error('Swap amount must be a positive finite number.');
+      }
       // Validate coins
       if (!this.supportedCoins.includes(inputCoin) || !this.supportedCoins.includes(outputCoin)) {
         throw new Error(`Unsupported coin. Supported: ${this.supportedCoins.join(', ')}`);
@@ -53,6 +54,9 @@ class BaseSwapEngine {
       // Get current prices
       const inputPrice = await this.getCoinPrice(inputCoin);
       const outputPrice = await this.getCoinPrice(outputCoin);
+      if (!Number.isFinite(inputPrice) || inputPrice <= 0 || !Number.isFinite(outputPrice) || outputPrice <= 0) {
+        throw new Error('Live prices are unavailable for this swap.');
+      }
 
       // Calculate output amount
       const inputValueUSD = inputAmount * inputPrice;
@@ -76,12 +80,10 @@ class BaseSwapEngine {
         estimatedTime: 15, // 15 seconds average
       };
 
-      console.log(`[BaseSwap] Quote: ${inputAmount} ${inputCoin} → ${finalOutputAmount.toFixed(6)} ${outputCoin}`);
 
       return quote;
     } catch (error) {
-      console.error('[BaseSwap] Quote error:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -95,47 +97,7 @@ class BaseSwapEngine {
     fromAddress: string,
     toAddress: string
   ): Promise<SwapTransaction> {
-    try {
-      // Get quote first
-      const quote = await this.getSwapQuote(inputCoin, outputCoin, inputAmount);
-
-      const transactionId = `swap-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-
-      const transaction: SwapTransaction = {
-        id: transactionId,
-        inputCoin,
-        outputCoin,
-        inputAmount,
-        outputAmount: quote.outputAmount,
-        fromAddress,
-        toAddress,
-        status: 'pending',
-        createdAt: Date.now(),
-      };
-
-      this.swapHistory.push(transaction);
-
-      console.log(`[BaseSwap] Swap initiated: ${inputAmount} ${inputCoin} → ${quote.outputAmount.toFixed(6)} ${outputCoin}`);
-
-      // Simulate swap execution (in production, this would interact with Base app API)
-      setTimeout(async () => {
-        transaction.status = 'confirmed';
-        transaction.txHash = `0x${Math.random().toString(16).substring(2)}`;
-        transaction.completedAt = Date.now();
-
-        console.log(`[BaseSwap] Swap confirmed: ${transaction.txHash}`);
-
-        await notifyOwner({
-          title: '✅ Swap Completed',
-          content: `Swapped ${inputAmount} ${inputCoin} to ${quote.outputAmount.toFixed(6)} ${outputCoin}. TX: ${transaction.txHash}`,
-        });
-      }, quote.estimatedTime * 1000);
-
-      return transaction;
-    } catch (error) {
-      console.error('[BaseSwap] Swap execution failed:', error);
-      throw error;
-    }
+    throw new Error('Live swap execution is not configured; this quote engine is for estimates only.');
   }
 
   /**
@@ -159,12 +121,10 @@ class BaseSwapEngine {
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
-      console.log(`[BaseSwap] Deposited ${swaps.length} swaps to ${toWalletAddress}`);
-
+      
       return swaps;
     } catch (error) {
-      console.error('[BaseSwap] Deposit failed:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -191,8 +151,7 @@ class BaseSwapEngine {
 
       return price;
     } catch (error) {
-      console.error(`[BaseSwap] Failed to fetch price for ${coin}:`, error);
-      // Return cached price or default
+            // Return cached price or default
       return this.priceCache.get(coin)?.price || 0;
     }
   }
@@ -222,8 +181,7 @@ class BaseSwapEngine {
         try {
           await this.getCoinPrice(coin);
         } catch (error) {
-          console.warn(`[BaseSwap] Failed to update price for ${coin}`);
-        }
+                  }
       }
     }, 30000); // Update every 30 seconds
   }
@@ -264,8 +222,7 @@ class BaseSwapEngine {
       try {
         prices[coin] = await this.getCoinPrice(coin);
       } catch (error) {
-        console.warn(`[BaseSwap] Failed to get price for ${coin}`);
-        prices[coin] = 0;
+                prices[coin] = 0;
       }
     }
 

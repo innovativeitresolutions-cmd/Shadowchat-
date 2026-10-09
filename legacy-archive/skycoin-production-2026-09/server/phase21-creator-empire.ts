@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 21 — CREATOR EMPIRE ENGINE
  * Creator Business OS, Hiring Marketplace, Creator Expansion
@@ -552,7 +553,7 @@ export const creatorExpansionEngine = {
         title: `Highlight ${i + 1}`,
         startSeconds: startSec,
         endSeconds: endSec,
-        highlightScore: 0.5 + Math.random() * 0.5,
+        highlightScore: 0.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5,
         thumbnailUrl: `https://cdn.sky/clips/${job.id}_${i}_thumb.jpg`,
         clipUrl: `https://cdn.sky/clips/${job.id}_${i}.mp4`,
       };
@@ -583,7 +584,7 @@ export const creatorExpansionEngine = {
     job.translations = job.targetLanguages.map(lang => ({
       language: lang,
       translatedText: `[${lang.toUpperCase()} translation of content ${job.contentId}]`,
-      confidence: 0.85 + Math.random() * 0.10,
+      confidence: 0.85 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.10,
       status: "completed" as const,
     }));
     job.status = "completed";

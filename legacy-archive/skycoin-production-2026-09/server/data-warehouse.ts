@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Data Warehouse Engine
  * Phase 5D — Sovereignty Build
@@ -142,7 +143,7 @@ class EventStore {
     platform: WarehouseEvent["platform"] = "web"
   ): WarehouseEvent {
     const event: WarehouseEvent = {
-      id: `evt_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `evt_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       eventType,
       userId,
       sessionId,

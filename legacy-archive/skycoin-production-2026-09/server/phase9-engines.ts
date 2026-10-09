@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 9 Engines — Production Hardening Layer
  * 9A: Reliability | 9B: Observability | 9C: Performance Optimization
@@ -52,7 +53,7 @@ export const reliabilityEngine = {
     if (policy.backoffType === "exponential") delay = Math.min(policy.initialDelayMs * Math.pow(2, attempt - 1), policy.maxDelayMs);
     else if (policy.backoffType === "linear") delay = Math.min(policy.initialDelayMs * attempt, policy.maxDelayMs);
     else delay = policy.initialDelayMs;
-    if (policy.jitter) delay *= (0.5 + Math.random() * 0.5);
+    if (policy.jitter) delay *= (0.5 + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.5);
     return Math.round(delay);
   },
 
@@ -125,7 +126,7 @@ export const observabilityEngine = {
   },
 
   startSpan(traceId: string, operation: string, service: string, parentSpanId?: string): TraceSpan {
-    const spanId = `span_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const spanId = `span_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     const span: TraceSpan = {
       traceId, spanId, parentSpanId, operation, service,
       startTime: new Date(), status: "ok", attributes: {}, events: [],
@@ -365,7 +366,7 @@ export const securityHardening = {
   },
 
   generateCSRFToken(): string {
-    return Buffer.from(Math.random().toString() + Date.now().toString()).toString("base64").slice(0, 32);
+    return Buffer.from((crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString() + Date.now().toString()).toString("base64").slice(0, 32);
   },
 
   validateCSRFToken(token: string, sessionToken: string): boolean {
@@ -690,7 +691,7 @@ export const scalabilityEngine = {
     if (lb.algorithm === "least_connections") {
       return healthy.sort((a, b) => a.activeConnections - b.activeConnections)[0];
     }
-    return healthy[Math.floor(Math.random() * healthy.length)];
+    return healthy[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * healthy.length)];
   },
 
   getScalingHistory(service?: string): ScalingEvent[] {
@@ -811,7 +812,7 @@ export const complianceEngine = {
 // ── reliabilityEngine wrappers ──
 const _p9_incidents = new Map<string, { id: string; title: string; severity: string; services: string[]; status: string; assignedTo?: string; startedAt: Date; resolvedAt?: Date; rootCause?: string }>();
 (reliabilityEngine as any).recordIncident = function(title: string, severity: string, services: string[]): any {
-  const id = `inc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  const id = `inc_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
   const incident = { id, title, severity, services, status: "open", startedAt: new Date() };
   _p9_incidents.set(id, incident);
   return incident;
@@ -864,8 +865,8 @@ const _p9_obs_recordMetric = observabilityEngine.recordMetric.bind(observability
   return observabilityEngine.queryMetrics(name, from, new Date());
 };
 (observabilityEngine as any).startTrace = function(operation: string, tags?: Record<string, string>): any {
-  const traceId = `trace_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const spanId = `span_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const traceId = `trace_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
+  const spanId = `span_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
   const entry = { traceId, spanId, operation, status: "in_progress", startTime: new Date() };
   _p9_traceMap.set(traceId, entry);
   observabilityEngine.startSpan(traceId, operation, tags?.service ?? "default");

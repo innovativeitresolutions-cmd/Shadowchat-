@@ -50,8 +50,7 @@ export const aiEnhancedRouter = router({
           timestamp: new Date(),
         };
       } catch (error) {
-        console.error('AI chat error:', error);
-        return {
+                return {
           reply: 'I encountered an issue processing your request. Please try again.',
           model: input.model || 'gpt-4',
           tokensUsed: 0,
@@ -91,8 +90,7 @@ export const aiEnhancedRouter = router({
           engine: input.engine || 'general',
         };
       } catch (error) {
-        console.error('Conversation error:', error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -132,8 +130,7 @@ export const aiEnhancedRouter = router({
           timestamp: new Date(),
         };
       } catch (error) {
-        console.error('Stream error:', error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -193,8 +190,7 @@ export const aiEnhancedRouter = router({
           timestamp: new Date(),
         };
       } catch (error) {
-        console.error('Insight generation error:', error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -240,8 +236,7 @@ export const aiEnhancedRouter = router({
           count: results.length,
         };
       } catch (error) {
-        console.error('Batch processing error:', error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -259,8 +254,7 @@ export const aiEnhancedRouter = router({
         productionLLM.clearHistory((ctx.user.id as unknown) as string, input.engine);
         return { success: true, cleared: input.engine || 'all' };
       } catch (error) {
-        console.error('Clear history error:', error);
-        throw error;
+                throw error;
       }
     }),
 
@@ -282,8 +276,7 @@ export const aiEnhancedRouter = router({
           count: history.length,
         };
       } catch (error) {
-        console.error('Get history error:', error);
-        throw error;
+                throw error;
       }
     }),
 

@@ -15,16 +15,14 @@ const queryClient = new QueryClient();
 const redirectToLoginIfUnauthorized = (error: unknown) => {
   // Disabled: OAuth authentication removed
   // Users can now access the platform without login
-  console.error("[API Error]", error);
-};
+  };
 
 // Query cache error handling - OAuth disabled
 queryClient.getQueryCache().subscribe(event => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.query.state.error;
     // OAuth redirect disabled - errors logged but not redirected
-    console.error("[API Query Error]", error);
-  }
+      }
 });
 
 // Mutation cache error handling - OAuth disabled
@@ -32,8 +30,7 @@ queryClient.getMutationCache().subscribe(event => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.mutation.state.error;
     // OAuth redirect disabled - errors logged but not redirected
-    console.error("[API Mutation Error]", error);
-  }
+      }
 });
 
 const trpcClient = trpc.createClient({

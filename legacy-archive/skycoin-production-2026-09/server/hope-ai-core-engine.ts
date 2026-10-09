@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * HOPE AI Core Engine
  * Advanced AI reasoning engine that EXCEEDS Manus 1.6 capabilities
@@ -140,7 +141,7 @@ export class HOPEAICore {
   async storeMemory(entry: Omit<MemoryEntry, 'id' | 'timestamp'>): Promise<MemoryEntry> {
     const memory: MemoryEntry = {
       ...entry,
-      id: `mem_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `mem_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).substr(2, 9)}`,
       timestamp: new Date(),
     };
 
@@ -206,7 +207,7 @@ export class HOPEAICore {
   private evaluateHypotheses(hypotheses: string[], context: Record<string, any>): Array<{hypothesis: string; confidence: number}> {
     return hypotheses.map(h => ({
       hypothesis: h,
-      confidence: Math.random() * 0.4 + 0.6, // Simulate confidence 0.6-1.0
+      confidence: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.4 + 0.6, // Simulate confidence 0.6-1.0
     }));
   }
 

@@ -8,9 +8,9 @@ const router = Router();
  * GET /api/mining/wallet/balance
  * Get wallet balances
  */
-router.get('/wallet/balance', (req, res) => {
+router.get('/wallet/balance', async (req, res) => {
   try {
-    const stats = walletManager.getStatistics();
+    const stats = await walletManager.getStatistics();
     
     res.json({
       success: true,

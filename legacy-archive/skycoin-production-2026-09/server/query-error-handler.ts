@@ -11,13 +11,10 @@ export async function safeQuery<T>(
   try {
     return await queryFn();
   } catch (error) {
-    console.error(`[Query Error] ${context}:`, error);
-    
+        
     // Log the error but return fallback value instead of crashing
     if (error instanceof Error) {
-      console.error(`Error message: ${error.message}`);
-      console.error(`Stack: ${error.stack}`);
-    }
+                }
     
     // Return fallback value to prevent page crashes
     return fallbackValue;
@@ -36,8 +33,7 @@ export function withQueryErrorHandling<T>(
     try {
       return await queryFn();
     } catch (error) {
-      console.error(`[Procedure Error] ${context}:`, error);
-      
+            
       // Return fallback instead of throwing
       return fallbackValue;
     }

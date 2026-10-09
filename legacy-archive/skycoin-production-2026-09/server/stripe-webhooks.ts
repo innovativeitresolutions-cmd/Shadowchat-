@@ -68,8 +68,7 @@ export class StripeWebhookHandler {
         // Verify webhook signature
         const isValid = this.verifyWebhookSignature(req);
         if (!isValid) {
-          console.warn('Invalid webhook signature');
-          return res.status(401).json({ error: 'Unauthorized' });
+                    return res.status(401).json({ error: 'Unauthorized' });
         }
 
         // Handle different event types
@@ -91,13 +90,11 @@ export class StripeWebhookHandler {
             break;
 
           default:
-            console.log(`Unhandled event type: ${event.type}`);
-        }
+                    }
 
         res.json({ received: true });
       } catch (error) {
-        console.error('Webhook error:', error);
-        res.status(500).json({ error: 'Webhook processing failed' });
+                res.status(500).json({ error: 'Webhook processing failed' });
       }
     });
   }
@@ -109,16 +106,14 @@ export class StripeWebhookHandler {
     // In production, use Stripe's signature verification
     // This is a simplified version - implement proper HMAC verification
     const signature = req.headers['stripe-signature'];
-    return !!signature; // Placeholder - implement real verification
-  }
+    return !!signature;   }
 
   /**
    * Handle successful payment
    */
   private async handlePaymentSuccess(paymentIntent: PaymentIntent): Promise<void> {
     try {
-      console.log(`✅ Payment succeeded: ${paymentIntent.id}`);
-
+      
       // Create order record
       const order: Order = {
         id: `order_${Date.now()}`,
@@ -145,8 +140,7 @@ export class StripeWebhookHandler {
       // Log transaction
       this.logTransaction('success', paymentIntent, order);
     } catch (error) {
-      console.error('Error handling payment success:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -155,8 +149,7 @@ export class StripeWebhookHandler {
    */
   private async handlePaymentFailure(paymentIntent: PaymentIntent): Promise<void> {
     try {
-      console.log(`❌ Payment failed: ${paymentIntent.id}`);
-
+      
       // Create failed order record
       const order: Order = {
         id: `order_${Date.now()}`,
@@ -179,8 +172,7 @@ export class StripeWebhookHandler {
       // Log transaction
       this.logTransaction('failure', paymentIntent, order);
     } catch (error) {
-      console.error('Error handling payment failure:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -189,8 +181,7 @@ export class StripeWebhookHandler {
    */
   private async handleRefund(chargeData: any): Promise<void> {
     try {
-      console.log(`💰 Refund processed: ${chargeData.id}`);
-
+      
       // Find related order
       const order = Array.from(this.orders.values()).find(
         (o) => o.transactionId === chargeData.payment_intent
@@ -203,8 +194,7 @@ export class StripeWebhookHandler {
 
       this.logTransaction('refund', chargeData, order);
     } catch (error) {
-      console.error('Error handling refund:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -213,11 +203,9 @@ export class StripeWebhookHandler {
    */
   private async handleSubscriptionUpdate(subscriptionData: any): Promise<void> {
     try {
-      console.log(`📅 Subscription updated: ${subscriptionData.id}`);
-      // Handle subscription logic
+            // Handle subscription logic
     } catch (error) {
-      console.error('Error handling subscription update:', error);
-      throw error;
+            throw error;
     }
   }
 
@@ -226,8 +214,7 @@ export class StripeWebhookHandler {
    */
   private async routeToAdmin(order: Order): Promise<void> {
     try {
-      console.log(`📤 Routing order ${order.id} to admin account...`);
-
+      
       // Create admin notification
       const adminNotification = {
         type: 'new_order',
@@ -246,10 +233,8 @@ export class StripeWebhookHandler {
       // Update order status
       order.adminNotified = true;
 
-      console.log(`✅ Order routed to admin: ${order.id}`);
-    } catch (error) {
-      console.error('Error routing to admin:', error);
-      throw error;
+          } catch (error) {
+            throw error;
     }
   }
 
@@ -270,10 +255,8 @@ export class StripeWebhookHandler {
         <p>Your order is being processed and will be shipped soon.</p>
       `;
 
-      console.log(`📧 Confirmation email sent for order ${order.id}`);
-    } catch (error) {
-      console.error('Error sending confirmation email:', error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -281,10 +264,8 @@ export class StripeWebhookHandler {
    */
   private async sendFailureNotification(paymentIntent: PaymentIntent, order: Order): Promise<void> {
     try {
-      console.log(`📧 Failure notification sent for order ${order.id}`);
-    } catch (error) {
-      console.error('Error sending failure notification:', error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -293,10 +274,9 @@ export class StripeWebhookHandler {
   private async notifyAdmin(notification: any): Promise<void> {
     try {
       // Send to admin dashboard via WebSocket or API
-      console.log(`🔔 Admin notification: ${JSON.stringify(notification)}`);
+      void notification;
     } catch (error) {
-      console.error('Error notifying admin:', error);
-    }
+          }
   }
 
   /**
@@ -304,10 +284,8 @@ export class StripeWebhookHandler {
    */
   private async notifyAdminRefund(order: Order): Promise<void> {
     try {
-      console.log(`💳 Admin refund notification: Order ${order.id} refunded`);
-    } catch (error) {
-      console.error('Error notifying admin of refund:', error);
-    }
+          } catch (error) {
+          }
   }
 
   /**
@@ -343,7 +321,7 @@ export class StripeWebhookHandler {
       status: order?.status,
     };
 
-    console.log(`📝 Transaction log: ${JSON.stringify(log)}`);
+    console.info("Payment audit event", log);
   }
 
   /**

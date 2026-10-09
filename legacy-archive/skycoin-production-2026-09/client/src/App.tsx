@@ -569,6 +569,7 @@ const MembershipTiers = lazy(() => import('./pages/MembershipTiers'));
 const MemoryConstellation = lazy(() => import('./pages/MemoryConstellation'));
 const MemoryGraphVisualizer = lazy(() => import('./pages/MemoryGraphVisualizer'));
 const MemorySystem = lazy(() => import('./pages/MemorySystem'));
+const FamilyLegacy = lazy(() => import('./pages/FamilyLegacy'));
 const Mentions = lazy(() => import('./pages/Mentions'));
 const MessageEncryption = lazy(() => import('./pages/MessageEncryption'));
 const MessageSearch = lazy(() => import('./pages/MessageSearch'));
@@ -1635,6 +1636,9 @@ export default function App() {
           <Route path="/medicationReminder" component={MedicationReminder} />
           <Route path="/megaMarketplace" component={MegaMarketplace} />
           <Route path="/membershipTiers" component={MembershipTiers} />
+          <Route path="/family-legacy" component={FamilyLegacy} />
+          <Route path="/familyLegacy" component={FamilyLegacy} />
+          <Route path="/memory-constellation" component={MemoryConstellation} />
           <Route path="/memoryConstellation" component={MemoryConstellation} />
           <Route path="/memoryGraphVisualizer" component={MemoryGraphVisualizer} />
           <Route path="/memorySystem" component={MemorySystem} />

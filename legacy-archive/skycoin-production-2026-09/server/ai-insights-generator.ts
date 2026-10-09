@@ -24,7 +24,6 @@ export const InsightSchema = z.object({
 
 export type Insight = z.infer<typeof InsightSchema>;
 
-// Mock insights for demonstration
 const mockInsights: Insight[] = [
   {
     id: 'insight_1',

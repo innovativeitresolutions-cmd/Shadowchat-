@@ -408,12 +408,10 @@ export async function exampleVPNUsage() {
 
   // Create route
   const route = vpn.routingEngine.createRoute(3);
-  console.log('Route created:', route.id);
-
+  
   // Start session
   const session = vpn.sessionManager.startSession('user123', route.id);
-  console.log('Session started:', session.id);
-
+  
   // Record usage
   vpn.sessionManager.recordUsage(session.id, 1024 * 1024 * 100, 1024 * 1024 * 50); // 100MB in, 50MB out
 
@@ -422,7 +420,6 @@ export async function exampleVPNUsage() {
 
   // Get summary
   const summary = vpn.sessionManager.getSessionSummary(session.id);
-  console.log('Session summary:', summary);
-
+  
   return vpn;
 }

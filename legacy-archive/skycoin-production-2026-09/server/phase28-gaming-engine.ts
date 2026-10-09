@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 28 — REAL GAMING ENGINE
  * PvP Matchmaking, Skill Ranking, Tournaments, Wagers, Guild Wars,
@@ -399,7 +400,7 @@ export const matchmakingEngine = {
       q.isActive = false;
     }
 
-    const matchId = `match_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const matchId = `match_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const match: GameMatch = {
       id: matchId,
       gameMode,
@@ -499,7 +500,7 @@ export const matchEngine = {
 
 export const tournamentEngine = {
   createTournament(params: Omit<Tournament, "id" | "registeredParticipants" | "bracket" | "createdAt">): Tournament {
-    const id = `tourney_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `tourney_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const tournament: Tournament = {
       ...params,
       id,
@@ -568,7 +569,7 @@ export const tournamentEngine = {
 
 export const wagerEngine = {
   createWager(params: Omit<Wager, "id" | "matchId" | "winnerId" | "payoutTxHash" | "acceptedAt" | "completedAt" | "createdAt">): Wager {
-    const id = `wager_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `wager_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const wager: Wager = { ...params, id, createdAt: new Date() };
     _wagers.set(id, wager);
     return wager;
@@ -588,7 +589,7 @@ export const wagerEngine = {
     wager.status = "completed";
     wager.winnerId = winnerId;
     wager.completedAt = new Date();
-    wager.payoutTxHash = `0x${Math.random().toString(16).slice(2, 66)}`;
+    wager.payoutTxHash = `0x${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(16).slice(2, 66)}`;
     return wager;
   },
 
@@ -607,7 +608,7 @@ export const wagerEngine = {
 
 export const guildEngine = {
   createGuild(params: Omit<Guild, "id" | "officerIds" | "wins" | "losses" | "warPoints" | "level" | "xp" | "createdAt" | "updatedAt">): Guild {
-    const id = `guild_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `guild_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const guild: Guild = {
       ...params,
       id,
@@ -687,7 +688,7 @@ export const guildEngine = {
 
 export const battlePassEngine = {
   createSeason(params: Omit<RewardSeason, "id" | "participantCount" | "createdAt">): RewardSeason {
-    const id = `season_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `season_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const season: RewardSeason = { ...params, id, participantCount: 0, createdAt: new Date() };
     _rewardSeasons.set(id, season);
     return season;
@@ -771,7 +772,7 @@ export const battlePassEngine = {
 
 export const antiCheatEngine = {
   reportCheat(params: Omit<AntiCheatReport, "id" | "status" | "resolvedAt" | "createdAt">): AntiCheatReport {
-    const id = `cheat_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `cheat_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const report: AntiCheatReport = {
       ...params,
       id,
@@ -850,7 +851,7 @@ export const antiCheatEngine = {
 
 export const gameTelemetryEngine = {
   recordEvent(params: Omit<GameTelemetry, "id">): GameTelemetry {
-    const id = `tel_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const id = `tel_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 6)}`;
     const event: GameTelemetry = { ...params, id };
     _telemetry.push(event);
     return event;
@@ -866,7 +867,7 @@ export const gameTelemetryEngine = {
       id,
       matchId,
       duration: _matches.get(matchId)?.durationSeconds ?? 0,
-      fileSize: Math.floor(Math.random() * 50000000) + 5000000,
+      fileSize: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 50000000) + 5000000,
       storageUrl: `https://replays.shadowchat.io/${matchId}.scr`,
       isPublic: true,
       viewCount: 0,

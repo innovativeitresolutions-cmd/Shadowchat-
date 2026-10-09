@@ -15,11 +15,11 @@ export default function Roulette({ onEnd }: { onEnd: (score: number, result: str
     setSpinning(true); setMsg("");
     let ticks = 0;
     const interval = setInterval(() => {
-      setResult(Math.floor(Math.random() * 37));
+      setResult(Math.floor((Math.random()) * 37));
       ticks++;
       if (ticks > 20) {
         clearInterval(interval);
-        const final = Math.floor(Math.random() * 37);
+        const final = Math.floor((Math.random()) * 37);
         setResult(final);
         const c = colorOf(final);
         const win = c === bet;

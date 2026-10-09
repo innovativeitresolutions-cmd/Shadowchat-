@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 34 — ECONOMIC CIVILIZATION LAYER
  * Creator labor markets, skill marketplaces, bounty boards, grant systems,
@@ -224,7 +225,7 @@ const _skillEndorsements = new Map<string, SkillEndorsement>();
 const _healthMetricsHistory: EconomicHealthMetrics[] = [];
 
 function _id(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
 }
 
 // ─── JOB MARKET ENGINE ────────────────────────────────────────────────────────

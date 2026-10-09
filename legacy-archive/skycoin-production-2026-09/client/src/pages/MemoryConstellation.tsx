@@ -38,10 +38,10 @@ function generateStars(count: number): Star[] {
     const labelList = labels[category];
     return {
       id: `star-${i}`,
-      x: 10 + Math.random() * 80,
-      y: 10 + Math.random() * 80,
-      size: 2 + Math.random() * 4,
-      brightness: 0.4 + Math.random() * 0.6,
+      x: 10 + (Math.random()) * 80,
+      y: 10 + (Math.random()) * 80,
+      size: 2 + (Math.random()) * 4,
+      brightness: 0.4 + (Math.random()) * 0.6,
       label: labelList[i % labelList.length],
       category,
       color: CATEGORY_COLORS[category],
@@ -130,11 +130,11 @@ export default function MemoryConstellation() {
             {Array.from({ length: 100 }, (_, i) => (
               <circle
                 key={`bg-${i}`}
-                cx={Math.random() * 100}
-                cy={Math.random() * 100}
+                cx={(Math.random()) * 100}
+                cy={(Math.random()) * 100}
                 r={0.15}
                 fill="white"
-                opacity={0.2 + Math.random() * 0.3}
+                opacity={0.2 + (Math.random()) * 0.3}
               />
             ))}
 

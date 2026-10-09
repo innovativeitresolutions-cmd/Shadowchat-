@@ -86,8 +86,7 @@ export default function CreatorProfile() {
     setCheckingOut(tierId);
     setSelectedTier(tierId);
     subscribeWithStripe.mutate({
-      creatorId: 1, // mock creator ID
-      tier: TIER_MAP[tierId] || "supporter",
+      creatorId: 1,       tier: TIER_MAP[tierId] || "supporter",
       successUrl: window.location.origin + window.location.pathname,
       cancelUrl: window.location.origin + window.location.pathname,
     });

@@ -212,7 +212,7 @@ export default function PresentationWithChat() {
           'Thanks for asking. We\'ll cover that in more detail later.',
           'That\'s a common concern. Here\'s how we\'re addressing it.',
         ];
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        const randomResponse = responses[Math.floor((Math.random()) * responses.length)];
         setMessages(prev => [...prev, {
           id: (Date.now() + 1).toString(),
           user: 'Presenter',

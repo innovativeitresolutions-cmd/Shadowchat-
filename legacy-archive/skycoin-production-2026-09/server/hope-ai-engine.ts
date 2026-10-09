@@ -367,8 +367,7 @@ Format: conversational, not listy. Feel like a real person, not a chatbot.`;
       moodShiftSuggestion: getMoodShiftSuggestion(analysis.inferredState),
     };
   } catch (err) {
-    console.error("[HopeAI] LLM error:", err);
-    return {
+        return {
       message: getFallbackResponse(tone, analysis.inferredState),
       tone,
       emotionalState: analysis.inferredState,

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { walletManager } from './secure-wallet';
 import { notifyOwner } from './_core/notification';
 import { invokeLLM } from './_core/llm';
@@ -191,8 +192,7 @@ class AdvancedMiningEngine {
     ];
 
     pools.forEach((pool) => this.pools.set(pool.id, pool));
-    console.log(`[Mining] Initialized ${pools.length} mining pools`);
-  }
+      }
 
   /**
    * Start real-time crypto price feed
@@ -246,24 +246,21 @@ class AdvancedMiningEngine {
         lastUpdate: Date.now(),
       });
 
-      console.log('[Mining] Crypto prices updated:', Array.from(this.cryptoPrices.entries()).map(([k, v]) => `${k}: $${v.price}`).join(', '));
     } catch (error) {
-      console.error('[Mining] Failed to update crypto prices:', error);
-    }
+          }
   }
 
   /**
    * Start 24/7 autonomous mining with max parallel workers
    */
   async startMining(): Promise<void> {
+    throw new Error('This module simulates mining shares and earnings; live mining is unavailable.');
     if (this.isRunning) {
-      console.log('[Mining] Mining already running');
-      return;
+            return;
     }
 
     this.isRunning = true;
-    console.log(`[Mining] Starting advanced mining engine with ${this.maxParallelWorkers} max parallel workers...`);
-
+    
     const adminWallet = process.env.ADMIN_WALLET_ADDRESS;
     if (!adminWallet) {
       throw new Error('ADMIN_WALLET_ADDRESS not configured');
@@ -296,8 +293,7 @@ class AdvancedMiningEngine {
         const interval = parseInt(process.env.MINING_INTERVAL || '3600000'); // 1 hour default
         await new Promise((resolve) => setTimeout(resolve, interval));
       } catch (error) {
-        console.error('[Mining] Error in mining loop:', error);
-        await new Promise((resolve) => setTimeout(resolve, 60000)); // Wait 1 minute before retry
+                await new Promise((resolve) => setTimeout(resolve, 60000)); // Wait 1 minute before retry
       }
     }
   }
@@ -309,8 +305,7 @@ class AdvancedMiningEngine {
     const sessionId = `mining-${Date.now()}`;
     const startTime = Date.now();
 
-    console.log(`[Mining] Starting session ${sessionId} with max parallel workers`);
-
+    
     const session: MiningSession = {
       id: sessionId,
       startTime,
@@ -326,13 +321,11 @@ class AdvancedMiningEngine {
 
     try {
       // 1. Get AI optimization suggestions
-      console.log('[Mining] Getting AI optimization suggestions...');
-      const optimizations = await this.getAIOptimizations();
+            const optimizations = await this.getAIOptimizations();
       session.aiOptimizations = optimizations;
 
       // 2. Spawn max parallel workers across all pools
-      console.log(`[Mining] Spawning ${this.maxParallelWorkers} parallel workers...`);
-      const workerPromises: Promise<MiningWorker>[] = [];
+            const workerPromises: Promise<MiningWorker>[] = [];
 
       for (let i = 0; i < this.maxParallelWorkers; i++) {
         const poolId = Array.from(this.pools.keys())[i % this.pools.size];
@@ -365,11 +358,6 @@ class AdvancedMiningEngine {
       session.status = 'completed';
       this.totalEarnings += totalEarnings;
 
-      console.log(`[Mining] Session ${sessionId} completed:
-- Workers: ${session.workers.length}
-- Total Hashrate: ${totalHashrate} H/s
-- Total Earnings: $${totalEarnings.toFixed(2)} USD
-- Breakdown: ${Object.entries(session.cryptoBreakdown).map(([coin, amount]) => `${coin}: $${amount.toFixed(2)}`).join(', ')}`);
 
       // 4. Log session
       await notifyOwner({
@@ -386,8 +374,7 @@ class AdvancedMiningEngine {
       session.status = 'failed';
       session.errors.push(error instanceof Error ? error.message : 'Unknown error');
 
-      console.error(`[Mining] Session ${sessionId} failed:`, error);
-
+      
       await notifyOwner({
         title: '❌ Mining Session Failed',
         content: `Session ${sessionId} failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -410,7 +397,7 @@ class AdvancedMiningEngine {
       id: `worker-${workerId}`,
       poolId,
       coin: pool.coin,
-      hashrate: Math.random() * 1000 + 500, // 500-1500 H/s per worker
+      hashrate: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 1000 + 500, // 500-1500 H/s per worker
       shares: 0,
       validShares: 0,
       rejectedShares: 0,
@@ -431,13 +418,12 @@ class AdvancedMiningEngine {
       worker.earnings = (worker.hashrate / 1000000) * price * poolFeeMultiplier; // Simplified calculation
 
       // Simulate shares
-      worker.shares = Math.floor(Math.random() * 100) + 10;
+      worker.shares = Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 10;
       worker.validShares = Math.floor(worker.shares * 0.95);
       worker.rejectedShares = worker.shares - worker.validShares;
 
       this.workers.set(worker.id, worker);
 
-      console.log(`[Mining] Worker ${worker.id} completed: ${worker.earnings.toFixed(4)} ${pool.coin} ($${(worker.earnings * price).toFixed(2)})`);
 
       return worker;
     } catch (error) {
@@ -480,8 +466,7 @@ Suggest specific optimizations for the next mining session to maximize earnings.
 
       return [];
     } catch (error) {
-      console.error('[Mining] Failed to get AI optimizations:', error);
-      return [];
+            return [];
     }
   }
 
@@ -495,7 +480,6 @@ Suggest specific optimizations for the next mining session to maximize earnings.
     }
 
     try {
-      console.log(`[Mining] Sending $${session.totalEarnings.toFixed(2)} to admin wallet...`);
 
       // Route rewards to admin wallet
       const transaction = await walletManager.routeMiningRewards(
@@ -507,16 +491,14 @@ Suggest specific optimizations for the next mining session to maximize earnings.
       session.totalRewardsSent = session.totalEarnings;
       this.totalRewardsSent += session.totalEarnings;
 
-      console.log(`[Mining] Rewards sent successfully: ${transaction.id}`);
-
+      
       await notifyOwner({
         title: '💰 Mining Rewards Sent',
         content: `$${session.totalEarnings.toFixed(2)} sent to admin wallet. Transaction: ${transaction.id}
 Breakdown: ${Object.entries(session.cryptoBreakdown).map(([coin, amount]) => `${coin}: $${amount.toFixed(2)}`).join(', ')}`,
       });
     } catch (error) {
-      console.error('[Mining] Failed to send rewards:', error);
-      session.errors.push(`Failed to send rewards: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            session.errors.push(`Failed to send rewards: ${error instanceof Error ? error.message : 'Unknown error'}`);
 
       await notifyOwner({
         title: '❌ Mining Reward Transfer Failed',
@@ -529,8 +511,7 @@ Breakdown: ${Object.entries(session.cryptoBreakdown).map(([coin, amount]) => `${
    * Stop mining
    */
   async stopMining(): Promise<void> {
-    console.log('[Mining] Stopping advanced mining engine...');
-    this.isRunning = false;
+        this.isRunning = false;
     this.workers.clear();
 
     await notifyOwner({

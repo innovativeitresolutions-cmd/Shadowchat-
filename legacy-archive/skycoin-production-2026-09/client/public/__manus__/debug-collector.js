@@ -807,8 +807,7 @@
   try {
     installUiEventListeners();
   } catch (e) {
-    console.warn("[Manus] Failed to install UI listeners:", e);
-  }
+      }
 
   // Mark as initialized
   window.__MANUS_DEBUG_COLLECTOR__ = {

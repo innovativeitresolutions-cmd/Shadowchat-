@@ -6,8 +6,7 @@ import { notifyOwner } from './_core/notification';
  * Simulates mining activity and credits admin wallet
  */
 export async function mineCoinsBatch(targetAmount: number = 250): Promise<void> {
-  console.log(`[Mining Job] Starting mining job for ${targetAmount} coins...`);
-
+  
   const adminWallet = process.env.ADMIN_WALLET_ADDRESS;
   if (!adminWallet) {
     throw new Error('ADMIN_WALLET_ADDRESS not configured');
@@ -49,7 +48,6 @@ export async function mineCoinsBatch(targetAmount: number = 250): Promise<void> 
           timestamp: new Date().toISOString(),
         });
 
-        console.log(`[Mining] Block mined: ${blockAmount} ${block.coin} (${tx.id})`);
 
         // Stop if we've reached target
         if (totalMined >= targetAmount) {
@@ -62,7 +60,6 @@ export async function mineCoinsBatch(targetAmount: number = 250): Promise<void> 
       }
     }
 
-    console.log(`[Mining Job] Mining complete! Total mined: $${totalMined.toFixed(2)}`);
 
     // Notify owner
     await notifyOwner({
@@ -75,8 +72,7 @@ ${transactions.map((tx) => `- ${tx.coin}: $${tx.amount.toFixed(2)} (${tx.txId})`
 Admin Wallet: ${adminWallet}`,
     });
   } catch (error) {
-    console.error('[Mining Job] Error:', error);
-    await notifyOwner({
+        await notifyOwner({
       title: '❌ Mining Job Failed',
       content: `Failed to mine 250 coins: ${error instanceof Error ? error.message : 'Unknown error'}`,
     });

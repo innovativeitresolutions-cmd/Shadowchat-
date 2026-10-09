@@ -48,8 +48,8 @@ const EVENT_TEMPLATES: Omit<LiveEvent, "id" | "ts">[] = [
 ];
 
 function genEvent(): LiveEvent {
-  const tpl = EVENT_TEMPLATES[Math.floor(Math.random() * EVENT_TEMPLATES.length)];
-  return { ...tpl, id: Math.random().toString(36).slice(2), ts: Date.now() };
+  const tpl = EVENT_TEMPLATES[Math.floor((Math.random()) * EVENT_TEMPLATES.length)];
+  return { ...tpl, id: (Math.random()).toString(36).slice(2), ts: Date.now() };
 }
 
 const LATENCY_DATA = [
@@ -276,9 +276,9 @@ export default function SystemObservability() {
                     id: `session_${1000 + i * 137}`,
                     user: `user_${(i * 7 + 3).toString(16)}x${i + 1}`,
                     room: ["feed", "chat", "dating", "notifications", "trading"][i % 5],
-                    msgs: Math.floor(Math.random() * 200) + 10,
-                    latency: Math.floor(Math.random() * 30) + 5,
-                    connected: `${Math.floor(Math.random() * 45) + 1}m ago`,
+                    msgs: Math.floor((Math.random()) * 200) + 10,
+                    latency: Math.floor((Math.random()) * 30) + 5,
+                    connected: `${Math.floor((Math.random()) * 45) + 1}m ago`,
                   })).map((sess) => (
                     <div key={sess.id} className="flex items-center gap-3 p-2 rounded-lg bg-white/5 text-xs">
                       <div className="w-2 h-2 rounded-full bg-[oklch(0.75_0.2_145)] animate-pulse shrink-0" />

@@ -50,12 +50,12 @@ export default function LiveReactions() {
   // Simulate incoming reactions from other users
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      const randomEmoji = REACTION_EMOJIS[Math.floor(Math.random() * REACTION_EMOJIS.length)];
-      const x = 10 + Math.random() * 80;
+      const randomEmoji = REACTION_EMOJIS[Math.floor((Math.random()) * REACTION_EMOJIS.length)];
+      const x = 10 + (Math.random()) * 80;
 
       setFloating(prev => [
         ...prev.slice(-30),
-        { id: Math.random().toString(36).slice(2), emoji: randomEmoji, x, createdAt: Date.now() }
+        { id: (Math.random()).toString(36).slice(2), emoji: randomEmoji, x, createdAt: Date.now() }
       ]);
 
       setCounts(prev => prev.map(r =>
@@ -65,8 +65,8 @@ export default function LiveReactions() {
       ));
 
       setTotalReactions(prev => prev + 1);
-      setViewerCount(prev => prev + (Math.random() > 0.7 ? 1 : Math.random() > 0.8 ? -1 : 0));
-      setReactionRate(prev => Math.max(50, Math.min(500, prev + (Math.random() - 0.5) * 20)));
+      setViewerCount(prev => prev + ((Math.random()) > 0.7 ? 1 : (Math.random()) > 0.8 ? -1 : 0));
+      setReactionRate(prev => Math.max(50, Math.min(500, prev + ((Math.random()) - 0.5) * 20)));
     }, 400);
 
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
@@ -82,10 +82,10 @@ export default function LiveReactions() {
   }, []);
 
   const sendReaction = useCallback((emoji: string) => {
-    const x = 10 + Math.random() * 80;
+    const x = 10 + (Math.random()) * 80;
     setFloating(prev => [
       ...prev,
-      { id: Math.random().toString(36).slice(2), emoji, x, createdAt: Date.now() }
+      { id: (Math.random()).toString(36).slice(2), emoji, x, createdAt: Date.now() }
     ]);
     setCounts(prev => prev.map(r =>
       r.emoji === emoji ? { ...r, count: r.count + 1, recent: true } : r

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 31 — DIGITAL IDENTITY LAYER
  * Creator passports, reputation passports, wallet identity fusion,
@@ -236,7 +237,7 @@ function _generatePassportNumber(): string {
 }
 
 function _generateId(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
 }
 
 function _generateSignature(data: string): string {
@@ -748,7 +749,7 @@ export const profileNFTEngine = {
     const nft: ProfileNFT = {
       id: _generateId("pnft"),
       userId: params.userId,
-      tokenId: `${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      tokenId: `${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`,
       contractAddress: "0xSKYCOIN4444_PROFILE_NFT",
       chain: "skycoin",
       name: params.name,

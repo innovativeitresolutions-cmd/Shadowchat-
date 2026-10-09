@@ -76,8 +76,7 @@ export default function DatingProfile() {
         });
       }
     } catch (error) {
-      console.error('Failed to load profile:', error);
-    } finally {
+          } finally {
       setLoading(false);
     }
   };
@@ -89,8 +88,7 @@ export default function DatingProfile() {
       setSuggestions(data.suggestions || []);
       setShowSuggestions(true);
     } catch (error) {
-      console.error('Failed to load suggestions:', error);
-    }
+          }
   };
 
   const handleSaveProfile = async () => {
@@ -111,8 +109,7 @@ export default function DatingProfile() {
         setEditing(false);
       }
     } catch (error) {
-      console.error('Failed to save profile:', error);
-    } finally {
+          } finally {
       setSaving(false);
     }
   };

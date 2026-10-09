@@ -120,7 +120,7 @@ export default function Live() {
 
     const interval = setInterval(() => {
       setViewerCount((prev) => {
-        const change = Math.floor(Math.random() * 100) - 40;
+        const change = Math.floor((Math.random()) * 100) - 40;
         return Math.max(100, prev + change);
       });
     }, 5000);

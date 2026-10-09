@@ -53,10 +53,10 @@ const initialTopGifters: TopGifter[] = [
 const generateRandomGift = (): RecentGift => {
   const randomGifter = [
     'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi',
-  ][Math.floor(Math.random() * 8)];
-  const randomGift = giftCatalog[Math.floor(Math.random() * giftCatalog.length)];
+  ][Math.floor((Math.random()) * 8)];
+  const randomGift = giftCatalog[Math.floor((Math.random()) * giftCatalog.length)];
   return {
-    id: Math.random().toString(36).substring(7),
+    id: (Math.random()).toString(36).substring(7),
     gifter: randomGifter,
     gift: randomGift,
     timestamp: Date.now(),
@@ -107,7 +107,7 @@ const LiveGifting = () => {
     setCreatorEarnings((prevEarnings) => prevEarnings + selectedGift.price * 0.7); // Simulate 70% earnings
 
     const newGift: RecentGift = {
-      id: Math.random().toString(36).substring(7),
+      id: (Math.random()).toString(36).substring(7),
       gifter: 'You', // Assuming the current user is sending
       gift: selectedGift,
       timestamp: Date.now(),

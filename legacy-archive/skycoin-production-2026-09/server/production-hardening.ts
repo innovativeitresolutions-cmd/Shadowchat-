@@ -89,8 +89,7 @@ export const errorHandler = (
   }
 
   // Log unexpected errors
-  console.error("UNEXPECTED ERROR:", err);
-
+  
   res.status(500).json({
     status: "error",
     message: "Internal server error",
@@ -108,7 +107,7 @@ export const requestLogger = (
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    console.log(JSON.stringify({
+    console.info(JSON.stringify({
       timestamp: new Date().toISOString(),
       method: req.method,
       path: req.path,
@@ -143,8 +142,7 @@ try {
   // const redis = require('redis');
   // redisClient = redis.createClient();
 } catch (error) {
-  console.warn('Redis not available, caching disabled');
-}
+  }
 
 export const cacheMiddleware = (ttl: number = 300) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -159,16 +157,14 @@ export const cacheMiddleware = (ttl: number = 300) => {
           return res.json(JSON.parse(cached));
         }
       } catch (error) {
-        console.error("Cache error:", error);
-      }
+              }
 
       const originalJson = res.json.bind(res);
       res.json = function (data: any) {
         try {
           redisClient.setEx(key, ttl, JSON.stringify(data)).catch(console.error);
         } catch (error) {
-          console.error("Cache set error:", error);
-        }
+                  }
         return originalJson(data);
       };
     }
@@ -303,15 +299,12 @@ export class MetricsCollector {
 // 11. BACKUP & RECOVERY
 export async function backupDatabase() {
   const timestamp = new Date().toISOString();
-  console.log(`Starting database backup at ${timestamp}`);
-
+  
   try {
     // Implement actual backup logic
     // This is a placeholder for the backup implementation
-    console.log(`Backup completed successfully at ${timestamp}`);
-  } catch (error) {
-    console.error("Backup failed:", error);
-    throw new AppError("Backup failed", 500);
+      } catch (error) {
+        throw new AppError("Backup failed", 500);
   }
 }
 

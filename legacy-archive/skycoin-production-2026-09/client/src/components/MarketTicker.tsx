@@ -36,9 +36,9 @@ export default function MarketTicker() {
     const interval = setInterval(() => {
       setTickers(prev => prev.map(ticker => ({
         ...ticker,
-        price: ticker.price * (1 + (Math.random() - 0.5) * 0.001),
-        change: (Math.random() - 0.5) * 10,
-        changePercent: (Math.random() - 0.5) * 5,
+        price: ticker.price * (1 + ((Math.random()) - 0.5) * 0.001),
+        change: ((Math.random()) - 0.5) * 10,
+        changePercent: ((Math.random()) - 0.5) * 5,
       })));
     }, 3000);
 

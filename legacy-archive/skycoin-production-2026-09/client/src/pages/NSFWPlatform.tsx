@@ -399,7 +399,7 @@ export default function NSFWPlatform() {
                         <div className="text-xs text-white/40">{c.handle}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm font-bold text-yellow-400">{(Math.random() * 5000 + 500).toFixed(0)} SKY444</div>
+                        <div className="text-sm font-bold text-yellow-400">{((Math.random()) * 5000 + 500).toFixed(0)} SKY444</div>
                         <div className="text-xs text-white/30">this week</div>
                       </div>
                     </div>

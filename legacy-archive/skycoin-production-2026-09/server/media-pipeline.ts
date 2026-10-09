@@ -469,7 +469,7 @@ export const mediaModerator = {
     const hashNum = parseInt(hash.slice(0, 8), 16) / 0xffffffff;
 
     const categories = MODERATION_CATEGORIES.map(name => {
-      const categoryHash = parseInt(crypto.createHash("md5").update(name + assetId).digest("hex").slice(0, 4), 16) / 0xffff;
+      const categoryHash = parseInt(crypto.createHash('sha256').update(name + assetId).digest("hex").slice(0, 4), 16) / 0xffff;
       const confidence = categoryHash * 0.3; // Most content is safe
       return { name, confidence, flagged: confidence > 0.7 };
     });
@@ -731,7 +731,7 @@ export const videoModerationAI = mediaModerator;
 // ─── COMMANDMENT 9A: initiateUpload alias ────────────────────────────────────
 export const _mediaPipelineAliases = {
   async initiateUpload(params: { userId: number; fileName: string; fileSize: number; mimeType: string; purpose: string }) {
-    const uploadId = `upload_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const uploadId = `upload_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     const fileKey = `uploads/${params.userId}/${uploadId}/${params.fileName}`;
     return {
       uploadId,

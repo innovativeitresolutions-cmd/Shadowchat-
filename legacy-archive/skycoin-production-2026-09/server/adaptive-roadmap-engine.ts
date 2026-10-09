@@ -223,8 +223,7 @@ export class AdaptiveRoadmapEngine {
     // Trigger priority update
     this.updateDynamicPriorities();
 
-    console.log(`Updated feedback signal for ${item.name}: ${item.feedbackScore}`);
-  }
+      }
 
   /**
    * Get roadmap changes (what reshuffled)

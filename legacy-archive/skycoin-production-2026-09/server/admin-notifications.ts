@@ -6,8 +6,6 @@
 
 import * as db from "./db";
 
-const ADMIN_USER_ID = "admin-skyler-blue"; // Sky4 admin account identifier
-
 export interface AdminNotification {
   type: "user_signup" | "payment" | "stake" | "swap" | "tip" | "mining" | "charity" | "marketplace" | "governance" | "security" | "system";
   title: string;
@@ -22,9 +20,6 @@ export interface AdminNotification {
  */
 export async function notifyAdmin(notification: AdminNotification): Promise<boolean> {
   try {
-    const timestamp = notification.timestamp || Date.now();
-    const severity = notification.severity || "info";
-    
     // Format message for ShadowChat
     const formattedMessage = formatNotificationMessage(notification);
     
@@ -36,11 +31,9 @@ export async function notifyAdmin(notification: AdminNotification): Promise<bool
       message: formattedMessage,
     });
     
-    console.log(`[Admin Notification] ${notification.type.toUpperCase()}: ${notification.title}`);
     return true;
   } catch (error) {
-    console.error("[Admin Notification] Failed:", error);
-    return false;
+        return false;
   }
 }
 

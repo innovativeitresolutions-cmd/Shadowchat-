@@ -95,7 +95,7 @@ function IcoStatsBanner() {
         <div>
           <div className="text-2xl font-black text-white">{stats.totalInvestors.toLocaleString()}</div>
           <div className="text-xs text-slate-400">Investors</div>
-          <div className="text-xs text-blue-400 mt-0.5">+{Math.floor(Math.random() * 12) + 3} today</div>
+          <div className="text-xs text-blue-400 mt-0.5">+{Math.floor((Math.random()) * 12) + 3} today</div>
         </div>
         <div>
           <div className="text-2xl font-black text-amber-400">${parseFloat(stats.tokenPriceUsd.toString()).toFixed(5)}</div>

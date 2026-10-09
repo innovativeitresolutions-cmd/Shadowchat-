@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * GAMIFICATION x44 ENGINE
  * Most Addictive UX Mechanics Ever
@@ -44,7 +45,7 @@ export class GamificationX44Engine {
       id: 'instant-reward-1',
       type: 'reward',
       trigger: 'user_action',
-      action: async () => ({ points: Math.random() * 100 }),
+      action: async () => ({ points: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 }),
       reward: { type: 'points', min: 10, max: 100 },
       frequency: 'variable', // Variable ratio = most addictive
       psychology: 'Variable rewards create unpredictable dopamine hits',
@@ -241,7 +242,7 @@ export class GamificationX44Engine {
       { name: 'Streaker', description: 'Maintain 7-day streak', reward: 600 },
     ];
 
-    return challenges[Math.floor(Math.random() * challenges.length)];
+    return challenges[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * challenges.length)];
   }
 
   /**
@@ -256,7 +257,7 @@ export class GamificationX44Engine {
       { reward: 5000, rarity: 'legendary', probability: 0.02 },
     ];
 
-    const random = Math.random();
+    const random = (crypto.getRandomValues(new Uint8Array(1))[0] / 256);
     let cumulative = 0;
 
     for (const outcome of outcomes) {
@@ -284,7 +285,7 @@ export class GamificationX44Engine {
    * Update progress
    */
   private updateProgress(): number {
-    return Math.random() * 100;
+    return (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100;
   }
 
   /**
@@ -303,14 +304,14 @@ export class GamificationX44Engine {
    * Update rank
    */
   private updateRank(): number {
-    return Math.floor(Math.random() * 100) + 1;
+    return Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 1;
   }
 
   /**
    * Advance battle pass
    */
   private advanceBattlePass(): number {
-    return Math.floor(Math.random() * 100) + 1;
+    return Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100) + 1;
   }
 
   /**
@@ -329,7 +330,9 @@ export class GamificationX44Engine {
    */
   private recordAnalytics(userId: string, hook: GamificationHook, result: any): void {
     // Would send to analytics service
-    console.log(`[Analytics] User: ${userId}, Hook: ${hook.id}, Result: ${JSON.stringify(result)}`);
+    void userId;
+    void hook;
+    void result;
   }
 
   /**
@@ -339,7 +342,7 @@ export class GamificationX44Engine {
     const now = new Date();
     if (hook.frequency === 'instant') return now;
     if (hook.frequency === 'delayed') return new Date(now.getTime() + 3600000); // 1 hour
-    return new Date(now.getTime() + Math.random() * 3600000); // Random within 1 hour
+    return new Date(now.getTime() + (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 3600000); // Random within 1 hour
   }
 
   /**
@@ -370,7 +373,7 @@ export class GamificationX44Engine {
    */
   private getRandomHookType(): GamificationHook['type'] {
     const types: GamificationHook['type'][] = ['reward', 'progress', 'streak', 'social', 'fomo', 'scarcity', 'achievement', 'level'];
-    return types[Math.floor(Math.random() * types.length)];
+    return types[Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * types.length)];
   }
 }
 

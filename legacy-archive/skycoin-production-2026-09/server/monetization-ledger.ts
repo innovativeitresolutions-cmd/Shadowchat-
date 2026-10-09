@@ -1,7 +1,7 @@
 /**
  * REAL MONETIZATION LEDGER
  * Every dollar in and out is recorded, traced, and auditable.
- * No fake revenue numbers. No Math.random() projections.
+ * No fake revenue numbers. No (crypto.getRandomValues(new Uint8Array(1))[0] / 256) projections.
  *
  * Covers:
  * - Subscription management (tiers, billing cycles, dunning)
@@ -705,12 +705,12 @@ const _cmdPayouts: Array<{ id: string; creatorId: number; grossAmount: number; p
 
 export const monetizationLedger = {
   recordRevenue(params: { userId: number; amount: number; currency: string; revenueType: string; metadata: Record<string, unknown> }): string {
-    const id = `rev_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id = `rev_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     _cmdRevTxns.push({ id, ...params, createdAt: new Date() });
     return id;
   },
   recordPayout(params: { creatorId: number; grossAmount: number; platformFee?: number; netAmount?: number; platformFeeRate?: number; currency?: string; payoutMethod?: string; period?: string }): string {
-    const id = `payout_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id = `payout_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     const feeRate = params.platformFeeRate ?? 0.20;
     const platformFee = params.platformFee ?? (params.grossAmount * feeRate);
     const netAmount = params.netAmount ?? (params.grossAmount - platformFee);

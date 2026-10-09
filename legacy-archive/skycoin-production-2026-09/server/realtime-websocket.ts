@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * REAL-TIME WEBSOCKET LAYER — COMMANDMENT 4 COMPLIANCE
  * WebSockets + Redis pub/sub for all 7 core systems:
@@ -811,7 +812,7 @@ export class WebSocketServer {
     close: () => void;
   } {
     const userId = req.userId ?? 0;
-    const connectionId = `ws_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const connectionId = `ws_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
 
     const conn = connectionManager.connect(userId, connectionId, {
       userAgent: req.headers["user-agent"],
@@ -937,7 +938,7 @@ let _cmdMsgCount = 0;
 
 export const connectionRegistry = {
   register(params: { userId: number; deviceType: string; ipAddress: string }): string {
-    const id = `conn_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id = `conn_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     _cmdConnections.set(id, { id, ...params, connectedAt: new Date() });
     return id;
   },
@@ -956,7 +957,7 @@ export const connectionRegistry = {
 
 export const channelManager = {
   createChannel(name: string, system: string): string {
-    const id = `ch_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id = `ch_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     _cmdChannels.set(id, { id, name, system, subscribers: new Set() });
     return id;
   },

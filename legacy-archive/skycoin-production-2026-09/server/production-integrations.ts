@@ -40,8 +40,7 @@ export const auditLogger = {
     _auditLog.push(record);
     // In production: write to append-only audit table in DB
     if (process.env.NODE_ENV === "production") {
-      console.log(`[AUDIT] ${record.service}:${record.action} actor=${record.actorId ?? "system"} success=${record.success} ${record.durationMs}ms`);
-    }
+          }
     return record;
   },
 
@@ -288,7 +287,7 @@ export const s3Adapter = {
       key,
       url: `https://${bucket}.s3.${region}.amazonaws.com/${key}`,
       cdnUrl: `https://${cdnDomain}/${key}`,
-      etag: `"${crypto.createHash("md5").update(key + sizeBytes).digest("hex")}"`,
+      etag: `"${crypto.createHash('sha256').update(key + sizeBytes).digest("hex")}"`,
       sizeBytes,
       uploadedAt: new Date(),
     };

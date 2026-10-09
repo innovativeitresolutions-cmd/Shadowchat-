@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PHASE 35 — LEGACY & IMMORTALITY SYSTEMS
  * Creator legacy vaults, digital wills, succession planning, permanent archives,
@@ -215,7 +216,7 @@ const _culturalRecords = new Map<string, CulturalPreservationRecord>();
 const _platformMemories = new Map<string, PlatformMemoryEntry>();
 
 function _id(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 9)}`;
 }
 
 function _legalHash(data: string): string {
@@ -764,7 +765,7 @@ export const culturalPreservationEngine = {
       mediaUrls: params.mediaUrls ?? [],
       timestamp: new Date(),
       preservedAt: new Date(),
-      ipfsCid: `Qm${Math.random().toString(36).slice(2).padStart(44, "0")}`,
+      ipfsCid: `Qm${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2).padStart(44, "0")}`,
       viewCount: 0,
       isPublic: params.isPublic ?? true,
     };

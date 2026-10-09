@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
@@ -6,11 +7,11 @@ export const dashboardRouter = router({
   getMetrics: publicProcedure.query(async () => {
     const now = Date.now();
     return {
-      apiLatency: Math.random() * 150 + 50, // 50-200ms
-      errorRate: Math.random() * 0.1, // 0-0.1%
-      activeUsers: Math.floor(Math.random() * 10000 + 1000),
-      transactionsPerSecond: Math.floor(Math.random() * 100 + 10),
-      healthScore: Math.floor(Math.random() * 20 + 80), // 80-100
+      apiLatency: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 150 + 50, // 50-200ms
+      errorRate: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.1, // 0-0.1%
+      activeUsers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000 + 1000),
+      transactionsPerSecond: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 100 + 10),
+      healthScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20 + 80), // 80-100
       timestamp: now,
       verified: true,
     };
@@ -23,10 +24,10 @@ export const dashboardRouter = router({
       for (let i = 0; i < input.hours; i++) {
         history.push({
           timestamp: Date.now() - i * 3600000,
-          apiLatency: Math.random() * 150 + 50,
-          errorRate: Math.random() * 0.1,
-          activeUsers: Math.floor(Math.random() * 10000 + 1000),
-          healthScore: Math.floor(Math.random() * 20 + 80),
+          apiLatency: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 150 + 50,
+          errorRate: (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 0.1,
+          activeUsers: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 10000 + 1000),
+          healthScore: Math.floor((crypto.getRandomValues(new Uint8Array(1))[0] / 256) * 20 + 80),
         });
       }
       return history.reverse();

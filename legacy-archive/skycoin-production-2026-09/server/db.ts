@@ -3,15 +3,20 @@ import mysql from 'mysql2/promise';
 import * as schema from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
-const poolConnection = mysql.createPool(process.env.DATABASE_URL as string);
+const poolConnection = process.env.DATABASE_URL ? mysql.createPool(process.env.DATABASE_URL) : null;
 
-export const db = drizzle(poolConnection, { schema, mode: 'default' });
+export const db = poolConnection
+  ? drizzle(poolConnection, { schema, mode: 'default' })
+  : new Proxy({} as ReturnType<typeof drizzle>, {
+      get() {
+        throw new Error('DATABASE_URL is required for database operations.');
+      },
+    });
 
 export async function getDb() {
-  return db;
+  return poolConnection ? db : null;
 }
 
-// TODO: Replace mock functions with real Drizzle ORM queries
 // For now, returning mock data to get the app running
 
 // ============ USER HELPERS ============

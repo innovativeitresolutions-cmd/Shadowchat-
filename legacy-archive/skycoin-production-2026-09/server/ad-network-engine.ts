@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Internal Ad Network Engine
  * Phase 5E — Sovereignty Build
@@ -312,7 +313,7 @@ class ImpressionTracker {
     const revenueGenerated = cpm / 1000;
     const creatorRevenue = creatorId ? revenueGenerated * this.CREATOR_REVENUE_SHARE : 0;
     const impression: AdImpression = {
-      id: `imp_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      id: `imp_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`,
       campaignId,
       creativeId,
       userId,

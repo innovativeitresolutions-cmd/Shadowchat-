@@ -116,8 +116,7 @@ export async function signup(input: SignupInput): Promise<AuthToken | null> {
       expiresIn: JWT_EXPIRY,
     };
   } catch (error) {
-    console.error("[Auth] Signup error:", error);
-    return null;
+        return null;
   }
 }
 
@@ -143,8 +142,7 @@ export async function signin(input: SigninInput): Promise<AuthToken | null> {
       expiresIn: JWT_EXPIRY,
     };
   } catch (error) {
-    console.error("[Auth] Signin error:", error);
-    return null;
+        return null;
   }
 }
 

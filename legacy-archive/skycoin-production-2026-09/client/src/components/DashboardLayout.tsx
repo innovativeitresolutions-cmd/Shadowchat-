@@ -22,7 +22,7 @@ import {
 // OAuth disabled - login URL no longer needed
 // import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Brain, Cpu, Globe, Rocket, Wallet, BarChart3, Shield, Zap, Star, Map, Bot, Building2, BookOpen, Gamepad2, MessageSquare, TrendingUp, Award } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Brain, Cpu, Globe, Rocket, Wallet, BarChart3, Shield, Zap, Star, Map, Bot, Building2, BookOpen, Gamepad2, MessageSquare, TrendingUp, Award, Heart } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -50,6 +50,7 @@ const menuItems = [
   { icon: Users, label: "Citizen Passport", path: "/citizen-passport" },
   // ─── MEMORY ──────────────────────────────────────────────────
   { icon: Star, label: "Memory Constellation", path: "/memory-constellation" },
+  { icon: Heart, label: "For My Kids", path: "/family-legacy" },
   // ─── ANALYTICS ───────────────────────────────────────────────
   { icon: BarChart3, label: "Analytics", path: "/enterprise-analytics" },
   { icon: Shield, label: "Security", path: "/security" },

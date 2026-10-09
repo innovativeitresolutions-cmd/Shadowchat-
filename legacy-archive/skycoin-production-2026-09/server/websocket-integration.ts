@@ -59,8 +59,7 @@ export class WebSocketIntegration {
           const message: WebSocketMessage = JSON.parse(data);
           this.handleMessage(subscriberId, message);
         } catch (error) {
-          console.error('WebSocket message error:', error);
-        }
+                  }
       });
 
       ws.on('close', () => {
@@ -74,8 +73,7 @@ export class WebSocketIntegration {
       });
 
       ws.on('error', (error) => {
-        console.error('WebSocket error:', error);
-      });
+              });
     });
   }
 

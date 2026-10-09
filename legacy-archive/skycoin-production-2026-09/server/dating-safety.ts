@@ -47,11 +47,9 @@ export async function blockUser(data: BlockUser) {
       .values(data)
       .returning();
 
-    console.log(`[Safety] User ${data.blockerId} blocked ${data.blockedUserId}`);
-    return result[0];
+        return result[0];
   } catch (error) {
-    console.error('[Block User] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -69,11 +67,9 @@ export async function unblockUser(blockerId: number, blockedUserId: number) {
         )
       );
 
-    console.log(`[Safety] User ${blockerId} unblocked ${blockedUserId}`);
-    return result;
+        return result;
   } catch (error) {
-    console.error('[Unblock User] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -94,8 +90,7 @@ export async function isUserBlocked(blockerId: number, userId: number): Promise<
 
     return blocked.length > 0;
   } catch (error) {
-    console.error('[Check Block] Error:', error);
-    return false;
+        return false;
   }
 }
 
@@ -111,8 +106,7 @@ export async function getBlockedUsers(userId: number) {
 
     return blocks;
   } catch (error) {
-    console.error('[Get Blocked Users] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -144,10 +138,7 @@ export async function reportUser(data: ReportUser) {
       })
       .returning();
 
-    console.log(
-      `[Safety] User ${data.reporterId} reported ${data.reportedUserId} for ${data.reason}`
-    );
-
+    
     // Auto-block the reported user
     await blockUser({
       blockerId: data.reporterId,
@@ -158,8 +149,7 @@ export async function reportUser(data: ReportUser) {
 
     return result[0];
   } catch (error) {
-    console.error('[Report User] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -176,8 +166,7 @@ export async function getPendingReports(limit = 50) {
 
     return reports;
   } catch (error) {
-    console.error('[Get Pending Reports] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -193,8 +182,7 @@ export async function getUserReports(userId: number) {
 
     return reports;
   } catch (error) {
-    console.error('[Get User Reports] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -223,13 +211,11 @@ export async function resolveReport(
         .set({ isActive: false })
         .where(eq(datingProfiles.id, reportId));
 
-      console.log(`[Safety] User profile suspended`);
-    }
+          }
 
     return { id: reportId, status: action === 'approved' ? 'resolved' : 'dismissed' };
   } catch (error) {
-    console.error('[Resolve Report] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -246,11 +232,9 @@ export async function suspendProfile(userId: number, reason: string) {
       .where(eq(datingProfiles.userId, userId))
       .returning();
 
-    console.log(`[Safety] User ${userId} profile suspended: ${reason}`);
-    return result[0];
+        return result[0];
   } catch (error) {
-    console.error('[Suspend Profile] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -267,11 +251,9 @@ export async function unsuspendProfile(userId: number) {
       .where(eq(datingProfiles.userId, userId))
       .returning();
 
-    console.log(`[Safety] User ${userId} profile unsuspended`);
-    return result[0];
+        return result[0];
   } catch (error) {
-    console.error('[Unsuspend Profile] Error:', error);
-    throw error;
+        throw error;
   }
 }
 
@@ -287,8 +269,7 @@ export async function isProfileSuspended(userId: number): Promise<boolean> {
 
     return profile.length > 0 && profile[0].suspended === true;
   } catch (error) {
-    console.error('[Check Suspension] Error:', error);
-    return false;
+        return false;
   }
 }
 
@@ -325,8 +306,7 @@ export async function getModerationStats() {
       suspendedProfiles: suspendedProfiles.length,
     };
   } catch (error) {
-    console.error('[Moderation Stats] Error:', error);
-    throw error;
+        throw error;
   }
 }
 

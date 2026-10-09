@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * PRISM Performance Engine v1.0
  * Caching, CDN simulation, load balancing, metrics, profiling for SKYCOIN4444
@@ -245,7 +246,7 @@ export class ProfilerEngine {
   private activeProfiles = new Map<string, { startTime: number; memoryBefore: number; metadata: Record<string, unknown> }>();
 
   startProfile(operationName: string, metadata: Record<string, unknown> = {}): string {
-    const id = `${operationName}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const id = `${operationName}_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 8)}`;
     this.activeProfiles.set(id, {
       startTime: Date.now(),
       memoryBefore: process.memoryUsage?.()?.heapUsed || 0,
@@ -334,7 +335,7 @@ export class LoadBalancerEngine {
         return healthy.reduce((min, n) => n.activeConnections < min.activeConnections ? n : min, healthy[0]);
       case "weighted": {
         const totalWeight = healthy.reduce((sum, n) => sum + n.weight, 0);
-        let rand = Math.random() * totalWeight;
+        let rand = (crypto.getRandomValues(new Uint8Array(1))[0] / 256) * totalWeight;
         for (const node of healthy) { rand -= node.weight; if (rand <= 0) return node; }
         return healthy[0];
       }

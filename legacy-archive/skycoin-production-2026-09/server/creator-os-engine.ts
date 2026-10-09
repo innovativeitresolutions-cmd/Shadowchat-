@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Phase 6A — Creator Operating System Engine
  * Full creator business management: CRM, audience segmentation, sponsorship,
@@ -79,7 +80,7 @@ export const creatorCRM = {
   },
 
   recordInteraction(contactId: string, type: string, content: string): { id: string; contactId: string; type: string; content: string; createdAt: Date } {
-    const id = `interaction_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const id = `interaction_${Date.now()}_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2)}`;
     const contact = _crmContacts.get(contactId);
     if (contact) contact.lastInteraction = new Date();
     _crmInteractions.push({ id, contactId, creatorId: contact?.creatorId ?? 0, type: type as any, subject: type, body: content, createdAt: new Date() });

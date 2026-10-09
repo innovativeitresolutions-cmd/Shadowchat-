@@ -35,7 +35,7 @@ import { Link } from "wouter";
 function generateTimeSeries(base: number, variance: number, points: number, trend = 0) {
   return Array.from({ length: points }, (_, i) => ({
     t: i,
-    v: Math.max(0, base + trend * i + (Math.random() - 0.5) * variance),
+    v: Math.max(0, base + trend * i + ((Math.random()) - 0.5) * variance),
   }));
 }
 
@@ -49,8 +49,8 @@ const RETENTION_DATA = Array.from({ length: 8 }, (_, i) => ({
 }));
 const REVENUE_DATA = Array.from({ length: 12 }, (_, i) => ({
   month: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][i],
-  revenue: 45000 + i * 8000 + Math.random() * 15000,
-  burn: 12000 + i * 1500 + Math.random() * 5000,
+  revenue: 45000 + i * 8000 + (Math.random()) * 15000,
+  burn: 12000 + i * 1500 + (Math.random()) * 5000,
 }));
 const THREAT_DATA = [
   { name: "Fraud Signals", value: 23, color: "#ef4444" },

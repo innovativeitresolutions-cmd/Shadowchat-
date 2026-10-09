@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 /**
  * Server Installer tRPC Router
  * Generates Docker Compose, env files, install scripts, and health checks
@@ -29,9 +30,9 @@ export const installerRouter = router({
     .mutation(async ({ input }) => {
       const config = {
         ...input,
-        dbPassword: `db_${Math.random().toString(36).slice(2, 14)}`,
-        jwtSecret: `jwt_${Math.random().toString(36).slice(2, 22)}`,
-        redisPassword: `redis_${Math.random().toString(36).slice(2, 14)}`,
+        dbPassword: `db_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 14)}`,
+        jwtSecret: `jwt_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 22)}`,
+        redisPassword: `redis_${(crypto.getRandomValues(new Uint8Array(1))[0] / 256).toString(36).slice(2, 14)}`,
       };
       return {
         envFile: generateEnvFile(config),

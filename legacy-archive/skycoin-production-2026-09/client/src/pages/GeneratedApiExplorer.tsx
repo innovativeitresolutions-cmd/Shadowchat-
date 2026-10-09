@@ -62,7 +62,7 @@ export default function GeneratedApiExplorer() {
       success: true,
       data: selectedEndpoint.method === "GET"
         ? { items: [{ id: "abc123", content: "Sample response", createdAt: new Date().toISOString() }], total: 1 }
-        : { id: "new_" + Math.random().toString(36).slice(2, 8), status: "created", timestamp: new Date().toISOString() },
+        : { id: "new_" + (Math.random()).toString(36).slice(2, 8), status: "created", timestamp: new Date().toISOString() },
       meta: { latency: "42ms", version: "v1" },
     };
     setResponse(JSON.stringify(mock, null, 2));

@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   reconstruct:
-    if: github.actor != 'github-actions[bot]' && github.event.head_commit.message == 'ci(legacy): reconstruct exact recovered archive'
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:

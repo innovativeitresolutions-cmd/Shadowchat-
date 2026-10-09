@@ -70,6 +70,7 @@ export function Footer() {
               <li><Link href="/marketplace" className="hover:text-pink-400 transition-colors">Marketplace</Link></li>
               <li><Link href="/games" className="hover:text-pink-400 transition-colors">Gaming</Link></li>
               <li><Link href="/courses" className="hover:text-pink-400 transition-colors">Learning</Link></li>
+              <li><a href="/the-chosen-one-easter-eggs.html" className="hover:text-pink-400 transition-colors">📖 The Four Doors · Story Easter Eggs</a></li>
               <li><Link href="/ai-tools" className="hover:text-pink-400 transition-colors">AI Tools</Link></li>
               <li><Link href="/api-docs" className="hover:text-pink-400 transition-colors">API</Link></li>
               <li><Link href="/analytics-dashboard" className="hover:text-pink-400 transition-colors">Analytics</Link></li>

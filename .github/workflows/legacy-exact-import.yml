@@ -90,7 +90,7 @@ jobs:
                           "actual": actual_lines,
                       })
 
-          expected_total_rows = 1758
+          expected_total_rows = 1754
           expected_source_files = 1693
           expected_source_loc = 355835
 
@@ -109,6 +109,22 @@ jobs:
           if source_loc_recounted != expected_source_loc:
               raise SystemExit(f"Recounted source LOC mismatch: {source_loc_recounted} != {expected_source_loc}")
 
+          optimized_expected = {
+              "deploy-android.sh": "33b9acb9b0cded9cc19cae665d7eb079370fb673ec95b5aef9b996465539929b",
+              "deploy-aws.sh": "180c29638e4055fa71cab9903c250ad51861af4db936fd30769194b41160eac9",
+              "deploy-gcp.sh": "49893e8fa13db6b7fdf37a2bcb0651143a088680d0cda46f2ab4e3a53fbd235c",
+              "deploy-ios.sh": "9c11da03c71a6c0a1b50a4c432ffb47d51eefe89f132e692d4183362f448c781",
+          }
+          optimized_exact = 0
+          for name, expected_hash in optimized_expected.items():
+              p = base / "optimized-deploy-scripts" / name
+              if not p.is_file():
+                  raise SystemExit(f"Missing optimized deployment helper: {name}")
+              actual_hash = hashlib.sha256(p.read_bytes()).hexdigest()
+              if actual_hash != expected_hash:
+                  raise SystemExit(f"Optimized deployment helper hash mismatch: {name}")
+              optimized_exact += 1
+
           evidence = {
               "archive_sha256": "beca31f9ff509662e0550df2b0e650a9a21fbe63b601201a2c6fd3e9233cf5b8",
               "inventory_rows": len(rows),
@@ -117,6 +133,8 @@ jobs:
               "hash_mismatches": 0,
               "selected_source_files": source_files,
               "selected_source_loc": source_loc_recounted,
+              "optimized_deploy_helpers_verified": optimized_exact,
+              "total_recovered_files_verified": exact + optimized_exact,
               "quarantined": True,
               "active_runtime_imported": False,
               "production_readiness_claim": False,
@@ -133,7 +151,9 @@ jobs:
               f"- Missing files: **0**\n"
               f"- Hash mismatches: **0**\n"
               f"- Selected source files: **{evidence['selected_source_files']:,}**\n"
-              f"- Selected source LOC recounted: **{evidence['selected_source_loc']:,}**\n\n"
+              f"- Selected source LOC recounted: **{evidence['selected_source_loc']:,}**\n"
+              f"- Optimized deployment helpers verified: **{evidence['optimized_deploy_helpers_verified']} / 4**\n"
+              f"- Total recovered files verified: **{evidence['total_recovered_files_verified']:,}**\n\n"
               "The archive is stored under `legacy-archive/` as quarantined historical source. "
               "It is not loaded by the active runtime and does not establish production readiness or validate historical external-service claims.\n",
               encoding="utf-8",

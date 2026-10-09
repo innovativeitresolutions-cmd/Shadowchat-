@@ -1,0 +1,16 @@
+{
+  "name": "skycoin4444-shadowchat-quality-baseline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Quality-first SKYCOIN4444 / ShadowChat engineering-beta baseline",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node scripts/verify-release.mjs",
+    "check": "node --check server.mjs && node --check src/domain.mjs && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

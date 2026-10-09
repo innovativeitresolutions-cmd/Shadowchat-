@@ -1,0 +1,14 @@
+{
+  "archive_sha256": "beca31f9ff509662e0550df2b0e650a9a21fbe63b601201a2c6fd3e9233cf5b8",
+  "inventory_rows": 1754,
+  "exact_sha256_matches": 1754,
+  "missing_files": 0,
+  "hash_mismatches": 0,
+  "selected_source_files": 1693,
+  "selected_source_loc": 355835,
+  "optimized_deploy_helpers_verified": 4,
+  "total_recovered_files_verified": 1758,
+  "quarantined": true,
+  "active_runtime_imported": false,
+  "production_readiness_claim": false
+}

@@ -145,7 +145,9 @@ Passing local tests does not automatically pass these infrastructure gates.
 
 ## Legacy source
 
-Recovered historical SKYCOIN4444 archives were previously measured at about **355,835 source LOC across 1,693 source files** after excluding generated/build output and obvious duplicate archive copies. Those files are not automatically treated as production-ready. See [`docs/LEGACY_IMPORT_STATUS.md`](docs/LEGACY_IMPORT_STATUS.md) for the selective-import standard.
+The full recovered SKYCOIN4444 archive is preserved under `legacy-archive/` as quarantined historical source. GitHub Actions verified **1,754 / 1,754 inventory-file SHA-256 hashes**, **4 / 4 optimized deployment helpers**, **1,693 selected source files**, and **355,835 selected source LOC** against the recovered consolidation archive.
+
+The archive is **not loaded by the active runtime** and is not evidence that historical provider, payment, crypto, security, deployment, compliance, charity, or production claims are live or verified. See [`docs/LEGACY_IMPORT_STATUS.md`](docs/LEGACY_IMPORT_STATUS.md) and [`legacy-archive/IMPORT_VERIFICATION.md`](legacy-archive/IMPORT_VERIFICATION.md).
 
 ## Product direction
 

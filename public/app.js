@@ -1,3 +1,4 @@
+import { enhanceWorkspaces } from "./workspaces-ui.mjs";
 const A=[['overview','Overview'],['hopeai','HopeAI'],['impact','HopeAI Impact'],['social','Social'],['market','Marketplace'],['games','Games'],['edu','Education'],['crypto','Wallet / Crypto'],['security','Security'],['ops','Release Ops']];
 const K='sky4-beta-v3',D=()=>({hope:[],impact:[],posts:[],cart:[],game:1000,watch:[],listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
 let s=(()=>{try{return {...D(),...JSON.parse(localStorage.getItem(K)||'{}')}}catch{return D()}})();
@@ -27,5 +28,6 @@ function bind(q){
  if(q==='crypto')$('watch').onsubmit=x=>{x.preventDefault();let c=$('wc').value,a=$('wa').value.trim(),ok=['ethereum','polygon','base','bsc'].includes(c)?/^0x[a-fA-F0-9]{40}$/.test(a):/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a);if(!ok)return alert('Invalid public-address format.');s.watch.push({c,a});save();render()};
  if(q==='security'){$('wipe').onclick=()=>{if(confirm('Clear browser-local beta data?')){localStorage.removeItem(K);s=D();render()}};$('export').onclick=()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(s,null,2)],{type:'application/json'}));a.download='skycoin4444-local.json';a.click()}};
  if(q==='ops')$('hc').onclick=async()=>{let h=$('health');h.textContent='Checking…';try{let r=await fetch('/api/healthz'),d=await r.json();h.innerHTML=`<strong class=\"${r.ok?'good':'bad'}\">${e(d.status)}</strong><p>database: ${e(d.database)} · provider: ${e(d.providerConnectivity)} · production ready: ${e(d.productionReady)}</p>`}catch{h.innerHTML='<strong class=\"bad\">Health check failed</strong>'}};
+ enhanceWorkspaces(q, {state:s, save, render, uid, go, escapeHtml:e});
 }
 addEventListener('hashchange',render);render();

@@ -126,6 +126,7 @@ export function removeImpactTask(campaign, taskId) {
 
 export function handoffCampaignToHope(campaign, id, createdAt = "") {
   if (!campaign || !campaign.title || !campaign.goal) throw new Error("Campaign is required.");
-  const plan = createHopePlan("Support " + campaign.title + ": " + campaign.goal, "charity", id, createdAt);
+  const goal = ("Support " + campaign.title + ": " + campaign.goal).slice(0, 500);
+  const plan = createHopePlan(goal, "charity", id, createdAt);
   return { ...plan, sourceCampaignId: String(campaign.id) };
 }

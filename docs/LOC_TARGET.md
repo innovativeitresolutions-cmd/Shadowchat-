@@ -21,6 +21,8 @@ npm run loc:audit -- --json
 
 The repo's prior exact-recovery import documented **355,835 selected historical source LOC**, validated by inventory; this is an archival measurement. It is not proof of active feature execution, database availability, model connectivity, external payments, or deployed integrations.
 
+The uploaded `skycoin_production_final (2) (2).zip` was also measured **as a separate extracted ZIP**, using the exact `scripts/loc-audit.mjs` source filtering rules (not the hosted runtime): **330,694 non-test source lines across 1,656 files**, plus **23,657 test lines across 33 files**. Combined source + tests = **354,351 physical lines across 1,689 files**, excluding generated build output and dependencies. This is **47,649 lines below 402,000 when tests count**, or **71,306 below if only non-test source counts**. Those files were measured in an uploaded archive and are **not assumed to be deployed by the current beta**.
+
 The uploaded `skycoin_production_final (2) (2).zip` contains historical source plus generated `build-output` artifacts. Counting generated bundles and duplicated vendor chunks as new source would substantially overstate real engineering progress. Source from that ZIP and the existing recovered archive may overlap, so their counts must **not be added together**.
 
 ## Progress standard

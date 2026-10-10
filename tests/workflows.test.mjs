@@ -82,3 +82,21 @@ test("Impact-to-Hope handoff generates a linked charity plan", () => {
   assert.match(plan.goal, /Food pantry/);
   assert.equal(plan.steps.every((s) => s.done === false), true);
 });
+
+test("maximum-length valid campaign can hand off safely", () => {
+  const c = createImpactWorkspace({
+    title: "A".repeat(120), goal: "B".repeat(500), pledgeIntent: 0
+  }, "campaign-1");
+  const plan = handoffCampaignToHope(c, "hope-1");
+  assert.equal(plan.goal.length, 500);
+  assert.equal(plan.sourceCampaignId, "campaign-1");
+});
+
+test("campaigns enforce finite action capacity", () => {
+  let campaign = createImpactWorkspace({ title: "Study drive", goal: "Plan a drive" });
+  for (let i = 0; i < 30; i++) {
+    campaign = addImpactTask(campaign, "Action " + i, String(i));
+  }
+  assert.equal(campaign.tasks.length, 30);
+  assert.throws(() => addImpactTask(campaign, "Action 31", "31"), /Maximum/);
+});

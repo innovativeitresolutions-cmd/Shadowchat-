@@ -8,8 +8,8 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 
 | Area | Implemented | Important boundary |
 |---|---|---|
-| HopeAI | Local planning workspace, persisted drafts, deterministic planning helper | No external model/provider is represented as connected |
-| HopeAI Impact | Campaign planning, beneficiaries, pledge intent, HopeAI planning handoff | No donation, settlement, nonprofit verification, receipt, or tax determination |
+| HopeAI | Goal-specific, browser-local action plans, task completion, progress tracking, delete | Deterministic templates; no connected model/provider |
+| HopeAI Impact | Campaign action boards, volunteer tasks, progress and HopeAI handoff | No donation, settlement, nonprofit verification, receipt, or tax determination |
 | Navigation | Desktop + mobile navigation across all flagship areas | Designed as one coherent product shell |
 | Social | Browser-local posts and reactions | No fake remote audience, realtime delivery, follower counts, or production moderation claim |
 | Marketplace | Search, lawful listings, restricted-item moderation, seller trust signals, cart, order drafts | No payment, escrow, seller-ID verification, crypto settlement, shipment or payout |
@@ -70,15 +70,17 @@ Future provider integrations should be added behind explicit capability checks a
 
 ## HopeAI
 
-HopeAI is the single public Hope brand. The current local helper creates a deterministic four-step action plan and explicitly labels itself as **not a connected AI provider response**. Browser-local drafts can be cleared from the HopeAI or Security surfaces.
+HopeAI is the single public Hope brand. The current local helper creates a deterministic four-step action plan for a selected goal type and explicitly labels itself as **not a connected AI provider response**. Plans support step completion and progress tracking. Browser-local drafts can be cleared from the HopeAI or Security surfaces.
 
 A real provider connection should not be marked live until there is configured secret management, request authorization, rate limiting, timeout/cancellation, provider-error redaction, token/cost controls, abuse handling, observability, data-retention documentation, and tests proving degraded behavior when the provider is unavailable.
 
 ## HopeAI Impact / charity
 
-Impact supports planning only: campaign goal, expected beneficiary count, and pledge intent. The pledge value is metadata. `moneyMoved` and `charityVerified` remain false.
+Impact supports planning only: campaign goal, volunteer/planning actions, progress tracking, and pledge intent. The pledge value is metadata. `moneyMoved` and `charityVerified` remain false.
 
 A real donation workflow would require, at minimum, a verified payment provider, account/merchant configuration, authorization and webhook integrity, idempotency, receipts/refunds, ledger reconciliation, dispute handling, charity/nonprofit verification appropriate to the product, data retention, security review, and legal/compliance analysis. None of those are implied by this repository.
+
+See [HopeAI & Impact action workspaces](docs/HOPEAI_IMPACT_WORKSPACES.md) for step-by-step usage, tests, and boundaries.
 
 ## Social / ShadowChat
 

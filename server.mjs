@@ -11,6 +11,7 @@ const port = Number(process.env.PORT || 3000);
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
@@ -42,7 +43,7 @@ function serveFile(res, requestPath) {
   fs.createReadStream(finalTarget).pipe(res);
 }
 
-const server = http.createServer((req, res) => {
+export const server = http.createServer((req, res) => {
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
   if (url.pathname === "/api/healthz") {
     return json(res, 200, {
@@ -64,6 +65,8 @@ const server = http.createServer((req, res) => {
   return serveFile(res, url.pathname);
 });
 
-server.listen(port, "0.0.0.0", () => {
-  console.log(`SKYCOIN4444 / ShadowChat engineering beta listening on http://0.0.0.0:${port}`);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`SKYCOIN4444 / ShadowChat engineering beta listening on http://0.0.0.0:${port}`);
+  });
+}

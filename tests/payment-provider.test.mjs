@@ -32,8 +32,12 @@ test("Stripe checkout creates a provider session and only a matched signed webho
       }) };
     }
   });
-  const server = http.createServer((req, res) => checkout.handle(req, res,
-    new URL(req.url, "http://127.0.0.1"), { currentUser: () => ({ username: "creator" }) }));
+  const server = http.createServer((req, res) => {
+    // Simulate a reverse proxy preserving the configured public TLS hostname.
+    req.headers.host = "checkout-test.example";
+    return checkout.handle(req, res, new URL(req.url, "http://127.0.0.1"),
+      { currentUser: () => ({ username: "creator" }) });
+  });
   await new Promise((done) => server.listen(0, "127.0.0.1", done));
   t.after(async () => { await new Promise((done) => server.close(done)); fs.rmSync(dir, { recursive:true, force:true }); });
   const base = "http://127.0.0.1:" + server.address().port;

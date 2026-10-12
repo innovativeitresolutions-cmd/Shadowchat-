@@ -177,6 +177,7 @@ export function createCryptoChatService({ dataFile = process.env.CRYPTOCHAT_DATA
   }
   return {
     enabled,
+    currentUser: sessionUser,
     handle: async (req, res, url) => {
       try { await handle(req, res, url); }
       catch (err) {

@@ -170,7 +170,7 @@ export function createCryptoChatService({ dataFile = process.env.CRYPTOCHAT_DATA
         if (!sessionUser(req)) { res.end(); listeners.delete(client); return; }
         try { res.write(": heartbeat\n\n"); } catch { listeners.delete(client); }
       }, 25000);
-      req.once("close", () => { clearInterval(interval); listeners.delete(client); });
+      res.once("close", () => { clearInterval(interval); listeners.delete(client); });
       return;
     }
     return jsonResponse(res, 404, { error: "Unknown chat endpoint." });

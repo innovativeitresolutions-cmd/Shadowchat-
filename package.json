@@ -8,7 +8,7 @@
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
     "verify": "node scripts/verify-release.mjs",
-    "check": "node --check server.mjs && node --check src/domain.mjs && node --check public/app.js && node --check public/workflows.mjs && node --check public/workspaces-ui.mjs",
+    "check": "node --check server.mjs && node --check src/domain.mjs && node --check public/app.js && node --check public/workflows.mjs && node --check public/workspaces-ui.mjs && node --check public/offerings.mjs && node --check public/launchpad-ui.mjs",
     "loc:audit": "node scripts/loc-audit.mjs"
   },
   "engines": {

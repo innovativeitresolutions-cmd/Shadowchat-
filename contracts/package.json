@@ -1,0 +1,15 @@
+{
+  "name": "skycoin4444-erc20-testnet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fixed supply ERC-20 testnet compiler and deployer; no mainnet deployment",
+  "scripts": {
+    "compile": "node compile.mjs",
+    "deploy:sepolia": "node deploy-sepolia.mjs"
+  },
+  "dependencies": {
+    "ethers": "6.16.0",
+    "solc": "0.8.30"
+  }
+}

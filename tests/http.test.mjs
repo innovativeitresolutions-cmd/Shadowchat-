@@ -13,7 +13,7 @@ test("live HTTP server serves HopeAI and Impact browser modules with JavaScript 
   const { port } = server.address();
   const base = "http://127.0.0.1:" + port;
 
-  for (const name of ["app.js", "workflows.mjs", "workspaces-ui.mjs"]) {
+  for (const name of ["app.js", "workflows.mjs", "workspaces-ui.mjs", "offerings.mjs", "launchpad-ui.mjs"]) {
     const response = await fetch(base + "/" + name);
     assert.equal(response.status, 200, name);
     assert.match(response.headers.get("content-type") || "", /text\/javascript/, name);

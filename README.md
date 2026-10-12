@@ -16,6 +16,7 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 | Games | Deterministic High/Low demo with resettable credits | Credits are non-redeemable; not gambling or financial wagering |
 | Education | Skill check, scoring, targeted missed-topic review into HopeAI | Study aid only; no accreditation or professional credential |
 | Wallet / Crypto | Watch-only public addresses and capability matrix | No private keys, signing, broadcasting, staking, mining, NFT minting, custody or live chain claim |
+| CryptoChat Launchpad | Token blueprints, ICO/IPO internal review, **wallet-signed Sepolia token deployment**, and optionally authenticated real-time multiuser SSE rooms | Only Sepolia testnet issuance; no mainnet launch, regulated investment acceptance, share issuance, or verified issuer identity. Hosted chat requires a persistent volume |
 | Security | CSP/security headers, local-data export/wipe, explicit boundaries | Not a security/compliance certification |
 | Release Ops | Health/capability/release-gate endpoints and P1 matrix | Hosted persistence/recovery/telemetry evidence still required |
 
@@ -67,6 +68,12 @@ This baseline intentionally uses browser `localStorage` for demo state so its pe
 The baseline fails closed rather than fabricating success. No external model provider, payment processor, blockchain RPC, custody service, charity-verification provider, email/SMS provider, identity provider, or telemetry backend is required to run the local product.
 
 Future provider integrations should be added behind explicit capability checks and should surface loading, unavailable, timeout, retry, authorization, and partial-failure states.
+
+## CryptoChat tokens, multiuser rooms, and optional platform checkout
+
+CryptoChat now includes three additional engineering paths: (1) **real Ethereum Sepolia testnet** ERC-20 deployment through the visitor's injected wallet, using reproducible Solidity source and compiled ABI/bytecode, with transaction receipt and minted-supply verification; (2) **server-backed authenticated real-time SSE rooms** when `CRYPTOCHAT_DATA_FILE` is configured on a persistent volume; and (3) **Stripe-hosted checkout for a separate non-investment platform membership** when the operator has provisioned legitimate credentials, a server-defined Price ID, a verified webhook, and durable payment ledger. No payment card details are processed by this server. Testing the optional checkout without keys must return unavailable, not a fake success.
+
+This work has **not** proven an actual funded testnet transaction, Stripe charge, remote user conversation, production-grade cluster, backup/restore drill, KYC status, issuer compliance, or securities offering. Browser-local ICO and equity IPO workspaces remain blocked internal plans. Do not conflate non-investment membership checkout with fundraising. See `contracts/` for the testnet deployment script and `docs/CRYPTOCHAT_RUNTIME.md` for environment and risk constraints.
 
 ## HopeAI
 

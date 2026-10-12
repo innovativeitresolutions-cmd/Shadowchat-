@@ -1,4 +1,6 @@
 import http from "node:http";
+import { createCryptoChatService } from "./src/crypto-chat-service.mjs";
+import { createServiceCheckout } from "./src/payment-service.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,6 +9,8 @@ import { CAPABILITIES, PRODUCT_AREAS, releaseGateSummary } from "./src/domain.mj
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(__dirname, "public");
 const port = Number(process.env.PORT || 3000);
+const chatService = createCryptoChatService();
+const checkoutService = createServiceCheckout();
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -45,6 +49,8 @@ function serveFile(res, requestPath) {
 
 export const server = http.createServer((req, res) => {
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  if (url.pathname.startsWith("/api/chat/")) return chatService.handle(req, res, url);
+  if (url.pathname.startsWith("/api/payments/")) return checkoutService.handle(req, res, url, { currentUser: chatService.currentUser });
   if (url.pathname === "/api/healthz") {
     return json(res, 200, {
       status: "ok",
@@ -54,6 +60,10 @@ export const server = http.createServer((req, res) => {
       database: "not-configured",
       providerConnectivity: "not-verified",
       productionReady: false,
+      authenticatedCryptoChat: chatService.enabled,
+      servicePayments: checkoutService.available,
+      tokenDeployment: false,
+      securitiesSubscriptions: false,
     });
   }
   if (url.pathname === "/api/capabilities") {

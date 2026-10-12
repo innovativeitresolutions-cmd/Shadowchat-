@@ -23,3 +23,9 @@ jobs:
         run: npm test
       - name: Release verification
         run: npm run verify
+      - name: Install pinned token testnet toolchain
+        run: npm install --prefix contracts --ignore-scripts --no-package-lock --no-audit
+      - name: Compile testnet ERC20 contract
+        run: npm --prefix contracts run compile
+      - name: Verify published browser artifact matches compiled Solidity bytecode
+        run: node -e "const fs=require('fs');const a=JSON.parse(fs.readFileSync('contracts/artifacts/SkyLaunchToken.json'));const b=JSON.parse(fs.readFileSync('public/erc20-sepolia-artifact.json'));if(a.bytecode!==b.bytecode || JSON.stringify(a.abi)!==JSON.stringify(b.abi) || b.chainId!==11155111 || b.audited!==false){process.exit(1)}console.log('Byte-for-byte token artifact parity passed')"

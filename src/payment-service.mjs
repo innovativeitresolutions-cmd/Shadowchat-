@@ -29,11 +29,11 @@ export function createServiceCheckout({
   env = process.env, now = () => Date.now(), fetchFn = fetch
 } = {}) {
   const available = configured(env);
-  let ledger = { seenEventIds: [], paidSessions: [] };
+  let ledger = { seenEventIds: [], paidSessions: [], pendingSessions: [] };
   if (available) {
     try {
       const data = JSON.parse(fs.readFileSync(env.STRIPE_LEDGER_FILE, "utf8"));
-      if (!Array.isArray(data.seenEventIds) || !Array.isArray(data.paidSessions)) throw new Error("Invalid payment ledger.");
+      if (!Array.isArray(data.seenEventIds) || !Array.isArray(data.paidSessions) || !Array.isArray(data.pendingSessions)) throw new Error("Invalid payment ledger.");
       ledger = data;
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
@@ -72,10 +72,15 @@ export function createServiceCheckout({
       if (!/^evt_[A-Za-z0-9]+$/.test(event.id || "")) return respond(res, 400, { error: "Invalid event ID." });
       if (ledger.seenEventIds.includes(event.id)) return respond(res, 200, { received: true, duplicate: true });
       // Webhook receipts are the only source of truth for completed purchases.
-      if (event.type === "checkout.session.completed" &&
+      const pending = ledger.pendingSessions.find((p) => p.sessionId === event.data?.object?.id);
+      if (pending && event.type === "checkout.session.completed" &&
           event.data?.object?.mode === "payment" &&
           event.data.object.payment_status === "paid" &&
           event.data.object.metadata?.product === "platform-membership" &&
+          event.data.object.metadata?.username === pending.username &&
+          event.data.object.livemode === env.STRIPE_SECRET_KEY.startsWith("sk_live_") &&
+          Number.isSafeInteger(event.data.object.amount_total) &&
+          event.data.object.amount_total > 0 &&
           /^cs_(test|live)_[A-Za-z0-9]+$/.test(event.data.object.id || "")) {
         const session = event.data.object;
         if (!ledger.paidSessions.some((x) => x.sessionId === session.id)) {
@@ -87,6 +92,7 @@ export function createServiceCheckout({
         }
       }
       ledger.seenEventIds.push(event.id);
+      if (pending) ledger.pendingSessions = ledger.pendingSessions.filter((p) => p.sessionId !== pending.sessionId);
       store();
       return respond(res, 200, { received: true });
     }
@@ -124,6 +130,9 @@ export function createServiceCheckout({
       try { result = await upstream.json(); } catch { return respond(res, 502, { error: "Invalid payment provider response." }); }
       if (!upstream.ok || typeof result.url !== "string" || !result.url.startsWith("https://checkout.stripe.com/"))
         return respond(res, 502, { error: "Provider did not create a checkout session." });
+      if (!/^cs_(test|live)_[A-Za-z0-9]+$/.test(result.id || "")) return respond(res, 502, { error: "Invalid provider checkout session." });
+      ledger.pendingSessions.push({ sessionId: result.id, username: u.username, createdAt: new Date(now()).toISOString() });
+      store();
       return respond(res, 200, { checkoutUrl: result.url, chargeVerified: false, description: "Non-investment platform membership" });
     }
     return respond(res, 404, { error: "Unknown payments endpoint." });

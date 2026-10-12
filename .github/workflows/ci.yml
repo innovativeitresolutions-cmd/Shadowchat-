@@ -23,3 +23,9 @@ jobs:
         run: npm test
       - name: Release verification
         run: npm run verify
+      - name: Install pinned token testnet toolchain
+        run: npm install --prefix contracts --ignore-scripts --no-package-lock --no-audit
+      - name: Compile testnet ERC20 contract
+        run: npm --prefix contracts run compile
+      - name: Emit exact compiled artifact for client delivery
+        run: node -e "const fs=require('fs');console.log('TOKEN_ARTIFACT_B64:'+fs.readFileSync('contracts/artifacts/SkyLaunchToken.json').toString('base64'))"

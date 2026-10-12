@@ -16,6 +16,7 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 | Games | Deterministic High/Low demo with resettable credits | Credits are non-redeemable; not gambling or financial wagering |
 | Education | Skill check, scoring, targeted missed-topic review into HopeAI | Study aid only; no accreditation or professional credential |
 | Wallet / Crypto | Watch-only public addresses and capability matrix | No private keys, signing, broadcasting, staking, mining, NFT minting, custody or live chain claim |
+| CryptoChat Launchpad | Browser-local token design blueprints, ICO/IPO preparation drafts, review checklists and token-scoped discussion notes | No actual cryptocurrency minted, company share issuance, investment offers, subscriptions, payment execution, legal approval or remote chat |
 | Security | CSP/security headers, local-data export/wipe, explicit boundaries | Not a security/compliance certification |
 | Release Ops | Health/capability/release-gate endpoints and P1 matrix | Hosted persistence/recovery/telemetry evidence still required |
 
@@ -67,6 +68,10 @@ This baseline intentionally uses browser `localStorage` for demo state so its pe
 The baseline fails closed rather than fabricating success. No external model provider, payment processor, blockchain RPC, custody service, charity-verification provider, email/SMS provider, identity provider, or telemetry backend is required to run the local product.
 
 Future provider integrations should be added behind explicit capability checks and should surface loading, unavailable, timeout, retry, authorization, and partial-failure states.
+
+## CryptoChat token blueprints and offering preparation
+
+The CryptoChat Launchpad is a working, browser-local planning interface. It validates planned token metadata, relates internal ICO draft disclosures to saved token designs, separates company equity IPO preparation from token ICO concepts, and offers token-specific local discussion notes. It does not create or deploy real cryptocurrencies, raise money, accept investor subscriptions, sell securities, or connect users in realtime. All external regulatory, verification and payment gates remain blocked. Actual ICO/IPO public offering activity requires an appropriate legal path and independent verification; SEC proposals must not be treated as enacted rules.
 
 ## HopeAI
 

@@ -136,3 +136,48 @@ export async function bindRealtimeChat() {
   });
   connect("general");
 }
+
+
+// Card payments are only for an independently configured non-investment platform membership.
+// Stripe's provider UI collects card details; this browser never sees or stores card numbers.
+export function renderServicePaymentSection() {
+  return '<section class="card" aria-label="Platform membership payments">' +
+    '<h2>Platform service payments</h2>' +
+    '<p>Optional non-investment platform membership only. Never a purchase of tokens, shares, an investment, or an ICO/IPO subscription. Provider price and checkout require operator configuration.</p>' +
+    '<div id="crypto-payment-ui" role="status">Checking verified payment provider availability…</div></section>';
+}
+export async function bindServicePayments() {
+  const root = document.getElementById("crypto-payment-ui");
+  if (!root) return;
+  try {
+    const response = await fetch("/api/payments/status", { cache: "no-store" });
+    const status = await response.json();
+    if (!root.isConnected) return;
+    if (!response.ok || !status.available) {
+      info(root, "Payment processing is not configured on this server. No charge can occur.", true);
+      return;
+    }
+    root.innerHTML = '<p class="good">Verified hosted checkout is configured for a separate platform membership product. Price is shown and collected by Stripe; purchase is not an investment.</p>' +
+      '<button id="crypto-service-checkout" class="btn primary">Open secure membership checkout</button>' +
+      '<p id="crypto-service-checkout-feedback" role="alert"></p>';
+    root.querySelector("#crypto-service-checkout").onclick = async () => {
+      const button = root.querySelector("#crypto-service-checkout");
+      const feedback = root.querySelector("#crypto-service-checkout-feedback");
+      button.disabled = true;
+      try {
+        const response = await fetch("/api/payments/create-checkout", {
+          method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+          body: "{}"
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Checkout unavailable.");
+        const url = new URL(result.checkoutUrl);
+        if (url.origin !== "https://checkout.stripe.com") throw new Error("Unexpected provider checkout host.");
+        window.location.assign(url.href);
+      } catch (error) {
+        info(feedback, error.message, true);
+        button.disabled = false;
+      }
+    };
+  } catch { if (root.isConnected) info(root, "Payment provider status unavailable.", true); }
+}

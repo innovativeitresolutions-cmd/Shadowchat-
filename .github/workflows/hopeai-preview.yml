@@ -24,5 +24,9 @@ jobs:
           node --check hopeai-preview/server.mjs
           node --check hopeai-preview/app.js
           node --check hopeai-preview/server.test.mjs
+          node --check hopeai-preview/local-ai-core.mjs
+          node --check hopeai-preview/local-ai-worker.mjs
+          node --check hopeai-preview/local-ai-ui.mjs
+          node --check hopeai-preview/local-ai.test.mjs
       - name: Run isolated beta tests
         run: npm --prefix hopeai-preview test

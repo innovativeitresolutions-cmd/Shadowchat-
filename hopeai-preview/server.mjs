@@ -116,10 +116,10 @@ export const server = createServer(async (req, res) => {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "X-Frame-Options": "DENY",
     "Referrer-Policy": "no-referrer", "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Content-Security-Policy": path === "/" ?
-      "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; " +
+      "default-src 'none'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self'; " +
       "worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; " +
       "base-uri 'none'; frame-ancestors 'none'; form-action 'self'" :
-      "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; " +
+      "default-src 'none'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; " +
       "connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; " +
       "worker-src 'self' blob:; frame-ancestors 'none'"
   };

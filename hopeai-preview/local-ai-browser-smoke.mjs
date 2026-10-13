@@ -53,6 +53,13 @@ try {
   assert.equal(await page.locator(".local-ai-message").count(),0);
   assert.equal(await page.locator("#local-ai-form").isVisible(),true);
   console.log("PASS: New chat resets conversation without reloading model");
+  await page.locator("#local-ai-prompt").fill("Who is Skyler Blue Spillers?");
+  await page.locator("#local-ai-send").click();
+  const grounded = await page.locator(".local-ai-message.assistant").last().innerText();
+  assert.match(grounded,/SKYCOIN4444/);
+  assert.match(grounded,/not AI-generated/);
+  assert.doesNotMatch(grounded,/scyelinder|car accident|soundwave|beach near my house/i);
+  console.log("PASS: Skyler identity uses disclosed project facts, not hallucinated biography");
   await page.locator("#local-ai-stop").click();
   assert.equal(await page.locator(".local-ai-message").count(),0);
   assert.equal(await page.locator("#local-ai-form").isVisible(),false);

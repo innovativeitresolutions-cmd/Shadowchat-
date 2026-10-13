@@ -7,7 +7,7 @@ process.env.HOPEAI_PUBLIC_ORIGIN = "https://preview.hopeai.example";
 process.env.HOPEAI_SESSION_SECRET = "synthetic-32-plus-character-cookie-key-fixture";
 process.env.HOPEAI_INVITE_CODE = "synthetic-32-plus-character-invitation-fixture";
 process.env.OPENAI_API_KEY = "synthetic-provider-key-for-unit-testing";
-const { server } = await import("./server.mjs");
+const { server, verifyProviderOnce } = await import("./server.mjs");
 
 let port;
 before(async () => {
@@ -37,6 +37,29 @@ async function request(path, { method = "GET", body = null, headers = {} } = {})
   });
 }
 const headers = { "Content-Type": "application/json", Origin: "https://preview.hopeai.example" };
+
+test("fail closed for invalid provider credentials, permit verified live provider", async () => {
+  const oldFetch = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => ({ok: false, status: 401});
+    assert.equal(await verifyProviderOnce(), false);
+    assert.equal((await request("/api/config")).data.ai_ready, false);
+    const blocked = await request("/api/login", {
+      method: "POST", body: { code: process.env.HOPEAI_INVITE_CODE },
+      headers
+    });
+    assert.equal(blocked.status, 503);
+    globalThis.fetch = async () => ({
+      ok: true, json: async () => ({
+        output: [{content: [{type: "output_text", text: "Hello"}]}]
+      })
+    });
+    assert.equal(await verifyProviderOnce(), true);
+    assert.equal((await request("/api/config")).data.ai_ready, true);
+  } finally {
+    globalThis.fetch = oldFetch;
+  }
+});
 
 test("public landing page, assets and honest configuration", async () => {
   const page = await request("/");

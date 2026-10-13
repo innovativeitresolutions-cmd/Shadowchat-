@@ -42,3 +42,16 @@ Render service ID: `srv-db72ogaj9qps73b0oh30`; free Node.js web service with `no
 ## Integration boundary
 
 All conversation prompts/responses run in the client web worker; Render serves only HTML, JS and CSS for on-device AI. For a production assistant with higher accuracy, cross-device persistence, team access or enterprise-grade safety, integrate a **separately provisioned** inference provider or hosting infrastructure with usage quotas, verified authorization, secure persistence, professional privacy/legal review, and end-to-end rollout testing.
+
+## Answer-quality safeguard (founder biography report)
+
+A real Android beta report showed the small 135M model fabricating a nonsensical story about **Skyler Blue Spillers** when asked who he is. This is an unreliable model output, **not a factual biography**. The hosted beta now:
+
+- Provides a narrow, explicitly labeled **project-sourced response** for founder-identity questions. It only states that, based on user-supplied project context, Skyler Blue Spillers is behind SKYCOIN4444 and HopeAI; no personal history is inferred. This particular response is **not AI-generated**.
+- Gives other private-identity questions an honest uncertainty response instead of inventing details.
+- Supports optional **in-tab project notes** (600 chars) passed as labeled, unverified user context to the on-device model, without server storage.
+- Uses deterministic decoding and a more explicit anti-invention system prompt in local models. **This does not eliminate hallucinations.**
+- Provides a prominent switch to the 360M local model at user choice (386 MB weights, more device RAM). It is still a small language model, not ChatGPT-level quality.
+- Tests the exact founder identity prompt and rejection of made-up facts in unit and real-browser workflows.
+
+Do not treat this as a secure or independently verified identity source, an independent biography, or a guarantee of truth for other topics. Improving arbitrary open-ended answers to high-quality cloud-model standards requires suitable inference compute and a working, funded provider/hosted model, neither verified here.

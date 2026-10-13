@@ -72,6 +72,8 @@ test("public landing page, assets and honest configuration", async () => {
   assert.equal((await request("/planner-ui.mjs")).status, 200);
   assert.equal((await request("/planner-core.mjs")).status, 200);
   assert.match(page.data, /Chat with HopeAI/);
+  assert.equal((await request("/trust.mjs")).status, 200);
+  assert.match(page.data, /local-ai-notes/);
   for (const url of ["/local-ai-core.mjs","/local-ai-ui.mjs","/local-ai-worker.mjs"]) {
     const resource = await request(url);
     assert.equal(resource.status, 200, url);

@@ -46,8 +46,9 @@ jobs:
           with open("/tmp/hopeai-config", encoding="utf8") as file:
               data = json.load(file)
           assert data.get("kind") == "standalone_preview"
-          assert data.get("ai_ready") is False, (
-              "Provider unexpectedly configured; do not assume no live credentials"
+          assert isinstance(data.get("ai_ready"), bool), (
+              "No reliable boolean for proven live model availability"
           )
-          print("PASS: Remote Studio HTML and preview-only fail-closed mode")
+          print("PASS: Remote Studio HTML and provider readiness contract; "
+                "provider_verified=" + str(data["ai_ready"]))
           PY

@@ -12,7 +12,9 @@ const origin = process.env.HOPEAI_PUBLIC_ORIGIN || (hostname ? "https://" + host
 const secret = process.env.HOPEAI_SESSION_SECRET || "";
 const invite = process.env.HOPEAI_INVITE_CODE || "";
 const providerKey = process.env.OPENAI_API_KEY || "";
-const ready = Boolean(origin) && secret.length >= 32 && invite.length >= 32 && Boolean(providerKey);
+const configured = Boolean(origin) && secret.length >= 32 && invite.length >= 32 && Boolean(providerKey);
+let providerVerified = false;
+const isReady = () => configured && providerVerified;
 const modes = Object.freeze({
   general: "Respond clearly and honestly.",
   learning: "Teach step by step with useful examples.",
@@ -130,10 +132,10 @@ export const server = createServer(async (req, res) => {
     } catch { return send(res, 500, { error: "asset_error" }); }
   }
   if (req.method === "GET" && path === "/api/config")
-    return send(res, 200, { kind: "standalone_preview", ai_ready: ready });
+    return send(res, 200, { kind: "standalone_preview", ai_ready: isReady() });
   if (req.method === "GET" && path === "/api/session") {
     const id = nonce(req);
-    return id ? send(res, 200, { authenticated: true, csrf: sign("csrf:" + id), ai_ready: ready }) :
+    return id ? send(res, 200, { authenticated: true, csrf: sign("csrf:" + id), ai_ready: isReady() }) :
       send(res, 401, { error: "login_required" });
   }
   if (req.method !== "POST" || !["/api/login", "/api/chat", "/api/logout"].includes(path))
@@ -141,7 +143,7 @@ export const server = createServer(async (req, res) => {
   if (!origin || req.headers.origin !== origin) return send(res, 403, { error: "origin_denied" });
   try {
     if (path === "/api/login") {
-      if (!ready) return send(res, 503, { error: "ai_not_configured" });
+      if (!isReady()) return send(res, 503, { error: "ai_not_configured" });
       if (!limit("login:" + (req.socket.remoteAddress || "unknown"), 8, 60))
         return send(res, 429, { error: "try_later" });
       const body = await input(req);
@@ -164,7 +166,7 @@ export const server = createServer(async (req, res) => {
       return send(res, 429, { error: "rate_limited" }, { "Retry-After": "60" });
     const data = validate(await input(req));
     if (!data) return send(res, 422, { error: "invalid_request" });
-    if (!ready) return send(res, 503, { error: "ai_not_configured" });
+    if (!isReady()) return send(res, 503, { error: "ai_not_configured" });
     return send(res, 200, { ...(await complete(data)), mode: data.mode });
   } catch (e) {
     const status = [413, 415, 422, 429].includes(e.status) ? e.status : 503;
@@ -173,5 +175,50 @@ export const server = createServer(async (req, res) => {
     return send(res, status, { error });
   }
 });
+/**
+ * Prove the configured key can actually produce a model response before enabling
+ * invitation sign-in. One bounded, low-token real API call per process boot.
+ * Never log credentials, prompts, completions, or upstream bodies.
+ */
+export async function verifyProviderOnce() {
+  providerVerified = false;
+  if (!configured) {
+    console.warn("HopeAI preview only: server secrets or AI provider not configured");
+    return false;
+  }
+  try {
+    const result = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + providerKey, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+        input: [{ role: "user", content: "Say hello in one word." }],
+        max_output_tokens: 35,
+        store: false
+      }),
+      redirect: "error",
+      signal: AbortSignal.timeout(20000)
+    });
+    if (!result.ok) {
+      console.warn("HopeAI real-provider readiness check failed with HTTP " + result.status);
+      return false;
+    }
+    const payload = await result.json();
+    const text = (payload.output || []).flatMap(x => x.content || [])
+      .filter(x => x.type === "output_text" && typeof x.text === "string")
+      .map(x => x.text).join("").trim();
+    providerVerified = Boolean(text);
+    console.info(providerVerified
+      ? "HopeAI real-provider readiness check PASSED"
+      : "HopeAI real-provider readiness check failed (empty response)");
+    return providerVerified;
+  } catch {
+    console.warn("HopeAI real-provider readiness check failed (transport)");
+    return false;
+  }
+}
 if (process.env.NODE_ENV !== "test")
-  server.listen(Number(process.env.PORT || 8080), "0.0.0.0", () => console.info("HopeAI beta listening"));
+  server.listen(Number(process.env.PORT || 10000), "0.0.0.0", () => {
+    console.info("HopeAI beta listening on PORT " + (process.env.PORT || "10000"));
+    void verifyProviderOnce();
+  });

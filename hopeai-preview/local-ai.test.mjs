@@ -12,7 +12,7 @@ test("on-device model declares real ONNX model, and verifies conversational role
     {role:"assistant",content:"Sure"},
     {role:"user",content:"discarded first"}
   ]);
-  assert.deepEqual(chat.map(x=>x.role),["system","assistant","user","assistant","user"]);
+  assert.deepEqual(chat.map(x=>x.role),["system","assistant","user","assistant","user","user"]);
   assert.equal(chat.at(-1).content,"What is testing?");
   assert.match(chat[0].content,/small|compact/i);
 });

@@ -1,0 +1,28 @@
+name: Standalone HopeAI beta checks
+
+on:
+  push:
+    branches: ['deploy/hopeai-standalone-beta-*']
+  pull_request:
+    paths:
+      - 'hopeai-preview/**'
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check server, client and test syntax
+        run: |
+          node --check hopeai-preview/server.mjs
+          node --check hopeai-preview/app.js
+          node --check hopeai-preview/server.test.mjs
+      - name: Run isolated beta tests
+        run: npm --prefix hopeai-preview test

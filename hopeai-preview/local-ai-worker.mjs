@@ -57,11 +57,11 @@ async function prepare(kind,preferGpu,id) {
   }
 }
 self.addEventListener("message", async event => {
-  const {type,id,preferGpu,model="quick",message,history,mode="general"} = event.data || {};
+  const {type,id,preferGpu,model="quick",message,history,mode="general",notes=""} = event.data || {};
   if (!["start","generate"].includes(type) || !Number.isSafeInteger(id) || id < 1) return;
   try {
     // Validate before any provider/model downloads or prompt rendering.
-    const payload = type === "generate" ? buildLocalMessages(message,history,mode) : null;
+    const payload = type === "generate" ? buildLocalMessages(message,history,mode,notes) : null;
     const generator = await prepare(model,Boolean(preferGpu),id);
     if (!initialized) {
       initialized = true;
@@ -78,8 +78,8 @@ self.addEventListener("message", async event => {
       }
     });
     const result = await generator(payload,{
-      max_new_tokens:model === "capable" ? 192 : 144,
-      do_sample:true,temperature:0.65,top_k:40,repetition_penalty:1.15,
+      max_new_tokens:model === "capable" ? 192 : 128,
+      do_sample:false,repetition_penalty:1.22,
       streamer
     });
     self.postMessage({type:"reply",id,text:extractLocalAnswer(result)});

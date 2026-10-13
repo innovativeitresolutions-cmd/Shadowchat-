@@ -2,7 +2,7 @@
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HopeAI Studio • SKYCOIN4444 Beta</title><meta name="theme-color" content="#0b1326">
-<link href="/app.css" rel="stylesheet"><script src="/app.js" defer></script></head>
+<link href="/app.css" rel="stylesheet"><script src="/app.js" defer></script><script type="module" src="/planner-ui.mjs"></script></head>
 <body>
 <div class="app">
 <header class="top"><div class="brand"><span class="logo">✦</span><span>Hope<span class="accent">AI</span> <small>STUDIO</small></span></div><span id="label" class="badge">PREVIEW ONLY</span><button id="logout" class="secondary" hidden>Sign out</button></header>
@@ -12,6 +12,19 @@
 <p class="intro">Your space to think, learn, build and find ways to make a difference.</p>
 <div class="notice" id="readiness">Checking whether this preview is connected to a live AI provider…</div>
 <form id="login-form" hidden><label for="code">Your invitation code</label><div class="access"><input id="code" type="password" required autocomplete="off" maxlength="256" placeholder="Enter your private code"><button type="submit" class="primary">Enter Studio →</button></div><p id="error" role="alert"></p></form>
+<section id="tools" class="offline-tools" aria-labelledby="tools-heading">
+<div class="kicker">AVAILABLE NOW · WITHOUT AI BILLING</div>
+<h2 id="tools-heading">Build a useful plan today.</h2>
+<p>These guided planners work now, even when our AI provider has no quota. They are <strong>rule-based tools, not AI answers</strong>. Your input stays in this browser; nothing is uploaded or saved.</p>
+<form id="planner-form" class="planner-form">
+<label>Choose a workflow<select name="type" required><option value="learning">Learn a skill</option><option value="volunteer">Help the community</option><option value="build">Ship a software project</option></select></label>
+<label>Your goal<input name="goal" type="text" maxlength="120" required autocomplete="off" placeholder="e.g. Learn SQL joins"></label>
+<label>Time available<select name="minutes"><option value="15">15 minutes</option><option value="30" selected>30 minutes</option><option value="60">60 minutes</option></select></label>
+<button class="primary" type="submit">Make my plan →</button>
+</form>
+<p id="planner-feedback" role="status" aria-live="polite"></p>
+<div id="planner-result" class="planner-result" hidden><h3>Your editable action roadmap</h3><pre id="planner-output" tabindex="0"></pre><button id="planner-download" class="secondary" type="button">↓ Download as Markdown</button></div>
+</section>
 <div class="cards"><article><span>01</span><h3>Discover</h3><p>Thoughtful answers and practical direction.</p></article><article><span>02</span><h3>Learn</h3><p>Small steps toward big skills.</p></article><article><span>03</span><h3>Make an impact</h3><p>Turn good intentions into plans.</p></article></div>
 </section>
 <section class="studio" id="studio" hidden>

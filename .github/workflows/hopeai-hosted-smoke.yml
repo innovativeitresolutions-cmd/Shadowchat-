@@ -40,6 +40,9 @@ jobs:
           URL="https://hopeai-standalone-preview.onrender.com"
           curl --fail --silent --show-error --max-time 25 "$URL/" -o /tmp/hopeai-page
           grep -F "HopeAI Studio" /tmp/hopeai-page >/dev/null
+          grep -F "Build a useful plan today" /tmp/hopeai-page >/dev/null
+          curl --fail --silent --show-error --max-time 25 "$URL/planner-core.mjs" -o /tmp/hopeai-planner
+          grep -F "function makePlan" /tmp/hopeai-planner >/dev/null
           curl --fail --silent --show-error --max-time 25 "$URL/api/config" -o /tmp/hopeai-config
           python3 - <<'PY'
           import json

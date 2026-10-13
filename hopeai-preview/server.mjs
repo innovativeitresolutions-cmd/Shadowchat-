@@ -109,7 +109,7 @@ async function complete(data) {
   } catch { throw Object.assign(new Error("provider_unavailable"), { status: 503 }); }
   finally { active--; }
 }
-const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"] };
+const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"], "/planner-ui.mjs": ["planner-ui.mjs", "application/javascript"], "/planner-core.mjs": ["planner-core.mjs", "application/javascript"] };
 export const server = createServer(async (req, res) => {
   const path = new URL(req.url || "/", "http://internal").pathname;
   const headers = {
@@ -200,7 +200,16 @@ export async function verifyProviderOnce() {
       signal: AbortSignal.timeout(20000)
     });
     if (!result.ok) {
-      console.warn("HopeAI real-provider readiness check failed with HTTP " + result.status);
+      // Only log an allowlisted error class. Never log response messages,
+      // user text, request bodies, credentials, or upstream raw responses.
+      let code = "unclassified";
+      try {
+        const info = await result.json();
+        const value = info?.error?.code || info?.error?.type;
+        if (["insufficient_quota", "rate_limit_exceeded", "billing_not_active",
+          "invalid_api_key", "model_not_found", "server_error"].includes(value)) code = value;
+      } catch { /* Ignore malformed provider errors. */ }
+      console.warn("HopeAI readiness HTTP " + result.status + ", class " + code);
       return false;
     }
     const payload = await result.json();

@@ -34,3 +34,20 @@
 .local-ai-form .primary{justify-self:start}
 .local-ai .local-disclaimer{font-size:12px;color:#91a8bf}
 @media(max-width:760px){.local-ai{padding:21px}.local-ai-head{align-items:flex-start;flex-direction:column}.local-ai .local-badge{align-self:flex-start}}
+
+
+/* Chat-first HopeAI local experience */
+.local-ai-settings,.local-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0 14px}
+.local-settings label{display:flex;flex-direction:column;gap:8px;font-size:13px;color:#d6eaf3;font-weight:650}
+.local-settings select{width:100%;min-width:0;padding:13px 12px;background:#0a2033;color:#e8f8fa;border:1px solid #4b798e;border-radius:11px}
+.local-settings select:disabled,.local-gpu input:disabled{opacity:.65;cursor:not-allowed}
+.local-ai-suggestions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.local-ai-suggestions button{border:1px solid #45738a;border-radius:999px;padding:9px 13px;color:#cbf4f4;background:#15394b}
+.local-ai-message div{white-space:pre-wrap;overflow-wrap:anywhere}
+.local-ai-message.assistant{border-color:#427e8b;background:#09202c}
+.local-ai-message.assistant strong{color:#a8eee8}
+.local-ai-message.user strong{color:#d2e4ff}
+.local-ai-message:not(:last-child){margin-bottom:3px}
+#local-ai-export:disabled,#local-ai-new:disabled,#local-ai-send:disabled{opacity:.55;cursor:not-allowed}
+#local-ai-status{border-left:3px solid #5ebdc5;padding-left:12px;margin:20px 0}
+@media(max-width:760px){.local-settings{grid-template-columns:1fr}.local-ai-message.user{margin-left:5px}}

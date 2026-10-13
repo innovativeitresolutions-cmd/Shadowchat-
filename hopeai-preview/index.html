@@ -2,7 +2,7 @@
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HopeAI Studio • SKYCOIN4444 Beta</title><meta name="theme-color" content="#0b1326">
-<link href="/app.css" rel="stylesheet"><script src="/app.js" defer></script><script type="module" src="/planner-ui.mjs"></script></head>
+<link href="/app.css" rel="stylesheet"><script src="/app.js" defer></script><script type="module" src="/planner-ui.mjs"></script><script type="module" src="/local-ai-ui.mjs"></script></head>
 <body>
 <div class="app">
 <header class="top"><div class="brand"><span class="logo">✦</span><span>Hope<span class="accent">AI</span> <small>STUDIO</small></span></div><span id="label" class="badge">PREVIEW ONLY</span><button id="logout" class="secondary" hidden>Sign out</button></header>
@@ -24,6 +24,25 @@
 </form>
 <p id="planner-feedback" role="status" aria-live="polite"></p>
 <div id="planner-result" class="planner-result" hidden><h3>Your editable action roadmap</h3><pre id="planner-output" tabindex="0"></pre><button id="planner-download" class="secondary" type="button">↓ Download as Markdown</button></div>
+</section>
+<section id="local-ai" class="local-ai" aria-labelledby="local-ai-title">
+<div class="local-ai-head"><div class="kicker">EXPERIMENTAL · REAL GENERATIVE MODEL · NO API QUOTA</div><span class="badge local-badge">RUNS ON YOUR DEVICE</span></div>
+<h2 id="local-ai-title">Talk to HopeAI Local.</h2>
+<p>This is a <strong>genuine small language model</strong>, not a canned chatbot. It runs directly in your browser rather than calling our OpenAI server. The first use downloads around <strong>180 MB of model weights</strong> plus runtime files from Hugging Face and jsDelivr. Generation may be slow or unsupported on low-memory devices.</p>
+<p class="local-ai-privacy">Try it on Wi-Fi. This feature is experimental and responses can be wrong. It has no web search or account access. The app's local-chat code does not send prompts to our server, but it downloads third-party code and weights; avoid entering confidential information.</p>
+<label class="local-gpu"><input type="checkbox" id="local-ai-gpu"> Try experimental GPU acceleration (if available; CPU fallback)</label>
+<div class="local-actions">
+<button type="button" id="local-ai-start" class="primary">Download &amp; start local AI →</button>
+<button type="button" id="local-ai-stop" class="secondary" hidden>■ Stop &amp; clear chat</button>
+</div>
+<p role="status" id="local-ai-status" aria-live="polite">Model downloads only after you press Start. No OpenAI key is required.</p>
+<div id="local-ai-messages" class="local-ai-messages" role="log" aria-label="On-device AI conversation" aria-live="polite"></div>
+<form id="local-ai-form" class="local-ai-form" hidden>
+<label for="local-ai-prompt">Your message to the on-device model</label>
+<textarea id="local-ai-prompt" rows="2" maxlength="600" required placeholder="Ask HopeAI Local a question…"></textarea>
+<button type="submit" id="local-ai-send" class="primary">Send message →</button>
+</form>
+<p class="local-disclaimer">Model: SmolLM2-135M-Instruct, quantized. Small models are more likely to hallucinate. Not suitable for emergencies or critical medical, legal, or financial advice.</p>
 </section>
 <div class="cards"><article><span>01</span><h3>Discover</h3><p>Thoughtful answers and practical direction.</p></article><article><span>02</span><h3>Learn</h3><p>Small steps toward big skills.</p></article><article><span>03</span><h3>Make an impact</h3><p>Turn good intentions into plans.</p></article></div>
 </section>

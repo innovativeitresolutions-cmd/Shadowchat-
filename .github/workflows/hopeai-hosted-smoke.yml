@@ -1,0 +1,53 @@
+name: HopeAI hosted preview live HTTPS smoke
+
+on:
+  push:
+    branches: ['deploy/hopeai-standalone-beta-*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Verify external HTTPS health (retry free-tier wake-up)
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://hopeai-standalone-preview.onrender.com"
+          code=000
+          for i in $(seq 1 18); do
+            code=$(curl --silent --show-error --max-time 20 -o /tmp/hopeai-health -w "%{http_code}" "$URL/healthz") || code=000
+            if [[ "$code" == 200 ]]; then break; fi
+            sleep 10
+          done
+          test "$code" = 200
+          python3 - <<'PY'
+          import json
+          with open("/tmp/hopeai-health", encoding="utf8") as file:
+              data = json.load(file)
+          assert data.get("status") == "ok", "not a healthy HopeAI process"
+          assert data.get("kind") == "standalone-preview", "wrong service"
+          print("PASS: Remote HTTPS HopeAI health verified")
+          PY
+      - name: Verify remote browser entry and honest provider readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://hopeai-standalone-preview.onrender.com"
+          curl --fail --silent --show-error --max-time 25 "$URL/" -o /tmp/hopeai-page
+          grep -F "HopeAI Studio" /tmp/hopeai-page >/dev/null
+          curl --fail --silent --show-error --max-time 25 "$URL/api/config" -o /tmp/hopeai-config
+          python3 - <<'PY'
+          import json
+          with open("/tmp/hopeai-config", encoding="utf8") as file:
+              data = json.load(file)
+          assert data.get("kind") == "standalone_preview"
+          assert data.get("ai_ready") is False, (
+              "Provider unexpectedly configured; do not assume no live credentials"
+          )
+          print("PASS: Remote Studio HTML and preview-only fail-closed mode")
+          PY

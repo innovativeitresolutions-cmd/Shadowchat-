@@ -1,0 +1,14 @@
+{
+  "name": "hopeai-standalone-hosted-preview",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Separate public-safe HopeAI beta hosting bridge; not private HopeAI source",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test *.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

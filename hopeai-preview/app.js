@@ -35,8 +35,8 @@
         el("readiness").textContent = "Private beta is configured. Sign in using your individual invitation.";
         loginForm.hidden = false;
       } else {
-        el("label").textContent = "BETA TOOLS LIVE";
-        el("readiness").textContent = "Your beta planning tools below are ready to use. Live AI conversations are temporarily unavailable because the configured provider has not completed a successful model test (for example, because of API quota or billing). The planners work directly in your browser, without sending your goals to the server. No AI answers are simulated.";
+        el("label").textContent = "LOCAL AI CHAT LIVE";
+        el("readiness").textContent = "HopeAI Chat below works using a real open-weight language model downloaded to your own device—no OpenAI quota needed. The hosted OpenAI-backed chat remains unavailable, but the local AI and planning tools are usable now. Try the quick model on Wi-Fi. Responses may be slow or inaccurate.";
         loginForm.hidden = true;
       }
       await refresh();

@@ -6,7 +6,7 @@ import {groundedProjectAnswer,validateProjectNotes} from "./trust.mjs";
 import {MAX_INPUT,resolveLocalModel,exportLocalTranscript} from "./local-ai-core.mjs";
 const el = id => document.getElementById(id);
 const start=el("local-ai-start"), stop=el("local-ai-stop");
-const newChat=el("local-ai-new"), exportChat=el("local-ai-export");
+const newChat=el("local-ai-new"), exportChat=el("local-ai-export"), better=el("local-ai-better");
 const form=el("local-ai-form"), status=el("local-ai-status");
 const messages=el("local-ai-messages"), prompt=el("local-ai-prompt"), submit=el("local-ai-send");
 const modelPicker=el("local-ai-model"), modePicker=el("local-ai-mode"), gpu=el("local-ai-gpu");
@@ -34,6 +34,8 @@ function updateControls(){
   newChat.disabled=busy;
   exportChat.hidden=!ready;
   exportChat.disabled=turns.length===0||busy;
+  better.hidden=!ready||chosenModel!=="quick";
+  better.disabled=busy;
   modelPicker.disabled=Boolean(worker);
   gpu.disabled=Boolean(worker);
   modePicker.disabled=busy;
@@ -150,6 +152,13 @@ form.addEventListener("submit",event=>{
   setStatus("Generating a real answer locally…");
   worker.postMessage({type:"generate",id,model:chosenModel,message:question,
     mode:modePicker.value,history:prior,notes});
+});
+better.addEventListener("click",()=>{
+  if(!ready||busy||chosenModel!=="quick")return;
+  unload();
+  modelPicker.value="capable";
+  setStatus("Better-quality 360M model selected. Requires ~386 MB download and more device memory. Press Download & start to switch.");
+  modelPicker.focus();
 });
 newChat.addEventListener("click",()=>{
   if(!ready||busy)return;

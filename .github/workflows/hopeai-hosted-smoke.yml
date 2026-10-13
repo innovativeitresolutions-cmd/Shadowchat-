@@ -41,6 +41,13 @@ jobs:
           curl --fail --silent --show-error --max-time 25 "$URL/" -o /tmp/hopeai-page
           grep -F "HopeAI Studio" /tmp/hopeai-page >/dev/null
           grep -F "Build a useful plan today" /tmp/hopeai-page >/dev/null
+          grep -F "Talk to HopeAI Local" /tmp/hopeai-page >/dev/null
+          curl --fail --silent --show-error --max-time 25 "$URL/local-ai-worker.mjs" -o /tmp/hopeai-worker
+          grep -F "local-ai-core.mjs" /tmp/hopeai-worker >/dev/null
+          curl --fail --silent --show-error --max-time 25 "$URL/local-ai-core.mjs" -o /tmp/hopeai-model
+          grep -F "onnx-community/SmolLM2-135M-Instruct-ONNX" /tmp/hopeai-model >/dev/null
+          curl --fail --silent --show-error --max-time 25 "$URL/local-ai-ui.mjs" -o /tmp/hopeai-chat-ui
+          grep -F 'new Worker("/local-ai-worker.mjs"' /tmp/hopeai-chat-ui >/dev/null
           curl --fail --silent --show-error --max-time 25 "$URL/planner-core.mjs" -o /tmp/hopeai-planner
           grep -F "function makePlan" /tmp/hopeai-planner >/dev/null
           curl --fail --silent --show-error --max-time 25 "$URL/api/config" -o /tmp/hopeai-config

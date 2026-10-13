@@ -35,8 +35,8 @@
         el("readiness").textContent = "Private beta is configured. Sign in using your individual invitation.";
         loginForm.hidden = false;
       } else {
-        el("label").textContent = "HOSTED PREVIEW";
-        el("readiness").textContent = "This visual preview is online, but live AI chat is not yet enabled. The operator must configure a private invitation code, a session-signing key, and an OpenAI API key in the hosting dashboard. No AI responses are simulated.";
+        el("label").textContent = "BETA TOOLS LIVE";
+        el("readiness").textContent = "Your beta planning tools below are ready to use. Live AI conversations are temporarily unavailable because the configured provider has not completed a successful model test (for example, because of API quota or billing). The planners work directly in your browser, without sending your goals to the server. No AI answers are simulated.";
         loginForm.hidden = true;
       }
       await refresh();

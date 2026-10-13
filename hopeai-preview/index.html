@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HopeAI Studio • SKYCOIN4444 Beta</title><meta name="theme-color" content="#0b1326">
+<link href="/app.css" rel="stylesheet"><script src="/app.js" defer></script></head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><span class="logo">✦</span><span>Hope<span class="accent">AI</span> <small>STUDIO</small></span></div><span id="label" class="badge">PREVIEW ONLY</span><button id="logout" class="secondary" hidden>Sign out</button></header>
+<main>
+<section class="welcome" id="gate">
+<div class="kicker">Part of the SKYCOIN4444 vision</div><h1>Ideas grow with <em>hope.</em></h1>
+<p class="intro">Your space to think, learn, build and find ways to make a difference.</p>
+<div class="notice" id="readiness">Checking whether this preview is connected to a live AI provider…</div>
+<form id="login-form" hidden><label for="code">Your invitation code</label><div class="access"><input id="code" type="password" required autocomplete="off" maxlength="256" placeholder="Enter your private code"><button type="submit" class="primary">Enter Studio →</button></div><p id="error" role="alert"></p></form>
+<div class="cards"><article><span>01</span><h3>Discover</h3><p>Thoughtful answers and practical direction.</p></article><article><span>02</span><h3>Learn</h3><p>Small steps toward big skills.</p></article><article><span>03</span><h3>Make an impact</h3><p>Turn good intentions into plans.</p></article></div>
+</section>
+<section class="studio" id="studio" hidden>
+<aside><h2>YOUR WORKSPACE</h2><button id="new" class="new">＋ New conversation</button><button id="export" class="export" disabled>↓ Export chat</button>
+<h2>EXPLORE</h2><div class="modes" role="group" aria-label="Chat mode">
+<button data-mode="general" class="selected" aria-pressed="true">✧ Everyday</button>
+<button data-mode="learning" aria-pressed="false">◈ Learn</button>
+<button data-mode="charity" aria-pressed="false">♡ Do good</button>
+<button data-mode="code" aria-pressed="false">⌘ Build</button>
+</div><div class="aside-note">Conversations stay in this browser tab only. Download them before leaving. No persistent chat history, donations or transactions.</div></aside>
+<div class="chat"><header class="chathead"><div class="kicker">A THOUGHTFUL COMPANION</div><h2 id="chat-title">What can I help with?</h2></header>
+<div id="messages" class="messages" role="log" aria-live="polite"><div class="empty" id="empty"><div class="spark">✦</div><h2>Where shall we begin?</h2><p>Ask a question, explore something new, or plan a project.</p><div class="ideas"><button data-suggest="Teach me a new skill one step at a time.">Teach me something ↗</button><button data-suggest="Help me plan a useful project.">Plan a project ↗</button><button data-suggest="How can I help my local community?">Make an impact ↗</button></div></div></div>
+<div class="composer"><p role="status" id="status"></p><form id="chat-form"><label for="prompt" class="sr">Ask HopeAI</label><textarea id="prompt" required maxlength="3000" rows="2" placeholder="Ask HopeAI anything…"></textarea><button id="send" aria-label="Send" type="submit">↑</button></form><p class="fine">AI can make mistakes. Verify important information. Not medical, financial or legal advice. No donations or live financial tools.</p></div></div>
+</section>
+</main><footer>HopeAI Standalone Hosting Preview · SKYCOIN4444 · Designed with care</footer>
+</div></body></html>

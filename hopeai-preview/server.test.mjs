@@ -64,14 +64,14 @@ test("fail closed for invalid provider credentials, permit verified live provide
 test("public landing page, assets and honest configuration", async () => {
   const page = await request("/");
   assert.equal(page.status, 200);
-  assert.match(page.data, /HopeAI Studio/);
+  assert.match(page.data, /HopeAI Chat/);
   assert.match(page.headers["content-security-policy"], /script-src 'self'/);
   assert.equal((await request("/app.js")).status, 200);
   assert.equal((await request("/app.css")).status, 200);
   assert.match(page.data, /Build a useful plan today/);
   assert.equal((await request("/planner-ui.mjs")).status, 200);
   assert.equal((await request("/planner-core.mjs")).status, 200);
-  assert.match(page.data, /Talk to HopeAI Local/);
+  assert.match(page.data, /Chat with HopeAI/);
   for (const url of ["/local-ai-core.mjs","/local-ai-ui.mjs","/local-ai-worker.mjs"]) {
     const resource = await request(url);
     assert.equal(resource.status, 200, url);

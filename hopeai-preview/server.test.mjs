@@ -71,6 +71,14 @@ test("public landing page, assets and honest configuration", async () => {
   assert.match(page.data, /Build a useful plan today/);
   assert.equal((await request("/planner-ui.mjs")).status, 200);
   assert.equal((await request("/planner-core.mjs")).status, 200);
+  assert.match(page.data, /Talk to HopeAI Local/);
+  for (const url of ["/local-ai-core.mjs","/local-ai-ui.mjs","/local-ai-worker.mjs"]) {
+    const resource = await request(url);
+    assert.equal(resource.status, 200, url);
+    assert.match(resource.headers["content-type"], /javascript/);
+  }
+  assert.match(page.headers["content-security-policy"], /worker-src 'self'/);
+  assert.match(page.headers["content-security-policy"], /https:\/\/huggingface.co/);
   assert.equal((await request("/api/config")).data.ai_ready, true);
   const health = await request("/healthz");
   assert.equal(health.status, 200);

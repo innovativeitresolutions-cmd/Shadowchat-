@@ -59,3 +59,13 @@ test("human-readable transcript export is real multi-turn history", () => {
   assert.match(out,/No chat data is stored/);
   assert.throws(()=>exportLocalTranscript([{role:"system",content:"secret"}]));
 });
+
+
+test("grounded user notes are explicitly labeled and cannot override private facts",()=>{
+  const messages=buildLocalMessages("Who is this person?",[],"general","I am founder of HopeAI.");
+  assert.match(messages[0].content,/User-supplied context/);
+  assert.match(messages[0].content,/I am founder of HopeAI/);
+  assert.match(messages[0].content,/Do not add facts not stated/);
+  assert.throws(()=>buildLocalMessages("Hello",[],"general","x".repeat(601)));
+  assert.throws(()=>buildLocalMessages("Hello",[],"general",null));
+});

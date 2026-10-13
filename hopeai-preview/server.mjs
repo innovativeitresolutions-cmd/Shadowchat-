@@ -109,7 +109,7 @@ async function complete(data) {
   } catch { throw Object.assign(new Error("provider_unavailable"), { status: 503 }); }
   finally { active--; }
 }
-const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"], "/planner-ui.mjs": ["planner-ui.mjs", "application/javascript"], "/planner-core.mjs": ["planner-core.mjs", "application/javascript"], "/local-ai-core.mjs": ["local-ai-core.mjs", "application/javascript"], "/local-ai-ui.mjs": ["local-ai-ui.mjs", "application/javascript"], "/local-ai-worker.mjs": ["local-ai-worker.mjs", "application/javascript"] };
+const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"], "/planner-ui.mjs": ["planner-ui.mjs", "application/javascript"], "/planner-core.mjs": ["planner-core.mjs", "application/javascript"], "/local-ai-core.mjs": ["local-ai-core.mjs", "application/javascript"], "/local-ai-ui.mjs": ["local-ai-ui.mjs", "application/javascript"], "/local-ai-worker.mjs": ["local-ai-worker.mjs", "application/javascript"], "/trust.mjs": ["trust.mjs", "application/javascript"] };
 export const server = createServer(async (req, res) => {
   const path = new URL(req.url || "/", "http://internal").pathname;
   const headers = {

@@ -51,3 +51,10 @@
 #local-ai-export:disabled,#local-ai-new:disabled,#local-ai-send:disabled{opacity:.55;cursor:not-allowed}
 #local-ai-status{border-left:3px solid #5ebdc5;padding-left:12px;margin:20px 0}
 @media(max-width:760px){.local-settings{grid-template-columns:1fr}.local-ai-message.user{margin-left:5px}}
+
+.local-notes{margin:14px 0;background:#0a1c2a;border:1px solid #38677a;padding:15px;border-radius:13px;color:#c8eaf0;text-align:left}
+.local-notes summary{cursor:pointer;font-weight:650;color:#9fe5e7}
+.local-notes label{display:block;margin:14px 0 7px;font-size:13px}
+.local-notes textarea{box-sizing:border-box;width:100%;resize:vertical;padding:12px;color:#e9fcff;border:1px solid #47788a;border-radius:10px;background:#061725;font:inherit}
+.local-notes p{font-size:12px;margin:8px 0;color:#a6bacb}
+#local-ai-better{border-color:#79cfc5;color:#a7f3e6}

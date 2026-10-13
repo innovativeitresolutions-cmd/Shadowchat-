@@ -1,3 +1,4 @@
+import {groundedProjectAnswer,validateProjectNotes} from "./trust.mjs";
 /**
  * HopeAI Chat UI — real multi-turn language model running in a browser Worker.
  * No paid API or simulated response. Conversations are not persisted or uploaded.
@@ -10,15 +11,16 @@ const form=el("local-ai-form"), status=el("local-ai-status");
 const messages=el("local-ai-messages"), prompt=el("local-ai-prompt"), submit=el("local-ai-send");
 const modelPicker=el("local-ai-model"), modePicker=el("local-ai-mode"), gpu=el("local-ai-gpu");
 const suggestions=el("local-ai-suggestions");
+const projectNotes=el("local-ai-notes");
 let worker=null,ready=false,busy=false,sequence=0,currentId=0;
 let turns=[],pending=null,chosenModel="quick";
 function setStatus(value){ status.textContent=String(value).slice(0,240); }
 function scrollToLast(){messages.scrollTop=messages.scrollHeight;}
-function append(role,text){
+function append(role,text,label){
   const item=document.createElement("div");
   item.className="local-ai-message "+role;
   const header=document.createElement("strong");
-  header.textContent=role==="user"?"You":"HopeAI • "+resolveLocalModel(chosenModel).label;
+  header.textContent=label||(role==="user"?"You":"HopeAI • "+resolveLocalModel(chosenModel).label);
   const body=document.createElement("div");
   body.textContent=text;
   item.append(header,body);messages.append(item);scrollToLast();
@@ -49,7 +51,7 @@ function unload(){
   if(worker)worker.terminate();
   worker=null;ready=false;busy=false;pending=null;
   clearConversation();
-  prompt.value="";sequence++;currentId=sequence;
+  prompt.value="";projectNotes.value="";sequence++;currentId=sequence;
   setStatus("Model unloaded. In-tab chat cleared; downloaded model files may remain in browser cache.");
   updateControls();
 }
@@ -125,6 +127,18 @@ form.addEventListener("submit",event=>{
   if(!worker||!ready||busy)return;
   const question=prompt.value.trim();
   if(!question||question.length>MAX_INPUT){setStatus("Enter a message up to "+MAX_INPUT+" characters.");return;}
+  let notes;
+  try{ notes=validateProjectNotes(projectNotes.value); }
+  catch{ setStatus("Project notes must contain 600 or fewer printable characters.");return; }
+  const source=groundedProjectAnswer(question);
+  if(source){
+    append("user",question);
+    append("assistant",source.answer,source.label);
+    turns.push({role:"user",content:question},{role:"assistant",content:source.answer});
+    prompt.value="";updateControls();scrollToLast();
+    setStatus("Answered from disclosed SKYCOIN4444 project information, not a model guess.");
+    return;
+  }
   busy=true;
   const id=++sequence;currentId=id;
   const prior=turns.slice(-6).map(t=>({
@@ -135,7 +149,7 @@ form.addEventListener("submit",event=>{
   updateControls();
   setStatus("Generating a real answer locally…");
   worker.postMessage({type:"generate",id,model:chosenModel,message:question,
-    mode:modePicker.value,history:prior});
+    mode:modePicker.value,history:prior,notes});
 });
 newChat.addEventListener("click",()=>{
   if(!ready||busy)return;

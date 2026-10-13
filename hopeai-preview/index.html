@@ -15,17 +15,23 @@
 <section id="local-ai" class="local-ai" aria-labelledby="local-ai-title">
 <div class="local-ai-head"><div class="kicker">REAL GENERATIVE AI · CHAT BETA · NO API KEY NEEDED</div><span class="badge local-badge">RUNS ON YOUR DEVICE</span></div>
 <h2 id="local-ai-title">Chat with HopeAI.</h2>
-<p>Have a real multi-turn conversation with an <strong>open-weight language model</strong>. Your device generates every reply, not a fake script or a paid API. Choose a lightweight model for phones or a larger experimental model for computers.</p>
+<p>Have a real multi-turn conversation with an <strong>open-weight language model</strong>. The small Quick model can make up details or produce nonsense. For better answers, choose the <strong>360M model</strong> if your device can handle it. No model has independently verified personal biographies.</p>
 <p class="local-ai-privacy">Start over Wi-Fi: model weights are approximately 181 MB or 386 MB, plus runtime files, and download once per browser cache. Replies may be slow on phones. Your chat stays in this browser tab; model/runtime assets come from Hugging Face and jsDelivr. Avoid entering secrets. This is experimental, with no web search or external account access.</p>
 <div class="local-settings">
 <label for="local-ai-model">Language model<select id="local-ai-model">
 <option value="quick">Quick · 135M · 181 MB (recommended for phones)</option>
-<option value="capable">Stronger · 360M · 386 MB (experimental, powerful devices)</option>
+<option value="capable">Recommended for quality · 360M · 386 MB (needs more RAM)</option>
 </select></label>
 <label for="local-ai-mode">Conversation focus<select id="local-ai-mode">
 <option value="general">Everyday chat</option><option value="learning">Learning</option><option value="code">Coding</option><option value="hope">Community &amp; SkyHope</option>
 </select></label>
 </div>
+<details class="local-notes">
+<summary>Optional: Give HopeAI accurate project context</summary>
+<label for="local-ai-notes">Facts you want the chatbot to know (maximum 600 characters; kept in this tab only)</label>
+<textarea id="local-ai-notes" maxlength="600" rows="3" placeholder="For example: I am building SKYCOIN4444 and HopeAI. My role is…"></textarea>
+<p>These are your statements, not independent verification. Never paste passwords, API keys, or confidential records.</p>
+</details>
 <label class="local-gpu"><input type="checkbox" id="local-ai-gpu"> Try experimental GPU acceleration (if available; CPU fallback)</label>
 <div class="local-actions">
 <button type="button" id="local-ai-start" class="primary">Download &amp; start local AI →</button>

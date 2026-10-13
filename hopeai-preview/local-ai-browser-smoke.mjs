@@ -17,7 +17,7 @@ try {
     const panel = document.querySelector("#local-ai-form");
     const message = document.querySelector("#local-ai-status")?.textContent || "";
     return (panel && !panel.hidden) || message.includes("could not start");
-  }, {timeout:360000});
+  }, null, {timeout:360000});
   const ready = await page.locator("#local-ai-form").isVisible();
   if (!ready) throw new Error("Real model did not load: " + (await page.locator("#local-ai-status").textContent()));
   await page.locator("#local-ai-prompt").fill("In one short sentence, what does a software test do?");

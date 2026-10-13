@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {LOCAL_MODEL_ID,MAX_INPUT,buildLocalMessages,extractLocalAnswer} from "./local-ai-core.mjs";
+import {LOCAL_MODEL_ID,LOCAL_MODELS,LOCAL_MODES,MAX_INPUT,buildLocalMessages,extractLocalAnswer,resolveLocalModel,exportLocalTranscript} from "./local-ai-core.mjs";
 
 test("on-device model declares real ONNX model, and verifies conversational roles", () => {
   assert.equal(LOCAL_MODEL_ID, "onnx-community/SmolLM2-135M-Instruct-ONNX");
@@ -12,7 +12,7 @@ test("on-device model declares real ONNX model, and verifies conversational role
     {role:"assistant",content:"Sure"},
     {role:"user",content:"discarded first"}
   ]);
-  assert.deepEqual(chat.map(x=>x.role),["system","assistant","user","assistant","user","user"]);
+  assert.deepEqual(chat.map(x=>x.role),["system","user","assistant","user","assistant","user","user"]);
   assert.equal(chat.at(-1).content,"What is testing?");
   assert.match(chat[0].content,/small|compact/i);
 });
@@ -35,4 +35,27 @@ test("extract model-generated assistant content, never fake canned text", () => 
   for(const value of [[],null,[{generated_text:[]}],[{generated_text:""}]]) {
     assert.throws(()=>extractLocalAnswer(value));
   }
+});
+
+test("model chooser advertises genuine ONNX model IDs and bounds", () => {
+  assert.equal(resolveLocalModel("quick").id,LOCAL_MODEL_ID);
+  assert.equal(resolveLocalModel("capable").id,"onnx-community/SmolLM2-360M-Instruct-ONNX");
+  assert.match(resolveLocalModel("capable").size,/386/);
+  assert.throws(()=>resolveLocalModel("unknown"));
+  for(const mode of Object.keys(LOCAL_MODES)) {
+    const conversation=buildLocalMessages("Teach me",[],mode);
+    assert.match(conversation[0].content,/HopeAI/);
+  }
+  assert.throws(()=>buildLocalMessages("Hi",[],"unauthorized"));
+  assert.equal(Object.keys(LOCAL_MODELS).length,2);
+});
+test("human-readable transcript export is real multi-turn history", () => {
+  const out=exportLocalTranscript([
+    {role:"user",content:"How do I test?"},
+    {role:"assistant",content:"Write repeatable checks."}
+  ]);
+  assert.match(out,/YOU:[\\s\\S]*How do I test[?]/);
+  assert.match(out,/HOPEAI:[\\s\\S]*Write repeatable/);
+  assert.match(out,/No chat data is stored/);
+  assert.throws(()=>exportLocalTranscript([{role:"system",content:"secret"}]));
 });

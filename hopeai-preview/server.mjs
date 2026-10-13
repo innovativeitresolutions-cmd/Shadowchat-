@@ -109,15 +109,19 @@ async function complete(data) {
   } catch { throw Object.assign(new Error("provider_unavailable"), { status: 503 }); }
   finally { active--; }
 }
-const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"], "/planner-ui.mjs": ["planner-ui.mjs", "application/javascript"], "/planner-core.mjs": ["planner-core.mjs", "application/javascript"] };
+const assets = { "/": ["index.html", "text/html"], "/app.css": ["app.css", "text/css"], "/app.js": ["app.js", "application/javascript"], "/planner-ui.mjs": ["planner-ui.mjs", "application/javascript"], "/planner-core.mjs": ["planner-core.mjs", "application/javascript"], "/local-ai-core.mjs": ["local-ai-core.mjs", "application/javascript"], "/local-ai-ui.mjs": ["local-ai-ui.mjs", "application/javascript"], "/local-ai-worker.mjs": ["local-ai-worker.mjs", "application/javascript"] };
 export const server = createServer(async (req, res) => {
   const path = new URL(req.url || "/", "http://internal").pathname;
   const headers = {
     "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "X-Frame-Options": "DENY",
     "Referrer-Policy": "no-referrer", "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Content-Security-Policy": path === "/" ?
-      "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" :
-      "default-src 'none'; frame-ancestors 'none'"
+      "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; " +
+      "worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; " +
+      "base-uri 'none'; frame-ancestors 'none'; form-action 'self'" :
+      "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; " +
+      "connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co; " +
+      "worker-src 'self' blob:; frame-ancestors 'none'"
   };
   Object.entries(headers).forEach(([key, value]) => res.setHeader(key, value));
   if (req.method === "GET" && path === "/healthz") return send(res, 200, { status: "ok", kind: "standalone-preview" });

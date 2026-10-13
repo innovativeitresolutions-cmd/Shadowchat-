@@ -68,6 +68,9 @@ test("public landing page, assets and honest configuration", async () => {
   assert.match(page.headers["content-security-policy"], /script-src 'self'/);
   assert.equal((await request("/app.js")).status, 200);
   assert.equal((await request("/app.css")).status, 200);
+  assert.match(page.data, /Build a useful plan today/);
+  assert.equal((await request("/planner-ui.mjs")).status, 200);
+  assert.equal((await request("/planner-core.mjs")).status, 200);
   assert.equal((await request("/api/config")).data.ai_ready, true);
   const health = await request("/healthz");
   assert.equal(health.status, 200);

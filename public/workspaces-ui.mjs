@@ -176,9 +176,26 @@ export function enhanceWorkspaces(area, { state, save, render, uid, go, escapeHt
         const index = Number(actionForm.dataset.impactActionForm);
         try {
           state.impact[index] = addImpactTask(state.impact[index],
-            actionForm.elements.namedItem("action").value, uid());
+            actionForm.elements.namedItem("action").value, uid(), {
+              ownerLabel: actionForm.elements.namedItem("owner").value,
+              dueDate: actionForm.elements.namedItem("dueDate").value
+            });
           save(); render();
         } catch (error) { errorFor(actionForm, error.message); }
+      };
+    });
+    campaignArea.querySelectorAll("[data-impact-schedule-form]").forEach((scheduleForm) => {
+      scheduleForm.onsubmit = (event) => {
+        event.preventDefault();
+        const index = Number(scheduleForm.dataset.impactScheduleForm);
+        try {
+          state.impact[index] = updateImpactTaskSchedule(state.impact[index],
+            scheduleForm.dataset.taskId, {
+              ownerLabel: scheduleForm.elements.namedItem("owner").value,
+              dueDate: scheduleForm.elements.namedItem("dueDate").value
+            });
+          save(); render();
+        } catch (error) { errorFor(scheduleForm, error.message); }
       };
     });
     campaignArea.querySelectorAll("[data-impact-toggle]").forEach((control) => {

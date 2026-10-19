@@ -11,7 +11,7 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 | HopeAI | Goal-specific, browser-local action plans, task completion, progress tracking, delete | Deterministic templates; no connected model/provider |
 | HopeAI Impact | Campaign action boards, volunteer tasks, progress and HopeAI handoff | No donation, settlement, nonprofit verification, receipt, or tax determination |
 | Navigation | Desktop + mobile navigation across all flagship areas | Designed as one coherent product shell |
-| Social | Browser-local posts and reactions | No fake remote audience, realtime delivery, follower counts, or production moderation claim |
+| Social | Browser-local post editing/deletion, personal reactions, replies, bounded legacy migration | No remote delivery, verified users, public reactions, follower counts, or production moderation claim |
 | Marketplace | Search, lawful listings, restricted-item moderation, seller trust signals, cart, order drafts | No payment, escrow, seller-ID verification, crypto settlement, shipment or payout |
 | Games | Deterministic High/Low demo with resettable credits | Credits are non-redeemable; not gambling or financial wagering |
 | Education | Eight-question security/privacy/Web3 practice, explanations, local progress and missed-topic HopeAI handoff | Browser-local study aid only; no accreditation or professional credential |
@@ -91,7 +91,7 @@ See [HopeAI & Impact action workspaces](docs/HOPEAI_IMPACT_WORKSPACES.md) for st
 
 ## Social / ShadowChat
 
-The Social area provides a small, honest local feed. Posts and reactions persist in the current browser only. There are no fabricated users, engagement counters, follower networks, remote delivery receipts, or realtime claims.
+The Social tab now supports **local post creation, editing, deletion, personal reaction toggles, and replies**, including migration of legacy plain-text posts. The feed is bounded (100 posts, 20 replies per post); records persist in this browser only. Reactions are strictly personal booleans, **not counts or audience activity**. There are no fabricated users, engagement counters, follower networks, moderation pipeline, remote delivery receipts, notifications, or realtime social-network claims. See [ShadowChat local feed contracts and boundaries](docs/SOCIAL_LOCAL_FEED.md).
 
 The next server-backed milestone should use participant authorization, durable user-scoped storage, rate limits, moderation/reporting, privacy controls, message/post deletion semantics, abuse logging, and clear delivery/error states.
 

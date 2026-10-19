@@ -1,4 +1,5 @@
 import { enhanceWorkspaces } from "./workspaces-ui.mjs";
+import { normalizeLocalPosts, createLocalPost, editLocalPost, deleteLocalPost, toggleLocalLike, addLocalReply, deleteLocalReply } from "./social.mjs";
 import { createHopePlan } from "./workflows.mjs";
 import { STUDY_QUESTIONS, scoreStudyCheck, recordStudyAttempt, studyProgress } from "./education.mjs";
 import { renderLaunchpad, bindLaunchpad } from "./launchpad-ui.mjs";
@@ -15,7 +16,41 @@ function shell(c){let q=p(),n=A.map(([i,l])=>`<button data-r=\"${i}\" class=\"${
 function overview(){let x=[['hopeai','HopeAI','Local planner; provider unavailable by default.'],['impact','HopeAI Impact','Planning only; no donation execution.'],['social','Social','Local feed with honest delivery state.'],['market','Marketplace','Lawful listings and restricted-item blocking.'],['games','Games','Demo credits only; no real-money value.'],['edu','Education','Skill checks; no accreditation.'],['crypto','Wallet / Crypto','Watch-only; no private keys or signing.'],['launchpad','CryptoChat Launchpad','Local token blueprints, ICO/IPO drafts and discussion; no token sale or deployment.'],['security','Security','Privacy controls and fail-closed boundaries.'],['ops','Release Ops','Health plus unresolved hosted gates.']];return `${hero('Quality first','One coherent ecosystem.','Usable flagship journeys, responsive navigation, deterministic tests and truthful degraded states.')}<div class=\"notice\">No production, payment, custody, charity verification, regulated gambling, accreditation, identity verification or compliance certification claim.</div><section class=\"grid\">${x.map(([i,n,d])=>`<article class=\"card clickable\" tabindex=\"0\" data-r=\"${i}\"><span class=\"pill\">${i}</span><h3>${n}</h3><p>${d}</p></article>`).join('')}</section>`}
 function hopeai(){return `${hero('Priority 1','HopeAI','Private-first planning. No external model is represented as connected.')}<div class=\"notice info\">Build plan uses deterministic local steps and stores drafts only in this browser.</div><form id=\"hope\" class=\"card\"><label>Goal<textarea id=\"hopeText\" maxlength=\"500\" required></textarea></label><button class=\"btn primary\">Build local plan</button></form><section class=\"card\"><h2>Plans</h2>${s.hope.length?s.hope.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><ol>${x.steps.map(y=>`<li>${e(y)}</li>`).join('')}</ol></div>`).join(''):'<div class=\"empty\">No plans yet.</div>'}</section>`}
 function impact(){return `${hero('HopeAI Impact','Plan impact truthfully.','Campaign goals and pledge intent are planning metadata only.')}<div class=\"notice\">No donation, settlement, receipt, charity verification or tax determination occurs.</div><form id=\"impact\" class=\"card\"><label>Title<input id=\"it\" required maxlength=\"120\"></label><label>Goal<textarea id=\"ig\" required maxlength=\"500\"></textarea></label><label>Pledge intent USD<input id=\"ip\" type=\"number\" min=\"0\" value=\"0\"></label><button class=\"btn primary\">Save plan</button></form><section class=\"card\">${s.impact.length?s.impact.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><p>${e(x.g)}</p><span class=\"pill\">$${x.p} intent · money moved: no</span></div>`).join(''):'<div class=\"empty\">No impact plans.</div>'}</section>`}
-function social(){return `${hero('ShadowChat','Social with honest delivery state.','Posts are browser-local. No fake audience, followers, realtime transport or delivery receipts.')}<form id=\"post\" class=\"card\"><label>Post<textarea id=\"pb\" maxlength=\"500\" required></textarea></label><button class=\"btn primary\">Post locally</button></form><section class=\"card\">${s.posts.length?s.posts.map(x=>`<div class=\"item\"><p>${e(x)}</p><span class=\"pill\">local only</span></div>`).join(''):'<div class=\"empty\">Local feed is empty.</div>'}</section>`}
+function social(){
+  s.posts=normalizeLocalPosts(s.posts);
+  const items=s.posts.map(post=>{
+    const replies=post.replies.length
+      ? '<ul class="social-replies">'+post.replies.map(reply=>
+        '<li><div class="social-reply"><p>'+e(reply.text)+'</p>'+
+        '<button class="btn danger" type="button" data-social-reply-delete="'+e(post.id)+'" data-reply-id="'+e(reply.id)+'" aria-label="Remove this local reply">Remove</button></div></li>'
+      ).join('')+'</ul>'
+      : '<p class="muted">No local replies.</p>';
+    return '<article class="item social-post" data-post="'+e(post.id)+'">'+
+      '<div class="item-row"><span class="pill">Local draft · only you</span><span class="muted">'+
+      e(post.createdAt ? post.createdAt.slice(0,10) : 'Saved before upgrade')+'</span></div>'+
+      '<p class="social-post-text">'+e(post.text)+'</p>'+
+      '<div class="social-actions"><button type="button" class="btn" data-social-like="'+e(post.id)+'" aria-pressed="'+post.likedByMe+'">'+
+      (post.likedByMe?'♥ Remove my reaction':'♡ React locally')+'</button>'+
+      '<button type="button" class="btn" data-social-edit-open="'+e(post.id)+'">Edit</button>'+
+      '<button type="button" class="btn danger" data-social-delete="'+e(post.id)+'">Delete</button></div>'+
+      '<form class="social-edit-form" data-social-edit="'+e(post.id)+'" hidden>'+
+      '<label>Edit this local post<textarea name="edit" maxlength="500" required>'+e(post.text)+'</textarea></label>'+
+      '<div class="social-actions"><button class="btn primary" type="submit">Save edit</button>'+
+      '<button class="btn" type="button" data-social-edit-cancel="'+e(post.id)+'">Cancel</button></div></form>'+
+      '<div class="social-thread"><h3>Replies · '+post.replies.length+' local</h3>'+replies+
+      '<form data-social-reply="'+e(post.id)+'" class="social-reply-form">'+
+      '<label>Write a local reply<textarea name="reply" maxlength="280" required></textarea></label>'+
+      '<button type="submit" class="btn">Add reply</button></form></div></article>';
+  }).join('');
+  return hero('ShadowChat','Your private local feed.',
+    'Write, edit and delete posts, react privately, and build local reply threads.')+
+    '<div class="notice info">Browser-only: no remote delivery, verified profiles, public audience, external moderation or notifications.</div>'+
+    '<form id="post" class="card social-compose"><label>New local post<textarea id="pb" maxlength="500" required></textarea></label>'+
+    '<button type="submit" class="btn primary">Save on this device</button><p class="muted">Maximum 100 local posts, 20 replies per post. Everything stays in this browser.</p>'+
+    '<p class="bad" role="alert" id="social-error" hidden></p></form>'+
+    '<section id="socialFeed" class="card social-feed"><h2>My local feed</h2>'+
+    (items || '<div class="empty">No posts yet. Create your first private local draft.</div>')+'</section>';
+}
 function market(){return `${hero('Lawful marketplace','Trust and safety before settlement.','Search/listing/cart UI is local. Payments, escrow, seller verification and crypto settlement are disabled.')}<div class=\"notice danger\">Controlled substances, weapons, stolen credentials/goods, malware, forged IDs and counterfeit currency are blocked.</div><section class=\"grid two\"><form id=\"listing\" class=\"card\"><label>Title<input id=\"lt\" required></label><label>Price USD<input id=\"lp\" type=\"number\" min=\"0\" step=\".01\" required></label><label>Description<textarea id=\"ld\" required></textarea></label><button class=\"btn primary\">Moderate & publish</button></form><div class=\"card\"><h2>Cart</h2><div class=\"kpi\">${s.cart.length}</div><p>No charge, transfer, escrow, shipment or payout occurs.</p><button id=\"cc\" class=\"btn\">Clear cart</button></div></section><section class=\"grid\">${s.listings.map(x=>`<article class=\"card\"><h3>${e(x.title)}</h3><p>${e(x.desc)}</p><strong>$${Number(x.price).toFixed(2)}</strong><div class=\"actions\"><button class=\"btn\" data-cart=\"${x.id}\">Add</button></div></article>`).join('')}</section>`}
 function games(){return `${hero('Games','Playable demo, no real-money value.','Credits are local and non-redeemable. No deposits, withdrawals, custody, prizes or regulated wagering.')}<section class=\"grid two\"><div class=\"card\"><div class=\"kpi\">${s.game}</div><p>demo credits</p><label>Stake<input id=\"stake\" type=\"number\" min=\"1\" max=\"100\" value=\"10\"></label><div class=\"actions\"><button class=\"btn primary\" data-g=\"low\">Low</button><button class=\"btn primary\" data-g=\"high\">High</button></div></div><div class=\"card\"><p>Each click uses a local deterministic-style demo roll. It is not represented as cryptographic randomness.</p></div></section>`}
 function edu(){
@@ -62,7 +97,53 @@ function bind(q){
  const $=id=>document.getElementById(id);
  if(q==='hopeai')$('hope').onsubmit=x=>{x.preventDefault();let t=$('hopeText').value.trim();if(t){s.hope.push({t,steps:['Define a useful outcome.','List required information or tools.','Take one reversible action.','Review the result.']});save();render()}};
  if(q==='impact')$('impact').onsubmit=x=>{x.preventDefault();if($('it').value.trim()&&$('ig').value.trim()){s.impact.push({t:$('it').value.trim(),g:$('ig').value.trim(),p:Math.max(0,Number($('ip').value)||0),moneyMoved:false,charityVerified:false});save();render()}};
- if(q==='social')$('post').onsubmit=x=>{x.preventDefault();if($('pb').value.trim()){s.posts.push($('pb').value.trim());save();render()}};
+ if(q==='social'){
+   const feed=$('socialFeed');
+   const newId=()=>crypto.randomUUID?.() || Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+   function showSocialError(error){
+     const display=$('social-error');
+     display.hidden=false;
+     display.textContent=error instanceof Error ? error.message : 'Unable to update local feed.';
+   }
+   function applySocial(operation){
+     try { s.posts=operation(s.posts);save();render(); } catch(error) { showSocialError(error); }
+   }
+   $('post').onsubmit=event=>{
+     event.preventDefault();
+     applySocial(posts=>createLocalPost(posts,$('pb').value,newId(),new Date().toISOString()));
+   };
+   feed.onclick=event=>{
+     const control=event.target.closest('button');
+     if(!control)return;
+     const data=control.dataset;
+     if(data.socialEditOpen){
+       const form=feed.querySelectorAll('[data-social-edit]');
+       const target=[...form].find(item=>item.dataset.socialEdit===data.socialEditOpen);
+       if(target){target.hidden=false;target.elements.namedItem('edit').focus();}
+     }
+     else if(data.socialEditCancel){
+       const form=[...feed.querySelectorAll('[data-social-edit]')].find(item=>item.dataset.socialEdit===data.socialEditCancel);
+       if(form)form.hidden=true;
+     }
+     else if(data.socialLike)applySocial(posts=>toggleLocalLike(posts,data.socialLike));
+     else if(data.socialDelete && window.confirm('Delete this local post and its replies?'))
+       applySocial(posts=>deleteLocalPost(posts,data.socialDelete));
+     else if(data.socialReplyDelete)
+       applySocial(posts=>deleteLocalReply(posts,data.socialReplyDelete,data.replyId));
+   };
+   feed.onsubmit=event=>{
+     const form=event.target;
+     if(!form.matches('form'))return;
+     event.preventDefault();
+     if(form.dataset.socialReply){
+       applySocial(posts=>addLocalReply(posts,form.dataset.socialReply,
+         form.elements.namedItem('reply').value,newId(),new Date().toISOString()));
+     }else if(form.dataset.socialEdit){
+       applySocial(posts=>editLocalPost(posts,form.dataset.socialEdit,
+         form.elements.namedItem('edit').value));
+     }
+   };
+ }
  if(q==='market'){$('listing').onsubmit=x=>{x.preventDefault();let t=$('lt').value.trim(),d=$('ld').value.trim(),v=Number($('lp').value);if(!t||bad.test(`${t}\n${d}`))return alert('Listing blocked by restricted-item filter.');if(Number.isFinite(v)&&v>=0){s.listings.push({id:uid(),title:t,price:v,desc:d});save();render()}};document.querySelectorAll('[data-cart]').forEach(x=>x.onclick=()=>{s.cart.push(x.dataset.cart);save();render()});$('cc').onclick=()=>{s.cart=[];save();render()}}
  if(q==='games')document.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{let n=Math.min(100,Math.max(1,Number($('stake').value)||10)),r=(Date.now()%100)+1,w=x.dataset.g==='high'?r>50:r<=50;s.game=Math.max(0,s.game+(w?n:-n));save();alert(`Roll ${r}: ${w?'win':'loss'} ${n} demo credits`);render()});
  if(q==='edu'){

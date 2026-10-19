@@ -8,7 +8,7 @@
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
     "verify": "node scripts/verify-release.mjs",
-    "check": "node --check server.mjs && node --check src/domain.mjs && node --check public/app.js && node --check public/workflows.mjs && node --check public/workspaces-ui.mjs && node --check public/offerings.mjs && node --check public/launchpad-ui.mjs && node --check src/crypto-chat-service.mjs && node --check src/payment-service.mjs && node --check public/realtime-chat-ui.mjs && node --check public/token-deploy-ui.mjs && node --check contracts/deploy-sepolia.mjs && node --check contracts/compile.mjs && node --check public/education.mjs && node --check public/social.mjs",
+    "check": "node --check server.mjs && node --check src/domain.mjs && node --check public/app.js && node --check public/workflows.mjs && node --check public/workspaces-ui.mjs && node --check public/offerings.mjs && node --check public/launchpad-ui.mjs && node --check src/crypto-chat-service.mjs && node --check src/payment-service.mjs && node --check public/realtime-chat-ui.mjs && node --check public/token-deploy-ui.mjs && node --check contracts/deploy-sepolia.mjs && node --check contracts/compile.mjs && node --check public/education.mjs && node --check public/social.mjs && node --check public/impact-schedule.mjs",
     "loc:audit": "node scripts/loc-audit.mjs"
   },
   "engines": {

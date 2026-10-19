@@ -1,6 +1,7 @@
+import { impactScheduleSummary } from "./impact-schedule.mjs";
 import {
   PLAN_TEMPLATES, createHopePlan, normalizeHopePlan, toggleHopeStep, progressOf,
-  createImpactWorkspace, normalizeImpactWorkspace, addImpactTask,
+  createImpactWorkspace, normalizeImpactWorkspace, addImpactTask, updateImpactTaskSchedule,
   toggleImpactTask, removeImpactTask, handoffCampaignToHope
 } from "./workflows.mjs";
 
@@ -48,17 +49,33 @@ function renderHopeList(plans, escapeHtml) {
 }
 
 function renderImpactList(campaigns, escapeHtml) {
-  if (!campaigns.length) return '<div class="empty">No campaign plans yet. Create one and add actions to track actual work.</div>';
+  if (!campaigns.length) return '<div class="empty">No campaign plans yet. Create a local volunteer action board.</div>';
+  const today = new Date().toISOString().slice(0, 10);
   return campaigns.map((campaign, index) => {
-    const tasks = campaign.tasks.map((task) =>
-      '<li class="workspace-task"><button type="button" class="btn workspace-step' +
-      (task.done ? ' is-done' : '') + '" data-impact-toggle="' + index + '" data-task-id="' +
-      escapeHtml(task.id) + '" aria-pressed="' + Boolean(task.done) + '">' +
-      (task.done ? '✓ ' : '○ ') + escapeHtml(task.title) + '</button>' +
-      '<button class="btn danger" type="button" data-impact-remove="' + index +
-      '" data-task-id="' + escapeHtml(task.id) + '" aria-label="Remove action ' +
-      escapeHtml(task.title) + '">Remove</button></li>'
-    ).join('');
+    const summary = impactScheduleSummary(campaign, today);
+    const tasks = campaign.tasks.map(task => {
+      const late = !task.done && task.dueDate && task.dueDate < today;
+      return '<li class="workspace-task impact-milestone"><button type="button" class="btn workspace-step' +
+        (task.done ? ' is-done' : '') + '" data-impact-toggle="' + index + '" data-task-id="' +
+        escapeHtml(task.id) + '" aria-pressed="' + Boolean(task.done) + '">' +
+        (task.done ? '✓ ' : '○ ') + escapeHtml(task.title) + '</button>' +
+        '<button class="btn danger" type="button" data-impact-remove="' + index +
+        '" data-task-id="' + escapeHtml(task.id) + '" aria-label="Remove action ' +
+        escapeHtml(task.title) + '">Remove</button>' +
+        '<p class="muted impact-task-meta">Suggested owner: ' +
+        escapeHtml(task.ownerLabel || 'unassigned') +
+        ' · Planned due: ' + escapeHtml(task.dueDate || 'not set') +
+        (late ? ' · <strong class="bad">Past planned date</strong>' : '') + '</p>' +
+        '<details class="impact-edit"><summary>Edit suggested owner / planned due date</summary>' +
+        '<form data-impact-schedule-form="' + index + '" data-task-id="' +
+        escapeHtml(task.id) + '" class="impact-schedule-form">' +
+        '<label>Suggested owner (not verified)<input name="owner" maxlength="80" value="' +
+        escapeHtml(task.ownerLabel || '') + '"></label>' +
+        '<label>Planned due date (UTC)<input name="dueDate" type="date" min="2000-01-01" max="2100-12-31" value="' +
+        escapeHtml(task.dueDate || '') + '"></label>' +
+        '<button type="submit" class="btn">Save planning details</button>' +
+        '<p role="alert" class="bad" data-workspace-error></p></form></details></li>';
+    }).join('');
     return '<article class="item stack"><div class="item-row"><div><h3 class="workspace-heading">' +
       escapeHtml(campaign.title) + '</h3><p>' + escapeHtml(campaign.goal) +
       '</p></div><button type="button" class="btn danger" data-impact-delete="' + index +
@@ -66,10 +83,15 @@ function renderImpactList(campaigns, escapeHtml) {
       '<p class="muted">Pledge intent (not received): $' +
       escapeHtml(Number(campaign.pledgeIntent).toFixed(2)) +
       ' · Donations: none · Charity verified: no</p>' +
+      '<p class="muted">Open: ' + summary.open + ' · Unassigned: ' +
+      summary.unassigned + ' · Past due: ' + summary.overdue +
+      ' · Due within 7 days: ' + summary.dueSoon + '</p>' +
       progressHtml(campaign.tasks, escapeHtml) +
       '<ul class="workspace-tasks">' + tasks + '</ul>' +
-      '<form data-impact-action-form="' + index + '" class="workspace-action-form">' +
+      '<form data-impact-action-form="' + index + '" class="workspace-action-form impact-create-form">' +
       '<label>Next volunteer or planning action<input name="action" maxlength="160" required placeholder="e.g. Confirm volunteer schedule"></label>' +
+      '<label>Suggested owner<input name="owner" maxlength="80" placeholder="Optional planning label"></label>' +
+      '<label>Planned due date<input name="dueDate" type="date" min="2000-01-01" max="2100-12-31"></label>' +
       '<button class="btn" type="submit">Add action</button><p role="alert" class="bad" data-workspace-error></p></form>' +
       '<button type="button" class="btn primary workspace-handoff" data-impact-handoff="' + index +
       '">Create HopeAI action plan from this campaign</button></article>';
@@ -154,9 +176,26 @@ export function enhanceWorkspaces(area, { state, save, render, uid, go, escapeHt
         const index = Number(actionForm.dataset.impactActionForm);
         try {
           state.impact[index] = addImpactTask(state.impact[index],
-            actionForm.elements.namedItem("action").value, uid());
+            actionForm.elements.namedItem("action").value, uid(), {
+              ownerLabel: actionForm.elements.namedItem("owner").value,
+              dueDate: actionForm.elements.namedItem("dueDate").value
+            });
           save(); render();
         } catch (error) { errorFor(actionForm, error.message); }
+      };
+    });
+    campaignArea.querySelectorAll("[data-impact-schedule-form]").forEach((scheduleForm) => {
+      scheduleForm.onsubmit = (event) => {
+        event.preventDefault();
+        const index = Number(scheduleForm.dataset.impactScheduleForm);
+        try {
+          state.impact[index] = updateImpactTaskSchedule(state.impact[index],
+            scheduleForm.dataset.taskId, {
+              ownerLabel: scheduleForm.elements.namedItem("owner").value,
+              dueDate: scheduleForm.elements.namedItem("dueDate").value
+            });
+          save(); render();
+        } catch (error) { errorFor(scheduleForm, error.message); }
       };
     });
     campaignArea.querySelectorAll("[data-impact-toggle]").forEach((control) => {

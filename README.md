@@ -9,7 +9,7 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 | Area | Implemented | Important boundary |
 |---|---|---|
 | HopeAI | Goal-specific, browser-local action plans, task completion, progress tracking, delete | Deterministic templates; no connected model/provider |
-| HopeAI Impact | Campaign action boards, volunteer tasks, progress and HopeAI handoff | No donation, settlement, nonprofit verification, receipt, or tax determination |
+| HopeAI Impact | Campaign tasks with planned owners and due dates, progress, HopeAI handoff | No donation, settlement, verified volunteers/nonprofits, or receipt |
 | Navigation | Desktop + mobile navigation across all flagship areas | Designed as one coherent product shell |
 | Social | Browser-local post editing/deletion, personal reactions, replies, bounded legacy migration | No remote delivery, verified users, public reactions, follower counts, or production moderation claim |
 | Marketplace | Search, lawful listings, restricted-item moderation, seller trust signals, cart, order drafts | No payment, escrow, seller-ID verification, crypto settlement, shipment or payout |
@@ -83,7 +83,7 @@ A real provider connection should not be marked live until there is configured s
 
 ## HopeAI Impact / charity
 
-Impact supports planning only: campaign goal, volunteer/planning actions, progress tracking, and pledge intent. The pledge value is metadata. `moneyMoved` and `charityVerified` remain false.
+Impact supports planning only: volunteer actions with suggested owner labels, planned UTC due dates, overdue and upcoming summaries, progress, and pledge intent. Labels are not identity verification or accepted assignments. The pledge value is metadata, not a payment. `moneyMoved` and `charityVerified` remain false. See [volunteer scheduling notes](docs/IMPACT_VOLUNTEER_SCHEDULING.md).
 
 A real donation workflow would require, at minimum, a verified payment provider, account/merchant configuration, authorization and webhook integrity, idempotency, receipts/refunds, ledger reconciliation, dispute handling, charity/nonprofit verification appropriate to the product, data retention, security review, and legal/compliance analysis. None of those are implied by this repository.
 

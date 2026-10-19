@@ -136,3 +136,20 @@ td { color: var(--muted); }
 @media (max-width: 600px) {
   .social-reply { flex-wrap: wrap; }
 }
+
+
+/* Impact milestone labels are suggestions, never verified volunteer assignments. */
+.impact-milestone { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.impact-task-meta { grid-column: 1 / -1; margin: 0; overflow-wrap: anywhere; }
+.impact-edit { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 10px; padding: 10px; min-width: 0; }
+.impact-edit summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.impact-schedule-form { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+.impact-schedule-form button { justify-self: start; }
+.impact-schedule-form [data-workspace-error] { grid-column: 1 / -1; margin: 0; }
+.workspace-action-form.impact-create-form { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.workspace-action-form.impact-create-form button { justify-self: start; }
+.workspace-action-form.impact-create-form [data-workspace-error] { grid-column: 1 / -1; }
+.impact-edit :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 600px) {
+  .impact-schedule-form, .workspace-action-form.impact-create-form { grid-template-columns: 1fr; }
+}

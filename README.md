@@ -14,7 +14,7 @@ This repository is the clean, testable product-quality baseline for the SKYCOIN4
 | Social | Browser-local posts and reactions | No fake remote audience, realtime delivery, follower counts, or production moderation claim |
 | Marketplace | Search, lawful listings, restricted-item moderation, seller trust signals, cart, order drafts | No payment, escrow, seller-ID verification, crypto settlement, shipment or payout |
 | Games | Deterministic High/Low demo with resettable credits | Credits are non-redeemable; not gambling or financial wagering |
-| Education | Skill check, scoring, targeted missed-topic review into HopeAI | Study aid only; no accreditation or professional credential |
+| Education | Eight-question security/privacy/Web3 practice, explanations, local progress and missed-topic HopeAI handoff | Browser-local study aid only; no accreditation or professional credential |
 | Wallet / Crypto | Watch-only public addresses and capability matrix | No private keys, signing, broadcasting, staking, mining, NFT minting, custody or live chain claim |
 | CryptoChat Launchpad | Token blueprints, ICO/IPO internal review, **wallet-signed Sepolia token deployment**, and optionally authenticated real-time multiuser SSE rooms | Only Sepolia testnet issuance; no mainnet launch, regulated investment acceptance, share issuance, or verified issuer identity. Hosted chat requires a persistent volume |
 | Security | CSP/security headers, local-data export/wipe, explicit boundaries | Not a security/compliance certification |
@@ -109,7 +109,7 @@ The demo game intentionally uses deterministic local output rather than claiming
 
 ## Education / SkySchool
 
-SkySchool includes a small security/crypto skill check and targeted review routing into HopeAI. Results are browser-local study records. They are not accreditation, academic credit, professional licensure, employment qualification, or an externally recognized certificate.
+SkySchool now has an eight-question practice assessment covering wallet security, account security, blockchain basics and privacy. Learners receive answer explanations, topic-level review, bounded local score history and an optional **HopeAI learning plan** based on missed topics. Results are browser-local study records; they are not accreditation, academic credit, professional licensure, employment qualification or an externally recognized certificate. See [SkySchool assessment and progress contracts](docs/SKYSCHOOL_STUDY_PROGRESS.md).
 
 ## Crypto / Web3 — detailed status
 

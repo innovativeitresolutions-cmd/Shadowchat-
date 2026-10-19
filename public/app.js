@@ -1,10 +1,13 @@
 import { enhanceWorkspaces } from "./workspaces-ui.mjs";
+import { createHopePlan } from "./workflows.mjs";
+import { STUDY_QUESTIONS, scoreStudyCheck, recordStudyAttempt, studyProgress } from "./education.mjs";
 import { renderLaunchpad, bindLaunchpad } from "./launchpad-ui.mjs";
 import { renderRealtimeChatSection, bindRealtimeChat, renderServicePaymentSection, bindServicePayments } from "./realtime-chat-ui.mjs";
 import { renderTokenDeployment, bindTokenDeployment } from "./token-deploy-ui.mjs";
 const A=[['overview','Overview'],['hopeai','HopeAI'],['impact','HopeAI Impact'],['social','Social'],['market','Marketplace'],['games','Games'],['edu','Education'],['crypto','Wallet / Crypto'],['launchpad','CryptoChat Launchpad'],['security','Security'],['ops','Release Ops']];
-const K='sky4-beta-v3',D=()=>({hope:[],impact:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
+const K='sky4-beta-v3',D=()=>({hope:[],impact:[],studyHistory:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
 let s=(()=>{try{return {...D(),...JSON.parse(localStorage.getItem(K)||'{}')}}catch{return D()}})();
+let latestStudyResult = null;
 const save=()=>localStorage.setItem(K,JSON.stringify(s)),e=x=>String(x??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c])),uid=()=>crypto.randomUUID?.()||`${Date.now()}-${Math.random()}`,p=()=>location.hash.slice(2)||'overview',go=x=>location.hash=`#/${x}`;
 const bad=/\b(fentanyl|heroin|cocaine|meth|lsd|mdma|ecstasy|oxycodone|hydrocodone|xanax|adderall|gun|firearm|ammo|silencer|explosive|stolen\s+(account|card|credential|goods?)|cvv|fullz|malware|ransomware|spyware|keylogger|botnet|fake\s+id|counterfeit\s+currency)\b/i;
 const hero=(k,t,d)=>`<section class=\"hero-card\"><div class=\"eyebrow\">${k}</div><h1 style=\"font-size:clamp(34px,5vw,56px)\">${t}</h1><p>${d}</p></section>`;
@@ -15,7 +18,42 @@ function impact(){return `${hero('HopeAI Impact','Plan impact truthfully.','Camp
 function social(){return `${hero('ShadowChat','Social with honest delivery state.','Posts are browser-local. No fake audience, followers, realtime transport or delivery receipts.')}<form id=\"post\" class=\"card\"><label>Post<textarea id=\"pb\" maxlength=\"500\" required></textarea></label><button class=\"btn primary\">Post locally</button></form><section class=\"card\">${s.posts.length?s.posts.map(x=>`<div class=\"item\"><p>${e(x)}</p><span class=\"pill\">local only</span></div>`).join(''):'<div class=\"empty\">Local feed is empty.</div>'}</section>`}
 function market(){return `${hero('Lawful marketplace','Trust and safety before settlement.','Search/listing/cart UI is local. Payments, escrow, seller verification and crypto settlement are disabled.')}<div class=\"notice danger\">Controlled substances, weapons, stolen credentials/goods, malware, forged IDs and counterfeit currency are blocked.</div><section class=\"grid two\"><form id=\"listing\" class=\"card\"><label>Title<input id=\"lt\" required></label><label>Price USD<input id=\"lp\" type=\"number\" min=\"0\" step=\".01\" required></label><label>Description<textarea id=\"ld\" required></textarea></label><button class=\"btn primary\">Moderate & publish</button></form><div class=\"card\"><h2>Cart</h2><div class=\"kpi\">${s.cart.length}</div><p>No charge, transfer, escrow, shipment or payout occurs.</p><button id=\"cc\" class=\"btn\">Clear cart</button></div></section><section class=\"grid\">${s.listings.map(x=>`<article class=\"card\"><h3>${e(x.title)}</h3><p>${e(x.desc)}</p><strong>$${Number(x.price).toFixed(2)}</strong><div class=\"actions\"><button class=\"btn\" data-cart=\"${x.id}\">Add</button></div></article>`).join('')}</section>`}
 function games(){return `${hero('Games','Playable demo, no real-money value.','Credits are local and non-redeemable. No deposits, withdrawals, custody, prizes or regulated wagering.')}<section class=\"grid two\"><div class=\"card\"><div class=\"kpi\">${s.game}</div><p>demo credits</p><label>Stake<input id=\"stake\" type=\"number\" min=\"1\" max=\"100\" value=\"10\"></label><div class=\"actions\"><button class=\"btn primary\" data-g=\"low\">Low</button><button class=\"btn primary\" data-g=\"high\">High</button></div></div><div class=\"card\"><p>Each click uses a local deterministic-style demo roll. It is not represented as cryptographic randomness.</p></div></section>`}
-function edu(){return `${hero('Education','SkySchool study checks.','Local study aid only; no accreditation, licensure, academic credit or external certificate.')}<form id=\"quiz\" class=\"card\"><h2>Security check</h2><label><input style=\"width:auto\" type=\"radio\" name=\"q\" value=\"public\"> Public wallet address is safe to share</label><label><input style=\"width:auto\" type=\"radio\" name=\"q\" value=\"seed\"> Seed phrase is safe to share</label><button class=\"btn primary\">Score</button><div id=\"qr\"></div></form>`}
+function edu(){
+  const progress=studyProgress(s.studyHistory);
+  const result=latestStudyResult;
+  const questions=STUDY_QUESTIONS.map((q,index)=>
+    '<fieldset class="item"><legend><strong>'+(index+1)+'. '+e(q.prompt)+
+    '</strong></legend>'+q.choices.map(option=>
+      '<label><input type="radio" style="width:auto" name="'+e(q.id)+
+      '" value="'+e(option.id)+'"> '+e(option.text)+'</label>'
+    ).join('')+'</fieldset>'
+  ).join('');
+  const feedback=result
+    ? '<section class="card" aria-live="polite"><h2>Latest practice feedback</h2><p role="status"><strong>'+
+      result.correct+'/'+result.total+' · '+result.percent+
+      '%</strong> · For practice only</p><div class="stack">'+
+      result.results.map(entry=>
+        '<div class="item"><strong class="'+(entry.correct?'good':'bad')+'">'+
+        (entry.correct?'Correct':'Review')+': '+e(entry.topic)+
+        '</strong><p>'+e(entry.prompt)+'</p><p>'+e(entry.explanation)+'</p></div>'
+      ).join('')+'</div>'+
+      (result.missedTopics.length
+        ? '<button class="btn primary" id="edu-hope">Create HopeAI plan for weak topics</button>'
+        : '<p class="good">All topics correct in this practice check.</p>')+'</section>'
+    : '';
+  const focus=progress.focusTopics.length
+    ? progress.focusTopics.map(t=>e(t)).join(', ') : 'No missed topics recorded';
+  return hero('Education','SkySchool practice & progress.',
+    'Eight security, wallet, blockchain and privacy questions. Local study aid; no accreditation or credential.')+
+    '<div class="notice info">Results stay on this device only. Do not enter passwords or personal secrets.</div>'+
+    '<section class="card"><h2>Study progress</h2><p>Attempts: '+progress.attempts+
+    ' · Latest: '+(progress.recentPercent===null?'—':progress.recentPercent+'%')+
+    ' · Best: '+(progress.bestPercent===null?'—':progress.bestPercent+'%')+
+    '</p><p>Topics to revisit: '+focus+'</p></section>'+
+    '<form id="quiz" class="card"><h2>Security & Web3 practice check</h2>'+
+    questions+'<button type="submit" class="btn primary">Score practice check</button></form>'+
+    feedback;
+}
 function cryptoPage(){return `${hero('Crypto boundary','Wallet / Crypto is watch-only.','No seed phrases, private keys, signing, broadcasting, swaps, staking, mining, NFT minting, custody or token deployment.')}<div class=\"notice\">Legacy source uses both SKY4 and SKY444 with conflicting economic constants; this repo makes no canonical live-token supply, price, yield or liquidity claim.</div><form id=\"watch\" class=\"card\"><label>Network<select id=\"wc\"><option>ethereum</option><option>polygon</option><option>base</option><option>bsc</option><option>solana</option></select></label><label>Public address<input id=\"wa\" required></label><button class=\"btn primary\">Add watch-only</button></form><section class=\"card\">${s.watch.length?s.watch.map(x=>`<div class=\"item\"><strong>${e(x.c)}</strong><p><code>${e(x.a)}</code></p></div>`).join(''):'<div class=\"empty\">No public addresses saved.</div>'}</section>`}
 function security(){return `${hero('Security','Fail closed and minimize secrets.','Server security headers plus browser-local data controls; not a security or compliance certification.')}<section class=\"grid two\"><div class=\"card\"><h2>Local data</h2><button id=\"export\" class=\"btn\">Export JSON</button> <button id=\"wipe\" class=\"btn danger\">Clear beta data</button></div><div class=\"card\"><h2>Not claimed</h2><p>Identity verification, KYC/AML completion, custody-grade key storage, certification, or production incident response.</p></div></section>`}
 function ops(){return `${hero('Release Ops','Evidence first.','Local tests do not prove hosted persistence, backup/restore, load resilience, cross-system operation or deployed alerting.')}<section class=\"grid two\"><div class=\"card\"><h2>Runtime</h2><div id=\"health\" class=\"empty\">Not checked.</div><button id=\"hc\" class=\"btn primary\">Check /api/healthz</button></div><div class=\"card\"><h2>P1 gates</h2><p>Invited-session persistence: not evidenced</p><p>Backup/restore RPO/RTO: not evidenced</p><p>Dependency failures: partial</p><p>Cross-system integration: local only</p><p>Telemetry/alerting: not evidenced</p></div></section>`}
@@ -27,7 +65,23 @@ function bind(q){
  if(q==='social')$('post').onsubmit=x=>{x.preventDefault();if($('pb').value.trim()){s.posts.push($('pb').value.trim());save();render()}};
  if(q==='market'){$('listing').onsubmit=x=>{x.preventDefault();let t=$('lt').value.trim(),d=$('ld').value.trim(),v=Number($('lp').value);if(!t||bad.test(`${t}\n${d}`))return alert('Listing blocked by restricted-item filter.');if(Number.isFinite(v)&&v>=0){s.listings.push({id:uid(),title:t,price:v,desc:d});save();render()}};document.querySelectorAll('[data-cart]').forEach(x=>x.onclick=()=>{s.cart.push(x.dataset.cart);save();render()});$('cc').onclick=()=>{s.cart=[];save();render()}}
  if(q==='games')document.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{let n=Math.min(100,Math.max(1,Number($('stake').value)||10)),r=(Date.now()%100)+1,w=x.dataset.g==='high'?r>50:r<=50;s.game=Math.max(0,s.game+(w?n:-n));save();alert(`Roll ${r}: ${w?'win':'loss'} ${n} demo credits`);render()});
- if(q==='edu')$('quiz').onsubmit=x=>{x.preventDefault();$('qr').innerHTML=new FormData($('quiz')).get('q')==='public'?'<p class=\"good\">Correct.</p>':'<p class=\"bad\">Review: never share seed phrases/private keys.</p>'};
+ if(q==='edu'){
+   $('quiz').onsubmit=event=>{
+     event.preventDefault();
+     const answers=Object.fromEntries(new FormData($('quiz')).entries());
+     latestStudyResult=scoreStudyCheck(answers);
+     s.studyHistory=recordStudyAttempt(s.studyHistory,latestStudyResult);
+     save();render();
+   };
+   if($('edu-hope'))$('edu-hope').onclick=()=>{
+     if(!latestStudyResult?.missedTopics.length)return;
+     s.hope=Array.isArray(s.hope)?s.hope:[];
+     const topics=latestStudyResult.missedTopics.join(', ');
+     s.hope.unshift(createHopePlan('Review SkySchool topics: '+topics,
+       'learning',uid(),new Date().toISOString()));
+     save();go('hopeai');
+   };
+ }
  if(q==='crypto')$('watch').onsubmit=x=>{x.preventDefault();let c=$('wc').value,a=$('wa').value.trim(),ok=['ethereum','polygon','base','bsc'].includes(c)?/^0x[a-fA-F0-9]{40}$/.test(a):/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a);if(!ok)return alert('Invalid public-address format.');s.watch.push({c,a});save();render()};
  if(q==='security'){$('wipe').onclick=()=>{if(confirm('Clear browser-local beta data?')){localStorage.removeItem(K);s=D();render()}};$('export').onclick=()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(s,null,2)],{type:'application/json'}));a.download='skycoin4444-local.json';a.click()}};
  if(q==='ops')$('hc').onclick=async()=>{let h=$('health');h.textContent='Checking…';try{let r=await fetch('/api/healthz'),d=await r.json();h.innerHTML=`<strong class=\"${r.ok?'good':'bad'}\">${e(d.status)}</strong><p>database: ${e(d.database)} · provider: ${e(d.providerConnectivity)} · production ready: ${e(d.productionReady)}</p>`}catch{h.innerHTML='<strong class=\"bad\">Health check failed</strong>'}};

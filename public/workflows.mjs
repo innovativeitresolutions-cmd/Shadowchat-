@@ -1,3 +1,4 @@
+import { planningOwner, planningDate, safePlanningField } from "./impact-schedule.mjs";
 // Browser-compatible, deterministic planning domain. No API/model/payment connections.
 export const PLAN_TEMPLATES = Object.freeze({
   general: Object.freeze([
@@ -99,17 +100,30 @@ export function normalizeImpactWorkspace(raw, index = 0) {
   const tasks = Array.isArray(raw.tasks) ? raw.tasks.slice(0, 30) : [];
   base.tasks = tasks.map((t, i) => ({
     id: String(t?.id ?? i + 1), title: String(t?.title ?? "").trim().slice(0, 160),
-    done: t?.done === true
+    done: t?.done === true,
+    ownerLabel: safePlanningField(t?.ownerLabel, planningOwner),
+    dueDate: safePlanningField(t?.dueDate, planningDate)
   })).filter((t) => t.title);
   return base; // Imported browser data cannot grant charity verification or prove donations.
 }
 
-export function addImpactTask(campaign, title, id) {
+export function addImpactTask(campaign, title, id, { ownerLabel = "", dueDate = "" } = {}) {
   if (!campaign || !Array.isArray(campaign.tasks)) throw new Error("Campaign not found.");
   const label = cleanText(title, 160, "Action");
   if (campaign.tasks.length >= 30) throw new Error("Maximum 30 actions per campaign.");
   if (campaign.tasks.some((task) => task.title.toLowerCase() === label.toLowerCase())) throw new Error("This action already exists.");
-  return { ...campaign, tasks: [...campaign.tasks, { id: String(id), title: label, done: false }] };
+  const owner = planningOwner(ownerLabel), date = planningDate(dueDate);
+  return { ...campaign, tasks: [...campaign.tasks, { id: String(id), title: label,
+    done: false, ownerLabel: owner, dueDate: date }] };
+}
+
+export function updateImpactTaskSchedule(campaign, taskId, { ownerLabel = "", dueDate = "" } = {}) {
+  if (!campaign || !Array.isArray(campaign.tasks)) throw new Error("Campaign not found.");
+  const id = String(taskId);
+  if (!campaign.tasks.some(task => String(task.id) === id)) throw new Error("Unknown campaign action.");
+  const owner = planningOwner(ownerLabel), date = planningDate(dueDate);
+  return { ...campaign, tasks: campaign.tasks.map(task => String(task.id) === id
+    ? { ...task, ownerLabel: owner, dueDate: date } : task) };
 }
 
 export function toggleImpactTask(campaign, taskId) {

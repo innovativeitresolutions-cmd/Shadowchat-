@@ -1,3 +1,13 @@
+function hopeai(){
+ const messages=Array.isArray(s.aiMessages)?s.aiMessages:[];
+ return `<section class="ai-heading"><div><div class="eyebrow">YOUR CREATIVE & THINKING PARTNER</div><h1>HopeAI</h1><p>A general-purpose assistant for ideas, code, learning, planning and everyday questions.</p></div><span class="pill">Provider connection: server-side</span></section>
+ <div class="ai-layout"><aside class="ai-aside card"><div class="ai-avatar">✦</div><h3>Welcome to HopeAI</h3><p>Ask naturally. Explore an idea. Get help untangling a problem or building something new.</p><h3>Try asking</h3><div class="prompt-list"><button class="prompt-chip" data-prompt="Help me plan the next useful feature for the Crypto Bazaar.">Build the Bazaar</button><button class="prompt-chip" data-prompt="Teach me a practical Web3 concept with an example.">Learn Web3</button><button class="prompt-chip" data-prompt="Help me debug a JavaScript problem.">Debug code</button><button class="prompt-chip" data-prompt="Help me organize my day into a few manageable steps.">Plan my day</button></div><button id="ai-clear" class="btn">Clear conversation</button></aside>
+ <section class="ai-chat card"><div class="chat-top"><div><strong>HopeAI Assistant</strong><small>General AI chat · private browser history</small></div><span class="online-dot">● Connection on demand</span></div>
+ <div id="ai-messages" class="ai-messages" aria-live="polite">${messages.length?messages.map(m=>`<article class="chat-message ${m.role==='user'?'from-user':'from-ai'}"><span>${m.role==='user'?'YOU':'HOPEAI'}</span><p>${e(m.content)}</p></article>`).join(''):'<div class="ai-welcome"><div class="welcome-star">✦</div><h2>What’s on your mind?</h2><p>Ask me anything. I’ll be clear about what I know and what I can’t do.</p></div>'}</div>
+ <div id="ai-status" class="ai-status" role="status">Messages are saved only in this browser. An AI provider must be configured by the operator before replies can be generated.</div>
+ <form id="ai-form" class="ai-compose"><textarea id="ai-input" maxlength="8000" rows="2" placeholder="Message HopeAI…" aria-label="Message HopeAI" required></textarea><button id="ai-send" class="btn primary" type="submit">Send ↑</button></form><small class="chat-disclaimer">HopeAI can make mistakes. Don’t enter passwords, seed phrases or private keys.</small>
+ </section></div>`;
+}
 import { enhanceWorkspaces } from "./workspaces-ui.mjs";
 import { normalizeLocalPosts, createLocalPost, editLocalPost, deleteLocalPost, toggleLocalLike, addLocalReply, deleteLocalReply } from "./social.mjs";
 import { createHopePlan } from "./workflows.mjs";
@@ -6,15 +16,37 @@ import { renderLaunchpad, bindLaunchpad } from "./launchpad-ui.mjs";
 import { renderRealtimeChatSection, bindRealtimeChat, renderServicePaymentSection, bindServicePayments } from "./realtime-chat-ui.mjs";
 import { renderTokenDeployment, bindTokenDeployment } from "./token-deploy-ui.mjs";
 const A=[['overview','Overview'],['hopeai','HopeAI'],['impact','HopeAI Impact'],['social','Social'],['market','Marketplace'],['games','Games'],['edu','Education'],['crypto','Wallet / Crypto'],['launchpad','CryptoChat Launchpad'],['security','Security'],['ops','Release Ops']];
-const K='sky4-beta-v3',D=()=>({hope:[],impact:[],studyHistory:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
+const K='sky4-beta-v3',D=()=>({hope:[],aiMessages:[],impact:[],studyHistory:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
 let s=(()=>{try{return {...D(),...JSON.parse(localStorage.getItem(K)||'{}')}}catch{return D()}})();
 let latestStudyResult = null;
 const save=()=>localStorage.setItem(K,JSON.stringify(s)),e=x=>String(x??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c])),uid=()=>crypto.randomUUID?.()||`${Date.now()}-${Math.random()}`,p=()=>location.hash.slice(2)||'overview',go=x=>location.hash=`#/${x}`;
 const bad=/\b(fentanyl|heroin|cocaine|meth|lsd|mdma|ecstasy|oxycodone|hydrocodone|xanax|adderall|gun|firearm|ammo|silencer|explosive|stolen\s+(account|card|credential|goods?)|cvv|fullz|malware|ransomware|spyware|keylogger|botnet|fake\s+id|counterfeit\s+currency)\b/i;
 const hero=(k,t,d)=>`<section class=\"hero-card\"><div class=\"eyebrow\">${k}</div><h1 style=\"font-size:clamp(34px,5vw,56px)\">${t}</h1><p>${d}</p></section>`;
-function shell(c){let q=p(),n=A.map(([i,l])=>`<button data-r=\"${i}\" class=\"${q===i?'active':''}\">${l}</button>`).join('');return `<div class=\"shell\"><aside class=\"sidebar\"><div class=\"brand\"><div class=\"brand-mark\">SK</div><div>SKYCOIN4444<small>ShadowChat · engineering beta</small></div></div><nav class=\"nav\">${n}</nav><div class=\"sidebar-footer\">HopeAI is the single public Hope brand.<br>External actions fail closed.</div></aside><div class=\"main\"><header class=\"topbar\"><strong>${A.find(x=>x[0]===q)?.[1]||'Overview'}</strong><span class=\"badge\">Engineering beta</span></header><main id=\"main\" class=\"content\">${c}</main></div><nav class=\"mobile-nav\">${n}</nav></div>`}
-function overview(){let x=[['hopeai','HopeAI','Local planner; provider unavailable by default.'],['impact','HopeAI Impact','Planning only; no donation execution.'],['social','Social','Local feed with honest delivery state.'],['market','Marketplace','Lawful listings and restricted-item blocking.'],['games','Games','Demo credits only; no real-money value.'],['edu','Education','Skill checks; no accreditation.'],['crypto','Wallet / Crypto','Watch-only; no private keys or signing.'],['launchpad','CryptoChat Launchpad','Local token blueprints, ICO/IPO drafts and discussion; no token sale or deployment.'],['security','Security','Privacy controls and fail-closed boundaries.'],['ops','Release Ops','Health plus unresolved hosted gates.']];return `${hero('Quality first','One coherent ecosystem.','Usable flagship journeys, responsive navigation, deterministic tests and truthful degraded states.')}<div class=\"notice\">No production, payment, custody, charity verification, regulated gambling, accreditation, identity verification or compliance certification claim.</div><section class=\"grid\">${x.map(([i,n,d])=>`<article class=\"card clickable\" tabindex=\"0\" data-r=\"${i}\"><span class=\"pill\">${i}</span><h3>${n}</h3><p>${d}</p></article>`).join('')}</section>`}
-function hopeai(){return `${hero('Priority 1','HopeAI','Private-first planning. No external model is represented as connected.')}<div class=\"notice info\">Build plan uses deterministic local steps and stores drafts only in this browser.</div><form id=\"hope\" class=\"card\"><label>Goal<textarea id=\"hopeText\" maxlength=\"500\" required></textarea></label><button class=\"btn primary\">Build local plan</button></form><section class=\"card\"><h2>Plans</h2>${s.hope.length?s.hope.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><ol>${x.steps.map(y=>`<li>${e(y)}</li>`).join('')}</ol></div>`).join(''):'<div class=\"empty\">No plans yet.</div>'}</section>`}
+function shell(c){let q=p(),n=A.map(([i,l])=>`<button data-r="${i}" class="${q===i?'active':''}">${l}</button>`).join('');return `<div class="shell"><aside class="sidebar"><div class="brand"><div class="brand-mark">SK</div><div>SKYCOIN4444<small>THE CRYPTO BAZAAR</small></div></div><div class="sidebar-label">EXPLORE</div><nav class="nav">${n}</nav><div class="sidebar-footer"><span class="footer-mark">✦</span><strong>Build your world.</strong><br>One connected digital destination.<small>Engineering beta · no paid services enabled</small></div></aside><div class="main"><header class="topbar"><div class="topbar-title"><span class="mobile-brand">SK✦</span><strong>${A.find(x=>x[0]===q)?.[1]||'Crypto Bazaar'}</strong></div><div class="topbar-right"><span class="badge">BETA PREVIEW</span><button class="topbar-avatar" data-r="hopeai" aria-label="Open HopeAI">✦</button></div></header><main id="main" class="content">${c}</main></div><nav class="mobile-nav">${n}</nav></div>`}function overview(){
+ const districts=[
+  ['hopeai','✦','HopeAI','Your AI companion','Ask, create, plan and learn','LIVE CHAT · PROVIDER REQUIRED'],
+  ['social','◎','Social District','People & communities','Share ideas and find your corner','LOCAL BETA'],
+  ['market','▦','Creator Market','Discover & collect','Digital goods, creator listings and carts','LOCAL BETA'],
+  ['games','◈','Arcade','Play something','Quick games and skill challenges','DEMO CREDITS'],
+  ['edu','⌘','SkySchool','Learn by doing','Web3, security and practical skills','PRACTICE'],
+  ['crypto','₿','Trading Floor','Markets & portfolio','Watch-only assets and research tools','WATCH-ONLY'],
+  ['launchpad','◇','CryptoChat','Build & connect','Community rooms and testnet tools','TESTNET / BETA'],
+  ['impact','♡','Hope & Impact','Make a difference','Organize ideas and volunteer plans','PLANNING']
+ ];
+ return `<section class="bazaar-hero">
+  <div class="bazaar-copy"><div class="eyebrow">WELCOME TO THE DIGITAL CITY</div>
+   <h1>One world.<br><span>Infinite possibilities.</span></h1>
+   <p>Explore the Crypto Bazaar — a connected place to create, discover, learn, play and build with Web3.</p>
+   <div class="actions"><button class="btn primary" data-r="hopeai">Talk to HopeAI</button><button class="btn" data-r="market">Explore the market</button></div>
+   <div class="hero-foot"><span>✦ Creator-first</span><span>◈ Community-powered</span><span>⌁ Built to explore</span></div>
+  </div>
+  <div class="bazaar-orbit" aria-label="Crypto Bazaar districts illustration"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-core">SK<span>4444</span></div><b class="orbit-node node-a">AI</b><b class="orbit-node node-b">WEB3</b><b class="orbit-node node-c">PLAY</b><b class="orbit-node node-d">CREATE</b></div>
+ </section>
+ <section class="section-head"><div><div class="eyebrow">THE DISTRICTS</div><h2>Find your next thing.</h2></div><span class="pill">8 destinations · one Bazaar</span></section>
+ <section class="district-grid">${districts.map(([id,icon,title,sub,desc,status])=>`<button class="district-card" data-r="${id}"><span class="district-icon">${icon}</span><span class="district-status">${status}</span><strong>${title}</strong><span class="district-sub">${sub}</span><small>${desc}</small><span class="district-arrow">↗</span></button>`).join('')}</section>
+ <section class="bazaar-bottom"><div><div class="eyebrow">YOUR SPACE, YOUR PACE</div><h2>Make something. Meet people. Keep exploring.</h2><p>Start with a conversation, a game, a lesson or a creator listing. Your local beta activity stays on this device.</p></div><button class="btn primary" data-r="hopeai">Open HopeAI →</button></section>
+ <div class="notice info">Engineering beta: social posts, listings, carts and game credits are local demos. HopeAI requires a configured server-side provider. Crypto tools are watch-only; no real-money gambling or trading execution.</div>`;
+}
 function impact(){return `${hero('HopeAI Impact','Plan impact truthfully.','Campaign goals and pledge intent are planning metadata only.')}<div class=\"notice\">No donation, settlement, receipt, charity verification or tax determination occurs.</div><form id=\"impact\" class=\"card\"><label>Title<input id=\"it\" required maxlength=\"120\"></label><label>Goal<textarea id=\"ig\" required maxlength=\"500\"></textarea></label><label>Pledge intent USD<input id=\"ip\" type=\"number\" min=\"0\" value=\"0\"></label><button class=\"btn primary\">Save plan</button></form><section class=\"card\">${s.impact.length?s.impact.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><p>${e(x.g)}</p><span class=\"pill\">$${x.p} intent · money moved: no</span></div>`).join(''):'<div class=\"empty\">No impact plans.</div>'}</section>`}
 function social(){
   s.posts=normalizeLocalPosts(s.posts);
@@ -95,7 +127,24 @@ function ops(){return `${hero('Release Ops','Evidence first.','Local tests do no
 function render(){let q=p(),f={overview,hopeai,impact,social,market,games,edu,crypto:cryptoPage,launchpad:()=>renderLaunchpad(s)+renderTokenDeployment(s)+renderRealtimeChatSection()+renderServicePaymentSection(),security,ops}[q]||overview;document.querySelector('#app').innerHTML=shell(f());document.querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r));bind(q)}
 function bind(q){
  const $=id=>document.getElementById(id);
- if(q==='hopeai')$('hope').onsubmit=x=>{x.preventDefault();let t=$('hopeText').value.trim();if(t){s.hope.push({t,steps:['Define a useful outcome.','List required information or tools.','Take one reversible action.','Review the result.']});save();render()}};
+ if(q==='hopeai'){
+   const form=$('ai-form'),input=$('ai-input'),messages=$('ai-messages'),status=$('ai-status'),send=$('ai-send');
+   const draw=()=>{messages.innerHTML=s.aiMessages.length?s.aiMessages.map(m=>`<article class="chat-message ${m.role==='user'?'from-user':'from-ai'}"><span>${m.role==='user'?'YOU':'HOPEAI'}</span><p>${e(m.content)}</p></article>`).join(''):'<div class="ai-welcome"><div class="welcome-star">✦</div><h2>What’s on your mind?</h2><p>Ask me anything. I’ll be clear about what I know and what I can’t do.</p></div>';messages.scrollTop=messages.scrollHeight};
+   form.onsubmit=async event=>{
+     event.preventDefault();const text=input.value.trim();if(!text)return;
+     s.aiMessages=Array.isArray(s.aiMessages)?s.aiMessages:[];s.aiMessages.push({role:'user',content:text});s.aiMessages=s.aiMessages.slice(-24);save();input.value='';draw();send.disabled=true;send.textContent='…';status.textContent='Connecting to HopeAI…';
+     try{
+       const response=await fetch('/api/hopeai/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:s.aiMessages.slice(-24)})});
+       const data=await response.json();
+       if(!response.ok)throw new Error(data.message||'HopeAI is temporarily unavailable.');
+       s.aiMessages.push({role:'assistant',content:data.message});s.aiMessages=s.aiMessages.slice(-24);save();status.textContent='Reply received from configured AI provider.';
+     }catch(error){status.textContent=error.message||'Could not connect to HopeAI.'}
+     finally{send.disabled=false;send.textContent='Send ↑';draw();input.focus()}
+   };
+   document.querySelectorAll('[data-prompt]').forEach(button=>button.onclick=()=>{input.value=button.dataset.prompt;input.focus()});
+   $('ai-clear').onclick=()=>{if(confirm('Clear this browser’s HopeAI conversation?')){s.aiMessages=[];save();status.textContent='Conversation cleared from this browser.';draw()}};
+   draw();
+ }
  if(q==='impact')$('impact').onsubmit=x=>{x.preventDefault();if($('it').value.trim()&&$('ig').value.trim()){s.impact.push({t:$('it').value.trim(),g:$('ig').value.trim(),p:Math.max(0,Number($('ip').value)||0),moneyMoved:false,charityVerified:false});save();render()}};
  if(q==='social'){
    const feed=$('socialFeed');

@@ -227,3 +227,15 @@ body { background: radial-gradient(ellipse at 75% -15%,rgba(91,69,180,.28),trans
 @media(max-width:1100px){.district-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.bazaar-hero{grid-template-columns:1fr .7fr;}}
 @media(max-width:900px){.mobile-brand{display:inline}.bazaar-hero{grid-template-columns:1fr;}.bazaar-orbit{width:260px;margin:20px auto -20px}.ai-layout{grid-template-columns:1fr}.ai-aside{order:2}.ai-chat{min-height:540px}.ai-aside .prompt-list{grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar-footer{display:none}}
 @media(max-width:600px){.district-grid{grid-template-columns:1fr 1fr;gap:9px}.district-card{min-height:174px;padding:13px}.district-status{position:static}.district-card strong{font-size:14px}.district-card small{font-size:10px}.bazaar-hero{padding:24px 19px;border-radius:20px}.bazaar-copy h1{font-size:45px}.bazaar-orbit{width:220px}.section-head{align-items:start;flex-direction:column}.bazaar-bottom{align-items:flex-start;flex-direction:column;padding:22px}.ai-heading{align-items:flex-start;flex-direction:column}.chat-top{align-items:flex-start;flex-direction:column}.ai-messages{padding:14px;min-height:320px}.chat-message{max-width:96%}.ai-aside .prompt-list{grid-template-columns:1fr}.ai-chat{min-height:500px}}
+
+.market-toolbar{display:grid;grid-template-columns:minmax(220px,2fr) minmax(150px,1fr) minmax(150px,1fr);gap:12px;align-items:end;margin:16px 0}
+.market-toolbar label{display:grid;gap:7px;color:var(--muted);font-size:12px;font-weight:700}
+.market-toolbar input,.market-toolbar select{width:100%;min-width:0;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#0b1728;color:var(--text)}
+.market-card{display:flex;flex-direction:column;gap:10px;min-height:210px;background:linear-gradient(155deg,#12243a,#0b1728)}
+.market-card h3{margin:5px 0 0;font-size:19px}
+.market-card p{flex:1;color:var(--muted);line-height:1.55}
+.market-card-top,.market-card .item-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.market-price{font-size:20px;color:#a6eaff}
+.market-card .btn{white-space:nowrap}
+@media(max-width:760px){.market-toolbar{grid-template-columns:1fr 1fr}.market-search{grid-column:1/-1}}
+@media(max-width:420px){.market-toolbar{grid-template-columns:1fr}}

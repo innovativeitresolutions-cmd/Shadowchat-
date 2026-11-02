@@ -77,9 +77,15 @@ This work has **not** proven an actual funded testnet transaction, Stripe charge
 
 ## HopeAI
 
-HopeAI is the single public Hope brand. The current local helper creates a deterministic four-step action plan for a selected goal type and explicitly labels itself as **not a connected AI provider response**. Plans support step completion and progress tracking. Browser-local drafts can be cleared from the HopeAI or Security surfaces.
+HopeAI is the single public Hope brand. The Bazaar now includes a general-purpose chat interface with browser-local conversation history, prompt starters, clear-history control, server-side provider credentials, request validation, per-client rate limiting, a 30-second timeout, and honest unavailable/error states. The browser never receives the provider API key. The provider adapter uses an OpenAI-compatible `/chat/completions` endpoint.
 
-A real provider connection should not be marked live until there is configured secret management, request authorization, rate limiting, timeout/cancellation, provider-error redaction, token/cost controls, abuse handling, observability, data-retention documentation, and tests proving degraded behavior when the provider is unavailable.
+To connect a provider, configure these server environment variables (never put secrets in browser code or committed files):
+
+- `HOPEAI_API_KEY` — provider API key;
+- `HOPEAI_MODEL` — model identifier;
+- `HOPEAI_BASE_URL` — optional API base URL; defaults to `https://api.openai.com/v1`.
+
+If the key or model is absent, `POST /api/hopeai/chat` returns an explicit `503 provider_not_configured` response and sends no message to a provider. Provider costs depend on the selected provider/model and are not enabled by this code alone. Before enabling a paid provider, set account-level spending limits and review the provider's retention and privacy terms. The browser-local history can be cleared from the HopeAI screen.
 
 ## HopeAI Impact / charity
 

@@ -83,7 +83,22 @@ function social(){
     '<section id="socialFeed" class="card social-feed"><h2>My local feed</h2>'+
     (items || '<div class="empty">No posts yet. Create your first private local draft.</div>')+'</section>';
 }
-function market(){return `${hero('Lawful marketplace','Trust and safety before settlement.','Search/listing/cart UI is local. Payments, escrow, seller verification and crypto settlement are disabled.')}<div class=\"notice danger\">Controlled substances, weapons, stolen credentials/goods, malware, forged IDs and counterfeit currency are blocked.</div><section class=\"grid two\"><form id=\"listing\" class=\"card\"><label>Title<input id=\"lt\" required></label><label>Price USD<input id=\"lp\" type=\"number\" min=\"0\" step=\".01\" required></label><label>Description<textarea id=\"ld\" required></textarea></label><button class=\"btn primary\">Moderate & publish</button></form><div class=\"card\"><h2>Cart</h2><div class=\"kpi\">${s.cart.length}</div><p>No charge, transfer, escrow, shipment or payout occurs.</p><button id=\"cc\" class=\"btn\">Clear cart</button></div></section><section class=\"grid\">${s.listings.map(x=>`<article class=\"card\"><h3>${e(x.title)}</h3><p>${e(x.desc)}</p><strong>$${Number(x.price).toFixed(2)}</strong><div class=\"actions\"><button class=\"btn\" data-cart=\"${x.id}\">Add</button></div></article>`).join('')}</section>`}
+function market(){
+ const cartItems=s.cart.map(id=>s.listings.find(item=>item.id===id)).filter(Boolean);
+ const total=cartItems.reduce((sum,item)=>sum+Math.max(0,Number(item.price)||0),0);
+ const categories=[...new Set(s.listings.map(item=>item.category||'Digital goods'))].sort();
+ return `${hero('Creator marketplace','Discover. Collect. Build your storefront.','A curated local marketplace for lawful digital goods and creator products. Checkout is intentionally disabled in this beta.')}
+ <div class="notice danger">Restricted goods and services are blocked. No payments, escrow, shipping, seller verification or crypto settlement are enabled.</div>
+ <section class="grid two">
+ <form id="listing" class="card"><h2>Publish a listing</h2><label>Product title<input id="lt" maxlength="120" required placeholder="What are you offering?"></label><label>Category<select id="lc"><option>Digital goods</option><option>Art & design</option><option>Education</option><option>Software</option><option>Collectibles</option><option>Services</option></select></label><label>Price USD<input id="lp" type="number" min="0" max="100000" step=".01" required></label><label>Description<textarea id="ld" maxlength="2000" required placeholder="Describe the product clearly…"></textarea></label><button class="btn primary">Review & publish locally</button><p class="muted">Listings are visible only in this browser.</p></form>
+ <div class="card"><div class="item-row"><h2>Your cart</h2><span class="pill">${cartItems.length} items</span></div>
+ ${cartItems.length?cartItems.map((item,index)=>`<div class="item item-row"><div><strong>${e(item.title)}</strong><p>$${Number(item.price).toFixed(2)}</p></div><button class="btn danger" data-cart-remove="${index}">Remove</button></div>`).join(''):'<div class="empty">Your cart is empty. Find something worth collecting.</div>'}
+ <div class="item-row"><strong>Subtotal</strong><strong>$${total.toFixed(2)}</strong></div><p class="muted">Demo cart only — no charge or order is created.</p><button id="cc" class="btn" ${cartItems.length?'':'disabled'}>Clear cart</button></div></section>
+ <section class="section-head"><div><div class="eyebrow">THE BAZAAR</div><h2>Explore creator goods</h2></div><span class="pill">${s.listings.length} local listings</span></section>
+ <div class="market-toolbar"><label class="market-search">Search listings<input id="market-search" type="search" placeholder="Try art, planner, software…"></label><label>Category<select id="market-category"><option value="all">All categories</option>${categories.map(category=>`<option value="${e(category)}">${e(category)}</option>`).join('')}</select></label><label>Sort<select id="market-sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="az">Name: A to Z</option></select></label></div>
+ <section id="market-results" class="grid market-results" aria-live="polite">${s.listings.map(item=>marketCard(item)).join('')}</section>`;
+}
+function marketCard(item){return `<article class="card market-card"><div class="market-card-top"><span class="pill">${e(item.category||'Digital goods')}</span><span class="muted">LOCAL</span></div><h3>${e(item.title)}</h3><p>${e(item.desc)}</p><div class="item-row"><strong class="market-price">$ ${Number(item.price).toFixed(2)}</strong><button class="btn primary" data-cart="${e(item.id)}">Add to cart</button></div></article>`}
 function games(){return `${hero('Games','Playable demo, no real-money value.','Credits are local and non-redeemable. No deposits, withdrawals, custody, prizes or regulated wagering.')}<section class=\"grid two\"><div class=\"card\"><div class=\"kpi\">${s.game}</div><p>demo credits</p><label>Stake<input id=\"stake\" type=\"number\" min=\"1\" max=\"100\" value=\"10\"></label><div class=\"actions\"><button class=\"btn primary\" data-g=\"low\">Low</button><button class=\"btn primary\" data-g=\"high\">High</button></div></div><div class=\"card\"><p>Each click uses a local deterministic-style demo roll. It is not represented as cryptographic randomness.</p></div></section>`}
 function edu(){
   const progress=studyProgress(s.studyHistory);
@@ -193,7 +208,28 @@ function bind(q){
      }
    };
  }
- if(q==='market'){$('listing').onsubmit=x=>{x.preventDefault();let t=$('lt').value.trim(),d=$('ld').value.trim(),v=Number($('lp').value);if(!t||bad.test(`${t}\n${d}`))return alert('Listing blocked by restricted-item filter.');if(Number.isFinite(v)&&v>=0){s.listings.push({id:uid(),title:t,price:v,desc:d});save();render()}};document.querySelectorAll('[data-cart]').forEach(x=>x.onclick=()=>{s.cart.push(x.dataset.cart);save();render()});$('cc').onclick=()=>{s.cart=[];save();render()}}
+ if(q==='market'){
+  const results=$('market-results');
+  const updateResults=()=>{
+    const query=$('market-search').value.trim().toLowerCase(),category=$('market-category').value,sort=$('market-sort').value;
+    let items=s.listings.filter(item=>(category==='all'||(item.category||'Digital goods')===category)&&(!query||`${item.title} ${item.desc} ${item.category||''}`.toLowerCase().includes(query)));
+    if(sort==='low')items.sort((a,b)=>Number(a.price)-Number(b.price));
+    if(sort==='high')items.sort((a,b)=>Number(b.price)-Number(a.price));
+    if(sort==='az')items.sort((a,b)=>a.title.localeCompare(b.title));
+    results.innerHTML=items.length?items.map(marketCard).join(''):'<div class="empty">No listings match. Try another search or category.</div>';
+  };
+  $('listing').onsubmit=event=>{
+    event.preventDefault();const title=$('lt').value.trim(),desc=$('ld').value.trim(),price=Number($('lp').value),category=$('lc').value;
+    if(!title||bad.test(`${title}\n${desc}`))return alert('Listing blocked by restricted-item filter.');
+    if(!Number.isFinite(price)||price<0||price>100000)return alert('Enter a valid price.');
+    if(s.listings.length>=100)return alert('Local beta limit: 100 listings.');
+    s.listings.push({id:uid(),title,price,desc,category});save();render();
+  };
+  $('market-search').oninput=updateResults;$('market-category').onchange=updateResults;$('market-sort').onchange=updateResults;
+  results.onclick=event=>{const button=event.target.closest('[data-cart]');if(!button)return;const item=s.listings.find(x=>x.id===button.dataset.cart);if(!item)return;if(s.cart.length>=50)return alert('Cart limit reached.');s.cart.push(item.id);save();render()};
+  document.querySelectorAll('[data-cart-remove]').forEach(button=>button.onclick=()=>{s.cart.splice(Number(button.dataset.cartRemove),1);save();render()});
+  $('cc').onclick=()=>{s.cart=[];save();render()};
+ }
  if(q==='games')document.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{let n=Math.min(100,Math.max(1,Number($('stake').value)||10)),r=(Date.now()%100)+1,w=x.dataset.g==='high'?r>50:r<=50;s.game=Math.max(0,s.game+(w?n:-n));save();alert(`Roll ${r}: ${w?'win':'loss'} ${n} demo credits`);render()});
  if(q==='edu'){
    $('quiz').onsubmit=event=>{

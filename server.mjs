@@ -1,6 +1,7 @@
 import http from "node:http";
 import { createCryptoChatService } from "./src/crypto-chat-service.mjs";
 import { createServiceCheckout } from "./src/payment-service.mjs";
+import { createHopeAIService } from "./src/hopeai-service.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,6 +12,7 @@ const publicDir = path.join(__dirname, "public");
 const port = Number(process.env.PORT || 3000);
 const chatService = createCryptoChatService();
 const checkoutService = createServiceCheckout();
+const hopeAIService = createHopeAIService();
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -49,6 +51,7 @@ function serveFile(res, requestPath) {
 
 export const server = http.createServer((req, res) => {
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  if (url.pathname === "/api/hopeai/chat") return hopeAIService.handle(req, res);
   if (url.pathname.startsWith("/api/chat/")) return chatService.handle(req, res, url);
   if (url.pathname.startsWith("/api/payments/")) return checkoutService.handle(req, res, url, { currentUser: chatService.currentUser });
   if (url.pathname === "/api/healthz") {

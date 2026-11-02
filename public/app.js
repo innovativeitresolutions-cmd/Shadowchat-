@@ -1,3 +1,13 @@
+function hopeai(){
+ const messages=Array.isArray(s.aiMessages)?s.aiMessages:[];
+ return `<section class="ai-heading"><div><div class="eyebrow">YOUR CREATIVE & THINKING PARTNER</div><h1>HopeAI</h1><p>A general-purpose assistant for ideas, code, learning, planning and everyday questions.</p></div><span class="pill">Provider connection: server-side</span></section>
+ <div class="ai-layout"><aside class="ai-aside card"><div class="ai-avatar">✦</div><h3>Welcome to HopeAI</h3><p>Ask naturally. Explore an idea. Get help untangling a problem or building something new.</p><h3>Try asking</h3><div class="prompt-list"><button class="prompt-chip" data-prompt="Help me plan the next useful feature for the Crypto Bazaar.">Build the Bazaar</button><button class="prompt-chip" data-prompt="Teach me a practical Web3 concept with an example.">Learn Web3</button><button class="prompt-chip" data-prompt="Help me debug a JavaScript problem.">Debug code</button><button class="prompt-chip" data-prompt="Help me organize my day into a few manageable steps.">Plan my day</button></div><button id="ai-clear" class="btn">Clear conversation</button></aside>
+ <section class="ai-chat card"><div class="chat-top"><div><strong>HopeAI Assistant</strong><small>General AI chat · private browser history</small></div><span class="online-dot">● Connection on demand</span></div>
+ <div id="ai-messages" class="ai-messages" aria-live="polite">${messages.length?messages.map(m=>`<article class="chat-message ${m.role==='user'?'from-user':'from-ai'}"><span>${m.role==='user'?'YOU':'HOPEAI'}</span><p>${e(m.content)}</p></article>`).join(''):'<div class="ai-welcome"><div class="welcome-star">✦</div><h2>What’s on your mind?</h2><p>Ask me anything. I’ll be clear about what I know and what I can’t do.</p></div>'}</div>
+ <div id="ai-status" class="ai-status" role="status">Messages are saved only in this browser. An AI provider must be configured by the operator before replies can be generated.</div>
+ <form id="ai-form" class="ai-compose"><textarea id="ai-input" maxlength="8000" rows="2" placeholder="Message HopeAI…" aria-label="Message HopeAI" required></textarea><button id="ai-send" class="btn primary" type="submit">Send ↑</button></form><small class="chat-disclaimer">HopeAI can make mistakes. Don’t enter passwords, seed phrases or private keys.</small>
+ </section></div>`;
+}
 import { enhanceWorkspaces } from "./workspaces-ui.mjs";
 import { normalizeLocalPosts, createLocalPost, editLocalPost, deleteLocalPost, toggleLocalLike, addLocalReply, deleteLocalReply } from "./social.mjs";
 import { createHopePlan } from "./workflows.mjs";
@@ -6,15 +16,37 @@ import { renderLaunchpad, bindLaunchpad } from "./launchpad-ui.mjs";
 import { renderRealtimeChatSection, bindRealtimeChat, renderServicePaymentSection, bindServicePayments } from "./realtime-chat-ui.mjs";
 import { renderTokenDeployment, bindTokenDeployment } from "./token-deploy-ui.mjs";
 const A=[['overview','Overview'],['hopeai','HopeAI'],['impact','HopeAI Impact'],['social','Social'],['market','Marketplace'],['games','Games'],['edu','Education'],['crypto','Wallet / Crypto'],['launchpad','CryptoChat Launchpad'],['security','Security'],['ops','Release Ops']];
-const K='sky4-beta-v3',D=()=>({hope:[],impact:[],studyHistory:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
+const K='sky4-beta-v3',D=()=>({hope:[],aiMessages:[],impact:[],studyHistory:[],posts:[],cart:[],game:1000,watch:[],testnetDeployments:[],launchpad:{tokens:[],offerings:[],messages:[]},listings:[{id:'1',title:'Creator icon pack',price:9,desc:'Original digital icon set.'},{id:'2',title:'Study planner',price:4,desc:'Printable study planner.'}]});
 let s=(()=>{try{return {...D(),...JSON.parse(localStorage.getItem(K)||'{}')}}catch{return D()}})();
 let latestStudyResult = null;
 const save=()=>localStorage.setItem(K,JSON.stringify(s)),e=x=>String(x??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c])),uid=()=>crypto.randomUUID?.()||`${Date.now()}-${Math.random()}`,p=()=>location.hash.slice(2)||'overview',go=x=>location.hash=`#/${x}`;
 const bad=/\b(fentanyl|heroin|cocaine|meth|lsd|mdma|ecstasy|oxycodone|hydrocodone|xanax|adderall|gun|firearm|ammo|silencer|explosive|stolen\s+(account|card|credential|goods?)|cvv|fullz|malware|ransomware|spyware|keylogger|botnet|fake\s+id|counterfeit\s+currency)\b/i;
 const hero=(k,t,d)=>`<section class=\"hero-card\"><div class=\"eyebrow\">${k}</div><h1 style=\"font-size:clamp(34px,5vw,56px)\">${t}</h1><p>${d}</p></section>`;
-function shell(c){let q=p(),n=A.map(([i,l])=>`<button data-r=\"${i}\" class=\"${q===i?'active':''}\">${l}</button>`).join('');return `<div class=\"shell\"><aside class=\"sidebar\"><div class=\"brand\"><div class=\"brand-mark\">SK</div><div>SKYCOIN4444<small>ShadowChat · engineering beta</small></div></div><nav class=\"nav\">${n}</nav><div class=\"sidebar-footer\">HopeAI is the single public Hope brand.<br>External actions fail closed.</div></aside><div class=\"main\"><header class=\"topbar\"><strong>${A.find(x=>x[0]===q)?.[1]||'Overview'}</strong><span class=\"badge\">Engineering beta</span></header><main id=\"main\" class=\"content\">${c}</main></div><nav class=\"mobile-nav\">${n}</nav></div>`}
-function overview(){let x=[['hopeai','HopeAI','Local planner; provider unavailable by default.'],['impact','HopeAI Impact','Planning only; no donation execution.'],['social','Social','Local feed with honest delivery state.'],['market','Marketplace','Lawful listings and restricted-item blocking.'],['games','Games','Demo credits only; no real-money value.'],['edu','Education','Skill checks; no accreditation.'],['crypto','Wallet / Crypto','Watch-only; no private keys or signing.'],['launchpad','CryptoChat Launchpad','Local token blueprints, ICO/IPO drafts and discussion; no token sale or deployment.'],['security','Security','Privacy controls and fail-closed boundaries.'],['ops','Release Ops','Health plus unresolved hosted gates.']];return `${hero('Quality first','One coherent ecosystem.','Usable flagship journeys, responsive navigation, deterministic tests and truthful degraded states.')}<div class=\"notice\">No production, payment, custody, charity verification, regulated gambling, accreditation, identity verification or compliance certification claim.</div><section class=\"grid\">${x.map(([i,n,d])=>`<article class=\"card clickable\" tabindex=\"0\" data-r=\"${i}\"><span class=\"pill\">${i}</span><h3>${n}</h3><p>${d}</p></article>`).join('')}</section>`}
-function hopeai(){return `${hero('Priority 1','HopeAI','Private-first planning. No external model is represented as connected.')}<div class=\"notice info\">Build plan uses deterministic local steps and stores drafts only in this browser.</div><form id=\"hope\" class=\"card\"><label>Goal<textarea id=\"hopeText\" maxlength=\"500\" required></textarea></label><button class=\"btn primary\">Build local plan</button></form><section class=\"card\"><h2>Plans</h2>${s.hope.length?s.hope.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><ol>${x.steps.map(y=>`<li>${e(y)}</li>`).join('')}</ol></div>`).join(''):'<div class=\"empty\">No plans yet.</div>'}</section>`}
+function shell(c){let q=p(),n=A.map(([i,l])=>`<button data-r="${i}" class="${q===i?'active':''}">${l}</button>`).join('');return `<div class="shell"><aside class="sidebar"><div class="brand"><div class="brand-mark">SK</div><div>SKYCOIN4444<small>THE CRYPTO BAZAAR</small></div></div><div class="sidebar-label">EXPLORE</div><nav class="nav">${n}</nav><div class="sidebar-footer"><span class="footer-mark">✦</span><strong>Build your world.</strong><br>One connected digital destination.<small>Engineering beta · no paid services enabled</small></div></aside><div class="main"><header class="topbar"><div class="topbar-title"><span class="mobile-brand">SK✦</span><strong>${A.find(x=>x[0]===q)?.[1]||'Crypto Bazaar'}</strong></div><div class="topbar-right"><span class="badge">BETA PREVIEW</span><button class="topbar-avatar" data-r="hopeai" aria-label="Open HopeAI">✦</button></div></header><main id="main" class="content">${c}</main></div><nav class="mobile-nav">${n}</nav></div>`}function overview(){
+ const districts=[
+  ['hopeai','✦','HopeAI','Your AI companion','Ask, create, plan and learn','LIVE CHAT · PROVIDER REQUIRED'],
+  ['social','◎','Social District','People & communities','Share ideas and find your corner','LOCAL BETA'],
+  ['market','▦','Creator Market','Discover & collect','Digital goods, creator listings and carts','LOCAL BETA'],
+  ['games','◈','Arcade','Play something','Quick games and skill challenges','DEMO CREDITS'],
+  ['edu','⌘','SkySchool','Learn by doing','Web3, security and practical skills','PRACTICE'],
+  ['crypto','₿','Trading Floor','Markets & portfolio','Watch-only assets and research tools','WATCH-ONLY'],
+  ['launchpad','◇','CryptoChat','Build & connect','Community rooms and testnet tools','TESTNET / BETA'],
+  ['impact','♡','Hope & Impact','Make a difference','Organize ideas and volunteer plans','PLANNING']
+ ];
+ return `<section class="bazaar-hero">
+  <div class="bazaar-copy"><div class="eyebrow">WELCOME TO THE DIGITAL CITY</div>
+   <h1>One world.<br><span>Infinite possibilities.</span></h1>
+   <p>Explore the Crypto Bazaar — a connected place to create, discover, learn, play and build with Web3.</p>
+   <div class="actions"><button class="btn primary" data-r="hopeai">Talk to HopeAI</button><button class="btn" data-r="market">Explore the market</button></div>
+   <div class="hero-foot"><span>✦ Creator-first</span><span>◈ Community-powered</span><span>⌁ Built to explore</span></div>
+  </div>
+  <div class="bazaar-orbit" aria-label="Crypto Bazaar districts illustration"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-core">SK<span>4444</span></div><b class="orbit-node node-a">AI</b><b class="orbit-node node-b">WEB3</b><b class="orbit-node node-c">PLAY</b><b class="orbit-node node-d">CREATE</b></div>
+ </section>
+ <section class="section-head"><div><div class="eyebrow">THE DISTRICTS</div><h2>Find your next thing.</h2></div><span class="pill">8 destinations · one Bazaar</span></section>
+ <section class="district-grid">${districts.map(([id,icon,title,sub,desc,status])=>`<button class="district-card" data-r="${id}"><span class="district-icon">${icon}</span><span class="district-status">${status}</span><strong>${title}</strong><span class="district-sub">${sub}</span><small>${desc}</small><span class="district-arrow">↗</span></button>`).join('')}</section>
+ <section class="bazaar-bottom"><div><div class="eyebrow">YOUR SPACE, YOUR PACE</div><h2>Make something. Meet people. Keep exploring.</h2><p>Start with a conversation, a game, a lesson or a creator listing. Your local beta activity stays on this device.</p></div><button class="btn primary" data-r="hopeai">Open HopeAI →</button></section>
+ <div class="notice info">Engineering beta: social posts, listings, carts and game credits are local demos. HopeAI requires a configured server-side provider. Crypto tools are watch-only; no real-money gambling or trading execution.</div>`;
+}
 function impact(){return `${hero('HopeAI Impact','Plan impact truthfully.','Campaign goals and pledge intent are planning metadata only.')}<div class=\"notice\">No donation, settlement, receipt, charity verification or tax determination occurs.</div><form id=\"impact\" class=\"card\"><label>Title<input id=\"it\" required maxlength=\"120\"></label><label>Goal<textarea id=\"ig\" required maxlength=\"500\"></textarea></label><label>Pledge intent USD<input id=\"ip\" type=\"number\" min=\"0\" value=\"0\"></label><button class=\"btn primary\">Save plan</button></form><section class=\"card\">${s.impact.length?s.impact.map(x=>`<div class=\"item\"><strong>${e(x.t)}</strong><p>${e(x.g)}</p><span class=\"pill\">$${x.p} intent · money moved: no</span></div>`).join(''):'<div class=\"empty\">No impact plans.</div>'}</section>`}
 function social(){
   s.posts=normalizeLocalPosts(s.posts);
@@ -51,7 +83,22 @@ function social(){
     '<section id="socialFeed" class="card social-feed"><h2>My local feed</h2>'+
     (items || '<div class="empty">No posts yet. Create your first private local draft.</div>')+'</section>';
 }
-function market(){return `${hero('Lawful marketplace','Trust and safety before settlement.','Search/listing/cart UI is local. Payments, escrow, seller verification and crypto settlement are disabled.')}<div class=\"notice danger\">Controlled substances, weapons, stolen credentials/goods, malware, forged IDs and counterfeit currency are blocked.</div><section class=\"grid two\"><form id=\"listing\" class=\"card\"><label>Title<input id=\"lt\" required></label><label>Price USD<input id=\"lp\" type=\"number\" min=\"0\" step=\".01\" required></label><label>Description<textarea id=\"ld\" required></textarea></label><button class=\"btn primary\">Moderate & publish</button></form><div class=\"card\"><h2>Cart</h2><div class=\"kpi\">${s.cart.length}</div><p>No charge, transfer, escrow, shipment or payout occurs.</p><button id=\"cc\" class=\"btn\">Clear cart</button></div></section><section class=\"grid\">${s.listings.map(x=>`<article class=\"card\"><h3>${e(x.title)}</h3><p>${e(x.desc)}</p><strong>$${Number(x.price).toFixed(2)}</strong><div class=\"actions\"><button class=\"btn\" data-cart=\"${x.id}\">Add</button></div></article>`).join('')}</section>`}
+function market(){
+ const cartItems=s.cart.map(id=>s.listings.find(item=>item.id===id)).filter(Boolean);
+ const total=cartItems.reduce((sum,item)=>sum+Math.max(0,Number(item.price)||0),0);
+ const categories=[...new Set(s.listings.map(item=>item.category||'Digital goods'))].sort();
+ return `${hero('Creator marketplace','Discover. Collect. Build your storefront.','A curated local marketplace for lawful digital goods and creator products. Checkout is intentionally disabled in this beta.')}
+ <div class="notice danger">Restricted goods and services are blocked. No payments, escrow, shipping, seller verification or crypto settlement are enabled.</div>
+ <section class="grid two">
+ <form id="listing" class="card"><h2>Publish a listing</h2><label>Product title<input id="lt" maxlength="120" required placeholder="What are you offering?"></label><label>Category<select id="lc"><option>Digital goods</option><option>Art & design</option><option>Education</option><option>Software</option><option>Collectibles</option><option>Services</option></select></label><label>Price USD<input id="lp" type="number" min="0" max="100000" step=".01" required></label><label>Description<textarea id="ld" maxlength="2000" required placeholder="Describe the product clearly…"></textarea></label><button class="btn primary">Review & publish locally</button><p class="muted">Listings are visible only in this browser.</p></form>
+ <div class="card"><div class="item-row"><h2>Your cart</h2><span class="pill">${cartItems.length} items</span></div>
+ ${cartItems.length?cartItems.map((item,index)=>`<div class="item item-row"><div><strong>${e(item.title)}</strong><p>$${Number(item.price).toFixed(2)}</p></div><button class="btn danger" data-cart-remove="${index}">Remove</button></div>`).join(''):'<div class="empty">Your cart is empty. Find something worth collecting.</div>'}
+ <div class="item-row"><strong>Subtotal</strong><strong>$${total.toFixed(2)}</strong></div><p class="muted">Demo cart only — no charge or order is created.</p><button id="cc" class="btn" ${cartItems.length?'':'disabled'}>Clear cart</button></div></section>
+ <section class="section-head"><div><div class="eyebrow">THE BAZAAR</div><h2>Explore creator goods</h2></div><span class="pill">${s.listings.length} local listings</span></section>
+ <div class="market-toolbar"><label class="market-search">Search listings<input id="market-search" type="search" placeholder="Try art, planner, software…"></label><label>Category<select id="market-category"><option value="all">All categories</option>${categories.map(category=>`<option value="${e(category)}">${e(category)}</option>`).join('')}</select></label><label>Sort<select id="market-sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="az">Name: A to Z</option></select></label></div>
+ <section id="market-results" class="grid market-results" aria-live="polite">${s.listings.map(item=>marketCard(item)).join('')}</section>`;
+}
+function marketCard(item){return `<article class="card market-card"><div class="market-card-top"><span class="pill">${e(item.category||'Digital goods')}</span><span class="muted">LOCAL</span></div><h3>${e(item.title)}</h3><p>${e(item.desc)}</p><div class="item-row"><strong class="market-price">$ ${Number(item.price).toFixed(2)}</strong><button class="btn primary" data-cart="${e(item.id)}">Add to cart</button></div></article>`}
 function games(){return `${hero('Games','Playable demo, no real-money value.','Credits are local and non-redeemable. No deposits, withdrawals, custody, prizes or regulated wagering.')}<section class=\"grid two\"><div class=\"card\"><div class=\"kpi\">${s.game}</div><p>demo credits</p><label>Stake<input id=\"stake\" type=\"number\" min=\"1\" max=\"100\" value=\"10\"></label><div class=\"actions\"><button class=\"btn primary\" data-g=\"low\">Low</button><button class=\"btn primary\" data-g=\"high\">High</button></div></div><div class=\"card\"><p>Each click uses a local deterministic-style demo roll. It is not represented as cryptographic randomness.</p></div></section>`}
 function edu(){
   const progress=studyProgress(s.studyHistory);
@@ -95,7 +142,24 @@ function ops(){return `${hero('Release Ops','Evidence first.','Local tests do no
 function render(){let q=p(),f={overview,hopeai,impact,social,market,games,edu,crypto:cryptoPage,launchpad:()=>renderLaunchpad(s)+renderTokenDeployment(s)+renderRealtimeChatSection()+renderServicePaymentSection(),security,ops}[q]||overview;document.querySelector('#app').innerHTML=shell(f());document.querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r));bind(q)}
 function bind(q){
  const $=id=>document.getElementById(id);
- if(q==='hopeai')$('hope').onsubmit=x=>{x.preventDefault();let t=$('hopeText').value.trim();if(t){s.hope.push({t,steps:['Define a useful outcome.','List required information or tools.','Take one reversible action.','Review the result.']});save();render()}};
+ if(q==='hopeai'){
+   const form=$('ai-form'),input=$('ai-input'),messages=$('ai-messages'),status=$('ai-status'),send=$('ai-send');
+   const draw=()=>{messages.innerHTML=s.aiMessages.length?s.aiMessages.map(m=>`<article class="chat-message ${m.role==='user'?'from-user':'from-ai'}"><span>${m.role==='user'?'YOU':'HOPEAI'}</span><p>${e(m.content)}</p></article>`).join(''):'<div class="ai-welcome"><div class="welcome-star">✦</div><h2>What’s on your mind?</h2><p>Ask me anything. I’ll be clear about what I know and what I can’t do.</p></div>';messages.scrollTop=messages.scrollHeight};
+   form.onsubmit=async event=>{
+     event.preventDefault();const text=input.value.trim();if(!text)return;
+     s.aiMessages=Array.isArray(s.aiMessages)?s.aiMessages:[];s.aiMessages.push({role:'user',content:text});s.aiMessages=s.aiMessages.slice(-24);save();input.value='';draw();send.disabled=true;send.textContent='…';status.textContent='Connecting to HopeAI…';
+     try{
+       const response=await fetch('/api/hopeai/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:s.aiMessages.slice(-24)})});
+       const data=await response.json();
+       if(!response.ok)throw new Error(data.message||'HopeAI is temporarily unavailable.');
+       s.aiMessages.push({role:'assistant',content:data.message});s.aiMessages=s.aiMessages.slice(-24);save();status.textContent='Reply received from configured AI provider.';
+     }catch(error){status.textContent=error.message||'Could not connect to HopeAI.'}
+     finally{send.disabled=false;send.textContent='Send ↑';draw();input.focus()}
+   };
+   document.querySelectorAll('[data-prompt]').forEach(button=>button.onclick=()=>{input.value=button.dataset.prompt;input.focus()});
+   $('ai-clear').onclick=()=>{if(confirm('Clear this browser’s HopeAI conversation?')){s.aiMessages=[];save();status.textContent='Conversation cleared from this browser.';draw()}};
+   draw();
+ }
  if(q==='impact')$('impact').onsubmit=x=>{x.preventDefault();if($('it').value.trim()&&$('ig').value.trim()){s.impact.push({t:$('it').value.trim(),g:$('ig').value.trim(),p:Math.max(0,Number($('ip').value)||0),moneyMoved:false,charityVerified:false});save();render()}};
  if(q==='social'){
    const feed=$('socialFeed');
@@ -144,7 +208,28 @@ function bind(q){
      }
    };
  }
- if(q==='market'){$('listing').onsubmit=x=>{x.preventDefault();let t=$('lt').value.trim(),d=$('ld').value.trim(),v=Number($('lp').value);if(!t||bad.test(`${t}\n${d}`))return alert('Listing blocked by restricted-item filter.');if(Number.isFinite(v)&&v>=0){s.listings.push({id:uid(),title:t,price:v,desc:d});save();render()}};document.querySelectorAll('[data-cart]').forEach(x=>x.onclick=()=>{s.cart.push(x.dataset.cart);save();render()});$('cc').onclick=()=>{s.cart=[];save();render()}}
+ if(q==='market'){
+  const results=$('market-results');
+  const updateResults=()=>{
+    const query=$('market-search').value.trim().toLowerCase(),category=$('market-category').value,sort=$('market-sort').value;
+    let items=s.listings.filter(item=>(category==='all'||(item.category||'Digital goods')===category)&&(!query||`${item.title} ${item.desc} ${item.category||''}`.toLowerCase().includes(query)));
+    if(sort==='low')items.sort((a,b)=>Number(a.price)-Number(b.price));
+    if(sort==='high')items.sort((a,b)=>Number(b.price)-Number(a.price));
+    if(sort==='az')items.sort((a,b)=>a.title.localeCompare(b.title));
+    results.innerHTML=items.length?items.map(marketCard).join(''):'<div class="empty">No listings match. Try another search or category.</div>';
+  };
+  $('listing').onsubmit=event=>{
+    event.preventDefault();const title=$('lt').value.trim(),desc=$('ld').value.trim(),price=Number($('lp').value),category=$('lc').value;
+    if(!title||bad.test(`${title}\n${desc}`))return alert('Listing blocked by restricted-item filter.');
+    if(!Number.isFinite(price)||price<0||price>100000)return alert('Enter a valid price.');
+    if(s.listings.length>=100)return alert('Local beta limit: 100 listings.');
+    s.listings.push({id:uid(),title,price,desc,category});save();render();
+  };
+  $('market-search').oninput=updateResults;$('market-category').onchange=updateResults;$('market-sort').onchange=updateResults;
+  results.onclick=event=>{const button=event.target.closest('[data-cart]');if(!button)return;const item=s.listings.find(x=>x.id===button.dataset.cart);if(!item)return;if(s.cart.length>=50)return alert('Cart limit reached.');s.cart.push(item.id);save();render()};
+  document.querySelectorAll('[data-cart-remove]').forEach(button=>button.onclick=()=>{s.cart.splice(Number(button.dataset.cartRemove),1);save();render()});
+  $('cc').onclick=()=>{s.cart=[];save();render()};
+ }
  if(q==='games')document.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>{let n=Math.min(100,Math.max(1,Number($('stake').value)||10)),r=(Date.now()%100)+1,w=x.dataset.g==='high'?r>50:r<=50;s.game=Math.max(0,s.game+(w?n:-n));save();alert(`Roll ${r}: ${w?'win':'loss'} ${n} demo credits`);render()});
  if(q==='edu'){
    $('quiz').onsubmit=event=>{
